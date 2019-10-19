@@ -1,0 +1,360 @@
+html {
+  scroll-behavior: smooth;
+  font-family: "Roboto", sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  /* Image source: https://www.pexels.com/de-de/foto/arbeit-beleuchtet-bildschirm-code-546819/ */
+  background: url("../images/ai-arbeit-beleuchtet-546819.jpg")
+    50% 0 no-repeat fixed;
+}
+
+h1 {
+  text-align: center;
+}
+
+p {
+  font-weight: bold;
+}
+
+section:last-of-type {
+  min-height: 61%;
+}
+
+.imagelink {
+  text-decoration: none;
+}
+
+.center {
+  margin: 0 auto;
+}
+
+.content {
+  margin: 0 auto;
+  max-width: 960px;
+}
+
+.rounded-circle {
+  border-radius: 100%;
+}
+
+#about ul {
+  list-style: none;
+}
+
+header {
+  width: 100%;
+  background: rgb(77, 71, 71);
+  min-height: 80px;
+  position: fixed;
+  margin-top: 30px;
+  z-index: 2;
+}
+
+nav {
+  float: right;
+  margin-top: 20px;
+  padding-left: 20%;
+}
+
+@media screen and (max-width: 640px) {
+  /*Formatierung Mobiles Menue*/
+  header nav,
+  div {
+    float: none;
+    padding-left: 0px;
+  }
+}
+
+@media screen and (max-width: 512px) {
+  /*Formatierung Mobiles Menue*/
+  header nav,
+  div {
+    float: none;
+    margin: auto;
+    padding-left: 0px;
+  }
+}
+
+#logo a {
+  color: #fff;
+  text-decoration: none;
+  float: left;
+  font-size: 30px;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+nav ul {
+  list-style: none;
+  display: block;
+  margin: 0 auto;
+  padding-left: 0px;
+}
+
+nav li {
+  margin-top: 9px;
+  float: left;
+  padding: 0 0 10px 21px;
+}
+
+nav li:first-of-type {
+  padding: 0 0 10px 10px;
+}
+
+nav li a {
+  color: #fff;
+  opacity: 0.6;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+nav li .active {
+  color: #fff;
+  opacity: 1;
+  border-bottom: 2px solid #fff;
+}
+
+nav li a:hover {
+  color: #fff;
+  opacity: 1;
+}
+
+#about,
+#skills {
+  width: 100%;
+}
+
+#about {
+  background-color: #2a2f4eb7;
+  color: #fff;
+  margin: 0;
+  padding: 200px 0 260px 0;
+  background-size: cover;
+}
+
+#skills {
+  background-color: #355057b7;
+  margin: 0 auto;
+  color: #fff;
+  padding: 200px 0;
+  background-size: cover;
+}
+
+#career {
+  background-color: #2a2f4eb7;
+  color: #fff;
+  padding: 200px 0;
+  background-size: cover;
+}
+
+#contact {
+  background-color: #355057b7;
+  margin: 0 auto;
+  color: #fff;
+  padding: 40vh 0;
+  background-size: cover;
+}
+
+#contact ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+#contact li {
+  padding-top: 10px;
+}
+
+#contact a {
+  color: #fff;
+}
+
+#contact label {
+  font-weight: bold;
+}
+
+#about img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.flexbox {
+  display: -webkit-flex;
+  -webkit-flex-direction: row;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.flexbox div {
+  padding: 0px 10px 0px 10px;
+}
+
+/* Contact Form */
+#contact textarea,
+input[type="email"] {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 4px;
+  font-size: 15px;
+  margin: 0;
+  outline: 0;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  background-color: #e8eeef;
+  color: #8a97a0;
+  -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03) inset;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03) inset;
+  margin-bottom: 30px;
+}
+
+#contact input[type="submit"],
+#contact input[type="button"] {
+  color: #fff;
+  background: #2a2f4e;
+  font-size: 18px;
+  text-align: center;
+  border: 1px solid #2a2f4e;
+  border-radius: 40px;
+  margin-top: 20px;
+}
+
+/* Timeline */
+.timeline * {
+  box-sizing: border-box;
+}
+
+/* The actual timeline (the vertical ruler) */
+.timeline {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* The actual timeline (the vertical ruler) */
+.timeline::after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  background-color: #82c4d4;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  margin-left: -3px;
+}
+
+/* Container around content */
+.container {
+  padding: 10px 40px;
+  position: relative;
+  background-color: inherit;
+  width: 50%;
+}
+
+/* The circles on the timeline */
+.container::after {
+  content: "";
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  right: -17px;
+  background-color: rgb(77, 71, 71);
+  border: 4px solid #82c4d4;
+  top: 15px;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+/* Place the container to the left */
+.left {
+  left: 0;
+}
+
+/* Place the container to the right */
+.right {
+  left: 50%;
+}
+
+/* Add arrows to the left container (pointing right) */
+.left::before {
+  content: " ";
+  height: 0;
+  position: absolute;
+  top: 22px;
+  width: 0;
+  z-index: 1;
+  right: 30px;
+  border: medium solid #355057;
+  border-width: 10px 0 10px 10px;
+  border-color: transparent transparent transparent #355057;
+}
+
+/* Add arrows to the right container (pointing left) */
+.right::before {
+  content: " ";
+  height: 0;
+  position: absolute;
+  top: 22px;
+  width: 0;
+  z-index: 1;
+  left: 30px;
+  border: medium solid #355057;
+  border-width: 10px 10px 10px 0;
+  border-color: transparent #355057 transparent transparent;
+}
+
+/* Fix the circle for containers on the right side */
+.right::after {
+  left: -16px;
+}
+
+/* The actual content */
+.containercontent {
+  padding: 20px 30px;
+  background-color: #355057;
+  color: #fff;
+  position: relative;
+  border-radius: 6px;
+}
+
+/* Media queries - Responsive timeline on screens less than 600px wide */
+@media screen and (max-width: 600px) {
+  /* Place the timelime to the left */
+  .timeline::after {
+    left: 31px;
+  }
+
+  /* Full-width containers */
+  .container {
+    width: 100%;
+    padding-left: 70px;
+    padding-right: 25px;
+  }
+
+  /* Make sure that all arrows are pointing leftwards */
+  .container::before {
+    left: 60px;
+    border: medium solid white;
+    border-width: 10px 10px 10px 0;
+    border-color: transparent white transparent transparent;
+  }
+
+  /* Make sure all circles are at the same spot */
+  .left::after,
+  .right::after {
+    left: 15px;
+  }
+
+  /* Make all right containers behave like the left ones */
+  .right {
+    left: 0%;
+  }
+}

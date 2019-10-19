@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <script src="js/mainscript.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+      crossorigin="anonymous"
+    />
+    <link href="css/mainstyle.css" rel="stylesheet" />
+    <title>Nicklas Wiegandt Contact</title>
+  </head>
+
+  <body>
+    <!-- HEADER START -->
+    <header>
+      <div class="content flexbox">
+        <div id="logo">
+          <a href="#"> Nicklas Wiegandt </a>
+        </div>
+        <nav>
+          <ul>
+            <li>
+              <a href="#about" class="active" title="Next Section">About me</a>
+            </li>
+            <li><a href="#skills" title="Next Section">Skills</a></li>
+            <li><a href="#career" title="Next Section">Career</a></li>
+            <li><a href="#contact" title="Next Section">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <section id="about">
+      <div class="content">
+        <img
+          src="https://www.gravatar.com/avatar/8665d18ab7949fcc3a0a4e06b6391b1e.jpg?s=128&r=X"
+          alt="Nicklas Wiegandt"
+          class="rounded-circle"
+        />
+        <h1>About me</h1>
+        <ul>
+          <li><b>Name:</b> Nicklas Wiegandt</li>
+          <li><b>Born:</b> 09th August 1995</li>
+          <li><b>Native language:</b> German</li>
+          <li><b>Living in:</b> Erlangen / Franconia / Bavaria / Germany</li>
+        </ul>
+      </div>
+    </section>
+    <section id="skills">
+      <div class="content">
+        <h2>Skills</h2>
+        software architecture, software development, project management
+        <p>Languages</p>
+        German - native language<br />
+        English - fluent
+        <p>Technical Languages</p>
+        Java SE & EE, HTML, CSS, PHP, SQL, JavaScript, TypeScript, Python, PHP
+        <p>Frameworks</p>
+        Spring Boot, JUnit, ionicframework, Vaadin, Angular 2
+        <p>Tools</p>
+        Apache Maven, Git, Gradle, Oracle DB, MySQL, Microsoft Office,
+        LibreOffice, Microsoft Outlook, Docker, Kubernetes, Rancher 2,
+        WordPress, Jenkins, Jira, Github, GitLab, Travis-ci, AWS Lambda, Alexa
+        Skills Kit
+        <p>Operating systems</p>
+        Linux, Windows, iOS
+        <p>Certificates</p>
+        <a
+          class="imagelink"
+          target="_blank"
+          href="https://skillshub.isqi.org/zl3ujgnl"
+        >
+          <img
+            alt="iSAQB® Software Architecture - Foundation Level"
+            width="200"
+            height="200"
+            src="https://api.accredible.com/v1/frontend/credential_website_embed_image/badge/13709734"
+          />
+        </a>
+        <a
+          class="imagelink"
+          target="_blank"
+          href="https://www.youracclaim.com/badges/f6e26265-b547-426d-8296-f9f06571b848/public_url"
+        >
+          <img
+            alt="Oracle Certified Associate, Java SE 7 Programmer, 2015"
+            width="105"
+            height="105"
+            src="images/oracle-certified-associate-java-se-7-programmer.png"
+          />
+        </a>
+        <a
+          class="imagelink"
+          target="_blank"
+          href="https://www.youracclaim.com/badges/c5360073-f9a2-4a04-8834-20d9343b546f/public_url"
+        >
+          <img
+            alt="Oracle Certified Professional, Java SE 7 Programmer, 2017"
+            width="105"
+            height="105"
+            src="images/oracle-certified-professional-java-se-7-programmer.png"
+          />
+        </a>
+      </div>
+    </section>
+    <section id="career">
+      <div class="content">
+        <h2>Career</h2>
+        <div class="timeline">
+          <div class="container left">
+            <div class="containercontent">
+              <h3>06/2019 - today</h3>
+              Software Engineer
+            </div>
+          </div>
+          <div class="container right">
+            <div class="containercontent">
+              <h3>07/2014 - 06/2019</h3>
+              IT-Consultant / Developer / Computer Sience Expert for Software
+              Development
+            </div>
+          </div>
+          <div class="container left">
+            <div class="containercontent">
+              <h3>09/2011 - 07/2014</h3>
+              Trainee as computer science expert for software development
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="contact">
+      <div class="content">
+        <h2>Contact</h2>
+        <div class="flexbox">
+          <div>
+            <ul>
+              <li>
+                <i class="far fa-envelope"> nicklas [at] wiegandt [dot] eu</i>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <form class="form-horizontal" method="post" action="https://gy9kx6l66c.execute-api.eu-west-1.amazonaws.com/default/website-contact-form">
+              <label for="mail">Email</label>
+              <input
+                type="email"
+                name="mail"
+                id="mail"
+                placeholder="yourmail@adress.com"
+                required
+              />
+              <label for="text">Text</label>
+              <textarea id="text" name="text" rows="3" required></textarea>
+              <div
+                class="g-recaptcha"
+                data-sitekey="6LfYmBkTAAAAALIJIQv0t5TQNX2OTm-KdrWt7iX3"
+              ></div>
+              <input type="submit" value="Send" />
+            </form>
+          </div>
+          <div>
+            <ul>
+              <li>
+                <a
+                  title="GitHub"
+                  href="https://github.com/Nicklas2751"
+                  target="_blank"
+                  ><i class="fab fa-github"> GitHub</i></a
+                >
+              </li>
+              <li>
+                <a
+                  title="Stack Overflow"
+                  href="https://stackoverflow.com/story/nicklas2751"
+                  target="_blank"
+                  ><i class="fab fa-stack-overflow"> Stack Overflow</i></a
+                >
+              </li>
+              <li>
+                <a
+                  title="Xing"
+                  href="https://www.xing.com/profile/Nicklas_Wiegandt"
+                  target="_blank"
+                  ><i class="fab fa-xing"> Xing</i></a
+                >
+              </li>
+              <li>
+                <a
+                  title="Linked In"
+                  href="https://www.linkedin.com/in/nicklas-wiegandt-09239714a/"
+                  target="_blank"
+                  ><i class="fab fa-linkedin"> LinkedIn</i></a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
