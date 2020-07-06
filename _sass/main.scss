@@ -1,0 +1,118 @@
+$fontColor: #fff;
+$backgroundColor: rgb(32, 32, 32);
+$highlightColor: rgb(238, 135, 16);
+
+$breakpoint-mobile: 480px;
+$breakpoint-tablet: 768px;
+$breakpoint-laptop: 1024px;
+$breakpoint-desktop: 1200px;
+$breakpoint-widedesktop: 1500px;
+
+body {
+    background-color: $backgroundColor;
+    color: $fontColor;
+    font-family: Hack, monospace;
+    font-size: 1em;
+}
+
+h1 {
+    font-size: 3em;
+}
+
+a {
+    text-decoration: none;
+    color: $fontColor;
+}
+
+a:hover, a i:hover {
+    text-decoration: underline;
+    text-decoration-color: $highlightColor;
+}
+
+nav {
+    font-size: 1.25em;
+}
+
+header {
+    text-align: center;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin main {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  margin: 1rem auto;
+  width: auto;
+}
+
+@media (min-width: $breakpoint-widedesktop) {
+    main {
+        @include main();
+        margin-left: 10vw;
+        margin-right: 10vw;
+    }
+}
+@media (min-width: $breakpoint-laptop) and (max-width: $breakpoint-widedesktop){
+    main {
+        @include main();
+        margin-left: 5vw;
+        margin-right: 5vw;
+    }
+}
+
+main a {
+    font-style: italic;
+    text-shadow: 3px 3px 2px $highlightColor;
+}
+
+@mixin footer {
+    display:flex;
+    flex-wrap: wrap;
+}
+
+footer {
+    @include footer();
+    flex-direction: row;
+    margin: 1rem auto;
+}
+
+footer * {
+    padding-left: 1vw;
+}
+
+@media (max-width: $breakpoint-mobile) {
+    footer {
+        @include footer();
+        flex-direction: column;
+        align-content: center;
+    }
+
+    footer * {
+        padding-top: 1vw;
+    }
+}
+
+.current-page {
+    font-weight: bold;
+    text-decoration: underline;
+    text-decoration-color: $highlightColor;
+    text-decoration-thickness: 4px;
+}
+
+.quickfacts {
+    display: grid;
+    grid-template-columns: 20vw auto;
+    grid-template-rows: auto;
+    justify-content:center;
+    align-items: center;
+}
+
+.rounded-circle {
+    border-radius: 100%;
+}

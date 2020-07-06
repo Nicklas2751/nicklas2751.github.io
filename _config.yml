@@ -19,13 +19,15 @@
 # in the templates via {{ site.myvariable }}.
 
 title: Nicklas Wiegandt
-email: nicklas@wiegandt.eu
+email: nicklas [at] wiegandt [dot] eu
 description: >- # this means to ignore newlines until "baseurl:"
   About Nicklas Wiegandt (Nicklas2751) and his Blog.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://nicklas.wiegandt.eu" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: nicklas2751
+stackoverflow_username: nicklas2751
 github_username:  nicklas2751
+xing_username: Nicklas_Wiegandt
+linkedin_username: nicklas-wiegandt-09239714a
 
 # Build settings
 plugins:
