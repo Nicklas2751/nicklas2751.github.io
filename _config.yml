@@ -29,6 +29,11 @@ github_username:  nicklas2751
 xing_username: Nicklas_Wiegandt
 linkedin_username: nicklas-wiegandt-09239714a
 
+asciidoctor:
+  attributes:
+    - icons=font
+    - source-highlighter=rouge
+
 # Build settings
 plugins:
   - jekyll-feed

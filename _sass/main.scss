@@ -1,3 +1,5 @@
+@import "syntax.css";
+
 $fontColor: #fff;
 $backgroundColor: rgb(32, 32, 32);
 $highlightColor: rgb(238, 135, 16);
@@ -149,6 +151,11 @@ footer * {
 
 .imagelink img {
     vertical-align: middle;
+}
+
+.listingblock .title {
+    font-size: small;
+    float: right;
 }
 
 #quickfacts {
