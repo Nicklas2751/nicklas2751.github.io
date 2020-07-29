@@ -8,6 +8,10 @@ $breakpoint-laptop: 1024px;
 $breakpoint-desktop: 1200px;
 $breakpoint-widedesktop: 1500px;
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     background-color: $backgroundColor;
     color: $fontColor;
@@ -42,6 +46,11 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+p {
+    hyphens: auto;
+    text-align: justify;
 }
 
 ul.tags {
@@ -128,6 +137,11 @@ footer * {
     text-decoration-thickness: 4px;
 }
 
+.errorContainer {
+    margin: 10px auto;
+    max-width: 600px;
+    text-align: center;
+}
 
 .imagelink {
     text-decoration: none !important;
