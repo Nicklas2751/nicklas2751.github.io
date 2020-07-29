@@ -1,0 +1,12 @@
+---
+layout: post
+title:  "First post"
+date:   2020-07-28 14:00:00 +0200
+tags: general
+excerpt_separator: //more
+---
+My first post on my new blog. This posts is about the blog itself and how it's made.
+//more
+I'll use this blog to write about things I find in my daly work as a software developer. Mostly problems I searched a lot to find a solution. So this blog should help others to find a solution if they have the same problem.
+
+This blog is made with jekyll and is hosted on GitHub like the website before. All HTML templates are selfmade. The content is written as ASCIIdoc. If you're interested in the source of this website you can find it here: https://github.com/nicklas2751/nicklas2751.github.io
