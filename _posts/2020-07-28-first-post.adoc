@@ -1,7 +1,7 @@
 = About this blog
 :page-layout: post
 :page-date: 2020-07-29 20:30:00 +0200
-:page-tags: [general]
+:page-tags: [general,aws,lambda]
 :page-liquid:
 
 My first post on my new blog. This posts is about the blog itself and how it's made.
