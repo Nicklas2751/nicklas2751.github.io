@@ -3,6 +3,9 @@
 $fontColor: #fff;
 $backgroundColor: rgb(32, 32, 32);
 $highlightColor: rgb(238, 135, 16);
+$inputFieldBackgorundColor: #AC6432;
+$submitBackgroundColor: #AC3232;
+$submitBackgroundHoverColor:#7E0202;
 
 $breakpoint-mobile: 480px;
 $breakpoint-tablet: 768px;
@@ -131,6 +134,45 @@ footer * {
         padding-top: 1vw;
     }
 }
+@media (max-width: $breakpoint-tablet) {
+    #quickfacts {
+        grid-template-columns: auto !important;
+        margin-top: 2vh;
+    }
+
+    #quickfacts img {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .imagelink img {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #certificates {
+        margin: unset !important;
+        width: 100% !important;
+        display: grid;
+        grid-template-columns: auto;
+        grid-template-rows: auto;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #certificates img {
+        display: block;
+        margin-top: 20px;
+    }
+}
+
+.contact {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+    justify-content: center;
+    align-items: center;
+}
 
 .current-page {
     font-weight: bold;
@@ -143,6 +185,11 @@ footer * {
     margin: 10px auto;
     max-width: 600px;
     text-align: center;
+}
+
+.highlight {
+    overflow: auto;
+    width: 100%;
 }
 
 .imagelink {
@@ -177,9 +224,22 @@ footer * {
 }
 
 /* Contact Form */
+form {
+    max-width: 400px;
+}
+
+form label {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+form button:hover {
+    background-color: $submitBackgroundHoverColor;
+}
+
 #contact textarea,
 input[type="email"] {
-    background: rgba(255, 255, 255, 0.1);
+    background-color: $inputFieldBackgorundColor;
     border: none;
     border-radius: 4px;
     font-size: 15px;
@@ -190,8 +250,7 @@ input[type="email"] {
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
-    background-color: #e8eeef;
-    color: #8a97a0;
+    color: #ffffff;
     -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03) inset;
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03) inset;
     margin-bottom: 30px;
@@ -199,13 +258,19 @@ input[type="email"] {
 
 #contact input[type="submit"],
 #contact input[type="button"] {
-    color: #fff;
-    background: #2a2f4e;
-    font-size: 18px;
+    background-color: $submitBackgroundColor;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 1.2px;
+    padding: 20px;
+    transition: 0.4s ease background;
+    width: 100%;
     text-align: center;
-    border: 1px solid #2a2f4e;
-    border-radius: 40px;
-    margin-top: 20px;
+    border: 1px solid transparent;
+    line-height: 1.5;
+    border-radius: 4px;
 }
 
 /* Timeline */

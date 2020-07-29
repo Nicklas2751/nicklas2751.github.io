@@ -1,6 +1,8 @@
 - name: Home
   link: /
 - name: Tags
-  link: /tags.html
+  link: /tags/
 - name: About
   link: /about/
+- name: Contact
+  link: /contact/
