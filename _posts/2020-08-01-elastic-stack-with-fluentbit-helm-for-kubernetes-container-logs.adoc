@@ -1,6 +1,6 @@
 = Elastic Stack with Fluent Bit Helm for Kubernetes container logs
 :page-layout: post
-:page-date: 2020-08-02 20:15:00 +0200
+:page-date: 2020-08-01 20:15:00 +0200
 :page-tags: [kubernetes,elastic-stack,fluentbit,helm]
 :page-liquid:
 
