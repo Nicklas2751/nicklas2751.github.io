@@ -1,0 +1,57 @@
+- skills:
+    - software architecture
+    - software development
+    - project management
+- languages:
+    - name: German
+      level: native language
+    - name: English
+      level: fluent
+- technicalLanguages:
+    - Java SE
+    - Java EE
+    - HTML
+    - CSS
+    - PHP
+    - SQL
+    - JavaScript
+    - TypeScript
+    - Python
+- frameworks:
+    - Spring Boot
+    - JUnit 4 & 5
+    - AssertJ
+    - mockito
+    - testcontainers
+    - quarkus
+    - ionicframework
+    - Vaadin
+    - Angular TypeScript
+- tools:
+    - Apache Maven
+    - Git
+    - Gradle
+    - Oracle DB
+    - MySQL
+    - Microsoft Office
+    - LibreOffice
+    - Microsoft Outlook
+    - Docker
+    - Kubernetes
+    - Rancher 2
+    - K3OS
+    - Google Cloud
+    - Azure
+    - WordPress
+    - Jenkins
+    - Jira
+    - Confluence
+    - GitHub
+    - GitLab
+    - Travis-ci
+    - AWS Lambda
+    - Alexa Skills Kit
+- operatingSystems:
+    - Linux
+    - Windows
+    - iOS 
