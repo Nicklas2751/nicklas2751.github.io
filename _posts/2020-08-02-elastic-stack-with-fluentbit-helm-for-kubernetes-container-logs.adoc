@@ -1,7 +1,7 @@
 = Elastic Stack with Fluent Bit Helm for Kubernetes container logs
 :page-layout: post
 :page-date: 2020-08-02 20:15:00 +0200
-:page-tags: [general,kubernetes,elastic-stack,fluentbit,helm]
+:page-tags: [kubernetes,elastic-stack,fluentbit,helm]
 :page-liquid:
 
 How to install Elastic Stack with Helm and get all Kubernetes container logs in to it with Fluent Bit.
