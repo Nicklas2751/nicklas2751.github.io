@@ -1,0 +1,18 @@
+language: ruby
+script:
+    - bundle exec jekyll build
+    - rm -rf ../nicklas2751.github.io
+    - git clone https://${GH_TOKEN}@github.com/nicklas2751/nicklas2751.github.io.git ../nicklas2751.github.io.master
+    - cp -R _site/* ../nicklas2751.github.io.master
+    - cd ../nicklas2751.github.io.master
+    - git config user.email "nicklas@wiegandt.eu"
+    - git config user.name "Nicklas Wiegandt"
+    - git add -A .
+    - git commit -a -m "Travis #$TRAVIS_BUILD_NUMBER"
+    - git push --quiet origin master > /dev/null 2>&1 
+branches:
+  only:
+  - jekyll
+rvm:
+- 2.7
+
