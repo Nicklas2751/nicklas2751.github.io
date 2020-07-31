@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Nicklas Wiegandt | </title>
+    <title>Nicklas Wiegandt | Contact</title>
     <base href="https://nicklas.wiegandt.eu" />
     <link rel="stylesheet" href="/assets/css/styles.css">
     <link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
@@ -24,37 +24,35 @@
     
       <a href="/about/" >About</a>
     
-      <a href="/contact/" >Contact</a>
+      <a href="/contact/" class="current-page">Contact</a>
     
 </nav>
     </header>
     <div class="bg-image"></div>
     <main>
-<article>
-    <h1></h1>
-    <ul class="tags">
-              
-    </ul>
-    <p>
-    <style type="text/css" media="screen">
-  
-  h1 {
-    margin: 30px 0;
-    font-size: 4em;
-    line-height: 1;
-    letter-spacing: -1px;
-  }
-</style>
-
-<div class="errorContainer">
-  <h1>404</h1>
-
-  <p><strong>Page not found :(</strong></p>
-  <p>The requested page could not be found.</p>
+<div class="contact">
+<h2>Contact</h2>
+    <div class="paragraph">
+<p><span class="icon"><i class="fa fa-envelope"></i></span> nicklas [at] wiegandt [dot] eu</p>
 </div>
-
-    </p>
-</article>
+<form id="contact" class="form-horizontal" method="post" action="https://gy9kx6l66c.execute-api.eu-west-1.amazonaws.com/default/website-contact-form">
+<label for="mail">E-Mail</label>
+<input
+type="email"
+name="mail"
+id="mail"
+placeholder="yourmail@adress.com"
+required
+/>
+<label for="text">Text</label>
+<textarea id="text" name="text" rows="3" required></textarea>
+<div
+class="g-recaptcha"
+data-sitekey="6LfYmBkTAAAAALIJIQv0t5TQNX2OTm-KdrWt7iX3"
+></div>
+<input type="submit" value="Send" />
+</form>
+</div>
     </main>
     <footer>
       &copy; 2020 Nicklas Wiegandt

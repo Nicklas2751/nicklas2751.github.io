@@ -1,4 +1,0 @@
----
-layout: tag
-tagname: k3os
----
