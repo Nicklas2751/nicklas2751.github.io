@@ -1,6 +1,6 @@
 = About this blog
 :page-layout: post
-:page-date: 2020-07-29 20:30:00 +0200
+:page-date: 2020-08-01 20:15:00 +0200
 :page-tags: [general,aws,lambda]
 :page-liquid:
 

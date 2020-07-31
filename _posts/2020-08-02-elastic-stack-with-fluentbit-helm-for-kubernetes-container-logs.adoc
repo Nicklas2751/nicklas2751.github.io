@@ -1,0 +1,23 @@
+= Elastic Stack with Fluent Bit Helm for Kubernetes container logs
+:page-layout: post
+:page-date: 2020-08-02 20:15:00 +0200
+:page-tags: [general,kubernetes,elastic-stack,fluentbit,helm]
+:page-liquid:
+
+How to install Elastic Stack with Helm and get all Kubernetes container logs in to it with Fluent Bit.
+
+== The problem
+The helm chart for Elastic Stack (https://hub.helm.sh/charts/stable/elastic-stack[stable/elastic-stack,window=_blank]) seems to be pretty easy right? Yeah it is but if you install it with Fluent Bit activated it tries to find Fluentd and even if you install Fluentd too it can't find it. And to get it even worse Fluentd can't find Elasticsearch. But why?
+
+Fluent Bit uses the wrong hostname of Fluentd and Fluentd uses the wrong hostname of Elasticsearch.
+
+== The solution
+Fortunally Fluent Bit don't need Fluentd to send its logs to Elasticsearch. So we just need to configure Fluent Bit to communicate with Elasticsearch and use the right hostname. 
+The default helm values already include the right Elasticsearch hostname. Why it isn't already set for Fluentd and Fluent Bit? I don't know.
+
+Here is my values file to get it working:
+
+.elastic-stack-fluentbit-values.yaml
+[source,yaml,linenums]
+----
+----
