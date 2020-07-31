@@ -8,7 +8,7 @@ script:
     - git config user.email "nicklas@wiegandt.eu"
     - git config user.name "Nicklas Wiegandt"
     - git add -A .
-    - git commit -a -m "Travis #$TRAVIS_BUILD_NUMBER"
+    - git commit -a -m "Travis $TRAVIS_BUILD_NUMBER"
     - git push --quiet origin master > /dev/null 2>&1 
 branches:
   only:
