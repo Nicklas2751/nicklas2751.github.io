@@ -20,4 +20,46 @@ Here is my values file to get it working:
 .elastic-stack-fluentbit-values.yaml
 [source,yaml,linenums]
 ----
-----
+elasticsearch:
+  enabled: true
+
+kibana:
+  enabled: true
+  env:
+    ELASTICSEARCH_HOSTS: http://{{ .Release.Name }}-elasticsearch-client:9200
+
+logstash:
+  enabled: false
+  # elasticsearch:
+  #   host: elastic-stack-elasticsearch-client
+
+filebeat:
+  enabled: false
+  # config:
+  #   output.file.enabled: false
+  #   output.logstash:
+  #     hosts: ["{{ .Release.Name }}-logstash:5044"]
+  # indexTemplateLoad:
+  #   - {{ .Release.Name }}-elasticsearch-client:9200
+
+fluentd:
+  enabled: false
+
+fluent-bit:
+  enabled: true
+  backend:
+    type: es
+    es:
+      host: {{ .Release.Name }}-elasticsearch-client
+
+fluentd-elasticsearch:
+  enabled: false
+
+nginx-ldapauth-proxy:
+  enabled: false
+elasticsearch-curator:
+  enabled: false
+
+elasticsearch-exporter:
+  enabled: false
+  ----
