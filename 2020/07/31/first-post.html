@@ -55,7 +55,7 @@
 <p>This is the source of my contact form lambda:</p>
 </div>
 <div class="listingblock">
-<div class="title">lambda_function.py <a href="https://github.com/Nicklas2751/contact-form-lambda/blob/c62f03067c52fdb085262a6f60b90fc3d0d1410e/lambda_function.py" target="_blank" rel="noopener">view</a> <a href="https://raw.githubusercontent.com/Nicklas2751/contact-form-lambda/c62f03067c52fdb085262a6f60b90fc3d0d1410e/lambda_function.py" target="_blank" rel="noopener">raw</a></div>
+<div class="title">lambda_function.py <a href="https://github.com/Nicklas2751/contact-form-lambda/blob/30b833e/lambda_function.py" target="_blank" rel="noopener">view</a> <a href="https://raw.githubusercontent.com/Nicklas2751/contact-form-lambda/30b833e/lambda_function.py" target="_blank" rel="noopener">raw</a></div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="python"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
  2
@@ -134,11 +134,16 @@
 75
 76
 77
+78
+79
+80
+81
 </pre></td><td class="code"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
 <span class="kn">from</span> <span class="nn">botocore.exceptions</span> <span class="kn">import</span> <span class="n">ClientError</span>
 <span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
 <span class="kn">import</span> <span class="nn">boto3</span>
 <span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">requests</span>
 
 <span class="k">def</span> <span class="nf">lambda_handler</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
     <span class="k">if</span> <span class="s">"g-recaptcha-response"</span> <span class="ow">in</span> <span class="n">event</span> <span class="ow">and</span> <span class="s">"mail"</span> <span class="ow">in</span> <span class="n">event</span> <span class="ow">and</span> <span class="s">"text"</span> <span class="ow">in</span> <span class="n">event</span><span class="p">:</span>
@@ -148,14 +153,17 @@
 
     <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
         <span class="n">send_email</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s">"mail"</span><span class="p">],</span><span class="n">event</span><span class="p">[</span><span class="s">"text"</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"RECaptcha failed!"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="p">{</span>
         <span class="s">"location"</span><span class="p">:</span> <span class="n">event</span><span class="p">[</span><span class="s">"referer"</span><span class="p">]</span>
     <span class="p">}</span>
 
 <span class="k">def</span> <span class="nf">checkRecaptcha</span><span class="p">(</span><span class="n">captchaCode</span><span class="p">):</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="s">"https://www.google.com/recaptcha/api/siteverify?secret=mySecret&amp;response="</span><span class="o">+</span><span class="n">captchaCode</span><span class="p">).</span><span class="n">read</span><span class="p">()</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">requestData</span> <span class="o">=</span> <span class="p">{</span> <span class="s">"secret"</span><span class="p">:</span> <span class="s">"mySecret"</span><span class="p">,</span> <span class="s">"response"</span><span class="p">:</span> <span class="n">captchaCode</span> <span class="p">}</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="s">"https://www.google.com/recaptcha/api/siteverify"</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">requestData</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">json</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">result</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'success'</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">send_email</span><span class="p">(</span><span class="n">userMail</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
@@ -211,6 +219,119 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="s">"Email sent! Message ID:"</span><span class="p">),</span>
         <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s">'MessageId'</span><span class="p">])</span>
+</pre></td></tr></tbody></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Because the HTML form sends it&#8217;s data as www-form-urlencoded the following API gateway integration request mapping template is needed:</p>
+</div>
+<div class="listingblock">
+<div class="title">api_gateway_mapping_template.vtl <a href="https://github.com/Nicklas2751/contact-form-lambda/blob/30b833e/api_gateway_mapping_template.vtl" target="_blank" rel="noopener">view</a> <a href="https://raw.githubusercontent.com/Nicklas2751/contact-form-lambda/30b833e/api_gateway_mapping_template.vtl" target="_blank" rel="noopener">raw</a></div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="vtl"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+</pre></td><td class="code"><pre>## convert HTML POST data or HTTP GET query string to JSON
+
+## get the raw post data from the AWS built-in variable and give it a nicer name
+#if ($context.httpMethod == "POST")
+ #set($rawAPIData = $input.path("$"))
+#elseif ($context.httpMethod == "GET")
+ #set($rawAPIData = $input.params().querystring)
+ #set($rawAPIData = $rawAPIData.toString())
+ #set($rawAPIDataLength = $rawAPIData.length() - 1)
+ #set($rawAPIData = $rawAPIData.substring(1, $rawAPIDataLength))
+ #set($rawAPIData = $rawAPIData.replace(", ", "&amp;"))
+#else
+ #set($rawAPIData = "")
+#end
+
+## first we get the number of "&amp;" in the string, this tells us if there is more than one key value pair
+#set($countAmpersands = $rawAPIData.length() - $rawAPIData.replace("&amp;", "").length())
+
+## if there are no "&amp;" at all then we have only one key value pair.
+## we append an ampersand to the string so that we can tokenise it the same way as multiple kv pairs.
+## the "empty" kv pair to the right of the ampersand will be ignored anyway.
+#if ($countAmpersands == 0)
+ #set($rawPostData = $rawAPIData + "&amp;")
+#end
+
+## now we tokenise using the ampersand(s)
+#set($tokenisedAmpersand = $rawAPIData.split("&amp;"))
+
+## we set up a variable to hold the valid key value pairs
+#set($tokenisedEquals = [])
+
+## now we set up a loop to find the valid key value pairs, which must contain only one "="
+#foreach( $kvPair in $tokenisedAmpersand )
+ #set($countEquals = $kvPair.length() - $kvPair.replace("=", "").length())
+ #if ($countEquals == 1)
+  #set($kvTokenised = $kvPair.split("="))
+  #if ($kvTokenised[0].length() &gt; 0)
+   ## we found a valid key value pair. add it to the list.
+   #set($devNull = $tokenisedEquals.add($kvPair))
+  #end
+ #end
+#end
+
+## next we set up our loop inside the output structure "{" and "}"
+{
+  "referer" : "$input.params('referer')",
+#foreach( $kvPair in $tokenisedEquals )
+  ## finally we output the JSON for this pair and append a comma if this isn't the last pair
+  #set($kvTokenised = $kvPair.split("="))
+ "$util.urlDecode($kvTokenised[0])" : #if($kvTokenised[1].length() &gt; 0)"$util.urlDecode($kvTokenised[1])"#{else}""#end#if( $foreach.hasNext ),#end
+#end
+}
 </pre></td></tr></tbody></table></code></pre>
 </div>
 </div>

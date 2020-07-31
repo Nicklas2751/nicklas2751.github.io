@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="https://nicklas.wiegandt.eu/feed.xml" rel="self" type="application/atom+xml" /><link href="https://nicklas.wiegandt.eu/" rel="alternate" type="text/html" /><updated>2020-07-31T19:54:14+00:00</updated><id>https://nicklas.wiegandt.eu/feed.xml</id><title type="html">Nicklas Wiegandt</title><subtitle>About Nicklas Wiegandt (Nicklas2751) and his Blog.</subtitle><entry><title type="html">About this blog</title><link href="https://nicklas.wiegandt.eu/2020/07/31/first-post.html" rel="alternate" type="text/html" title="About this blog" /><published>2020-07-31T18:15:00+00:00</published><updated>2020-07-31T18:15:00+00:00</updated><id>https://nicklas.wiegandt.eu/2020/07/31/first-post</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2020/07/31/first-post.html">&lt;div class=&quot;paragraph&quot;&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="https://nicklas.wiegandt.eu/feed.xml" rel="self" type="application/atom+xml" /><link href="https://nicklas.wiegandt.eu/" rel="alternate" type="text/html" /><updated>2020-07-31T20:14:33+00:00</updated><id>https://nicklas.wiegandt.eu/feed.xml</id><title type="html">Nicklas Wiegandt</title><subtitle>About Nicklas Wiegandt (Nicklas2751) and his Blog.</subtitle><entry><title type="html">About this blog</title><link href="https://nicklas.wiegandt.eu/2020/07/31/first-post.html" rel="alternate" type="text/html" title="About this blog" /><published>2020-07-31T18:15:00+00:00</published><updated>2020-07-31T18:15:00+00:00</updated><id>https://nicklas.wiegandt.eu/2020/07/31/first-post</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2020/07/31/first-post.html">&lt;div class=&quot;paragraph&quot;&gt;
 &lt;p&gt;My first post on my new blog. This posts is about the blog itself and how it&amp;#8217;s made.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;paragraph&quot;&gt;
@@ -11,7 +11,7 @@
 &lt;p&gt;This is the source of my contact form lambda:&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;title&quot;&gt;lambda_function.py &lt;a href=&quot;https://github.com/Nicklas2751/contact-form-lambda/blob/c62f03067c52fdb085262a6f60b90fc3d0d1410e/lambda_function.py&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;view&lt;/a&gt; &lt;a href=&quot;https://raw.githubusercontent.com/Nicklas2751/contact-form-lambda/c62f03067c52fdb085262a6f60b90fc3d0d1410e/lambda_function.py&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;raw&lt;/a&gt;&lt;/div&gt;
+&lt;div class=&quot;title&quot;&gt;lambda_function.py &lt;a href=&quot;https://github.com/Nicklas2751/contact-form-lambda/blob/30b833e/lambda_function.py&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;view&lt;/a&gt; &lt;a href=&quot;https://raw.githubusercontent.com/Nicklas2751/contact-form-lambda/30b833e/lambda_function.py&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;raw&lt;/a&gt;&lt;/div&gt;
 &lt;div class=&quot;content&quot;&gt;
 &lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;python&quot;&gt;&lt;table class=&quot;linenotable&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;linenos gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt; 1
  2
@@ -90,11 +90,16 @@
 75
 76
 77
+78
+79
+80
+81
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;__future__&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;print_function&lt;/span&gt;
 &lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;botocore.exceptions&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ClientError&lt;/span&gt;
 &lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;urllib.request&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;urlopen&lt;/span&gt;
 &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;boto3&lt;/span&gt;
 &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;json&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;requests&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;lambda_handler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;g-recaptcha-response&quot;&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;mail&quot;&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;text&quot;&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
@@ -104,14 +109,17 @@
 
     &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;success&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;send_email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;mail&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;RECaptcha failed!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
     &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
         &lt;span class=&quot;s&quot;&gt;&quot;location&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;referer&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;checkRecaptcha&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;captchaCode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;urlopen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;https://www.google.com/recaptcha/api/siteverify?secret=mySecret&amp;amp;response=&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;captchaCode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;loads&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;requestData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;secret&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;mySecret&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;response&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;captchaCode&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;requests&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;https://www.google.com/recaptcha/api/siteverify&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;requestData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'success'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;send_email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;userMail&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
@@ -167,6 +175,119 @@
     &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Email sent! Message ID:&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'MessageId'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Because the HTML form sends it&amp;#8217;s data as www-form-urlencoded the following API gateway integration request mapping template is needed:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;title&quot;&gt;api_gateway_mapping_template.vtl &lt;a href=&quot;https://github.com/Nicklas2751/contact-form-lambda/blob/30b833e/api_gateway_mapping_template.vtl&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;view&lt;/a&gt; &lt;a href=&quot;https://raw.githubusercontent.com/Nicklas2751/contact-form-lambda/30b833e/api_gateway_mapping_template.vtl&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;raw&lt;/a&gt;&lt;/div&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;vtl&quot;&gt;&lt;table class=&quot;linenotable&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;linenos gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt; 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;## convert HTML POST data or HTTP GET query string to JSON
+
+## get the raw post data from the AWS built-in variable and give it a nicer name
+#if ($context.httpMethod == &quot;POST&quot;)
+ #set($rawAPIData = $input.path(&quot;$&quot;))
+#elseif ($context.httpMethod == &quot;GET&quot;)
+ #set($rawAPIData = $input.params().querystring)
+ #set($rawAPIData = $rawAPIData.toString())
+ #set($rawAPIDataLength = $rawAPIData.length() - 1)
+ #set($rawAPIData = $rawAPIData.substring(1, $rawAPIDataLength))
+ #set($rawAPIData = $rawAPIData.replace(&quot;, &quot;, &quot;&amp;amp;&quot;))
+#else
+ #set($rawAPIData = &quot;&quot;)
+#end
+
+## first we get the number of &quot;&amp;amp;&quot; in the string, this tells us if there is more than one key value pair
+#set($countAmpersands = $rawAPIData.length() - $rawAPIData.replace(&quot;&amp;amp;&quot;, &quot;&quot;).length())
+
+## if there are no &quot;&amp;amp;&quot; at all then we have only one key value pair.
+## we append an ampersand to the string so that we can tokenise it the same way as multiple kv pairs.
+## the &quot;empty&quot; kv pair to the right of the ampersand will be ignored anyway.
+#if ($countAmpersands == 0)
+ #set($rawPostData = $rawAPIData + &quot;&amp;amp;&quot;)
+#end
+
+## now we tokenise using the ampersand(s)
+#set($tokenisedAmpersand = $rawAPIData.split(&quot;&amp;amp;&quot;))
+
+## we set up a variable to hold the valid key value pairs
+#set($tokenisedEquals = [])
+
+## now we set up a loop to find the valid key value pairs, which must contain only one &quot;=&quot;
+#foreach( $kvPair in $tokenisedAmpersand )
+ #set($countEquals = $kvPair.length() - $kvPair.replace(&quot;=&quot;, &quot;&quot;).length())
+ #if ($countEquals == 1)
+  #set($kvTokenised = $kvPair.split(&quot;=&quot;))
+  #if ($kvTokenised[0].length() &amp;gt; 0)
+   ## we found a valid key value pair. add it to the list.
+   #set($devNull = $tokenisedEquals.add($kvPair))
+  #end
+ #end
+#end
+
+## next we set up our loop inside the output structure &quot;{&quot; and &quot;}&quot;
+{
+  &quot;referer&quot; : &quot;$input.params('referer')&quot;,
+#foreach( $kvPair in $tokenisedEquals )
+  ## finally we output the JSON for this pair and append a comma if this isn't the last pair
+  #set($kvTokenised = $kvPair.split(&quot;=&quot;))
+ &quot;$util.urlDecode($kvTokenised[0])&quot; : #if($kvTokenised[1].length() &amp;gt; 0)&quot;$util.urlDecode($kvTokenised[1])&quot;#{else}&quot;&quot;#end#if( $foreach.hasNext ),#end
+#end
+}
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;</content><author><name></name></author><category term="general" /><category term="aws" /><category term="lambda" /><summary type="html">My first post on my new blog. This posts is about the blog itself and how it&amp;#8217;s made.</summary></entry></feed>
