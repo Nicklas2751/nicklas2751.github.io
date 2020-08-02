@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Nicklas Wiegandt | Use K3OS system Traefik with Let&#8217;s Encrypt</title>
+    <base href="https://nicklas.wiegandt.eu" />
+    <link type="application/atom+xml" rel="alternate" href="https://nicklas.wiegandt.eu/feed.xml" title="Nicklas Wiegandt" />
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>Nicklas Wiegandt</h1>
+      <nav>
+    
+      <a href="/" >Home</a>
+    
+      <a href="/tags/" >Tags</a>
+    
+      <a href="/about/" >About</a>
+    
+      <a href="/contact/" >Contact</a>
+    
+    <a href="https://nicklas.wiegandt.eu/feed.xml" target="_blank"><i class="fas fa-rss-square"></i></a>
+</nav>
+    </header>
+    <div class="bg-image"></div>
+    <main>
+<article>
+    <h1>Use K3OS system Traefik with Let&#8217;s Encrypt</h1>
+    <ul class="tags">
+        
+            <li><a href="/tag/kubernetes">#kubernetes</a></li>
+        
+            <li><a href="/tag/traefik">#traefik</a></li>
+        
+            <li><a href="/tag/letsencrypt">#letsencrypt</a></li>
+        
+            <li><a href="/tag/k3os">#k3os</a></li>
+        
+            <li><a href="/tag/rancher">#rancher</a></li>
+              
+    </ul>
+    <p>
+    <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>How to use <a href="https://k3os.io/" target="_blank" rel="noopener">K3OS</a> system <a href="https://containo.us/traefik/" target="_blank" rel="noopener">Traefik</a> with <a href="https://letsencrypt.org" target="_blank" rel="noopener">Let&#8217;s Encrypt</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-problem">The problem</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>K3OS comes with a system Traefik. Nice so we can use it to route our services and give them with Let&#8217;s Encrypt HTTPS. Yes!</p>
+</div>
+<div class="paragraph">
+<p>But how to configure it to do what we want? There is a configuration file: <code>/var/lib/rancher/k3s/server/manifests/traefik.yaml</code></p>
+</div>
+<div class="paragraph">
+<p>Seems to work pretty well so where is the problem? If you reboot your server or, like in my case your provider restarts your server, all Traefik configuration is lost.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-solution">The solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>K3OS has some persistent directories and <code>/var/lib/rancher/k3s/server/manifests</code> isn&#8217;t one. Ok but <a href="https://github.com/rancher/k3os#kubernetes" target="_blank" rel="noopener">the documentation says</a> that you can write manifests with the configuration key <code>write_files</code>. But there&#8217;s another stumbling block! Per default K3OS overwrites the Traefik configuration on each boot.</p>
+</div>
+<div class="paragraph">
+<p>So here is the solution, you need to add this to your K3OS configuration:</p>
+</div>
+<div class="listingblock">
+<div class="title">/var/lib/rancher/k3os/config.yaml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml">  <span class="na">k3s_args</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">server</span>
+  <span class="pi">-</span> <span class="s2">"</span><span class="s">--no-deploy=traefik"</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now don&#8217;t forget to write the Traefik configuration with <code>write_files</code>:</p>
+</div>
+<div class="listingblock">
+<div class="title">/var/lib/rancher/k3os/config.yaml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml"><span class="na">write_files</span><span class="pi">:</span>
+<span class="pi">-</span> <span class="na">content</span><span class="pi">:</span> <span class="pi">|-</span>
+    <span class="s">apiVersion: helm.cattle.io/v1</span>
+    <span class="s">kind: HelmChart</span>
+    <span class="s">metadata:</span>
+      <span class="s">name: traefik</span>
+      <span class="s">namespace: kube-system</span>
+    <span class="s">spec:</span>
+      <span class="s">chart: https://%{KUBERNETES_API}%/static/charts/traefik-1.81.0.tgz</span>
+      <span class="s">set:</span>
+        <span class="s">rbac.enabled: "true"</span>
+        <span class="s">ssl.enabled: "true"</span>
+        <span class="s">ssl.enforced: "true"</span>
+        <span class="s">acme.enabled: "true"</span>
+        <span class="s">acme.challengeType: "tls-alpn-01"</span>
+        <span class="s">acme.email: "admin@yourdomain.com"</span>
+        <span class="s">acme.staging: "false"</span>
+        <span class="s">metrics.prometheus.enabled: "true"</span>
+        <span class="s">kubernetes.ingressEndpoint.useDefaultPublishedService: "true"</span>
+        <span class="s">image: "rancher/library-traefik"</span>
+  <span class="na">owner</span><span class="pi">:</span> <span class="s">root</span>
+  <span class="na">path</span><span class="pi">:</span> <span class="s">/var/lib/rancher/k3s/server/manifests/traefik.yaml</span>
+  <span class="na">permissions</span><span class="pi">:</span> <span class="s1">'</span><span class="s">0755'</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A complete configuration could look like this:</p>
+</div>
+<div class="listingblock">
+<div class="title">/var/lib/rancher/k3os/config.yaml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre></td><td class="code"><pre><span class="na">k3os</span><span class="pi">:</span>
+  <span class="na">k3s_args</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">server</span>
+  <span class="pi">-</span> <span class="s2">"</span><span class="s">--no-deploy=traefik"</span>
+<span class="na">sshAuthorizedKeys</span><span class="pi">:</span>
+<span class="pi">-</span> <span class="s">github:yourGithubUserName</span>
+<span class="na">write_files</span><span class="pi">:</span>
+<span class="pi">-</span> <span class="na">content</span><span class="pi">:</span> <span class="pi">|-</span>
+    <span class="s">apiVersion: helm.cattle.io/v1</span>
+    <span class="s">kind: HelmChart</span>
+    <span class="s">metadata:</span>
+      <span class="s">name: traefik</span>
+      <span class="s">namespace: kube-system</span>
+    <span class="s">spec:</span>
+      <span class="s">chart: https://%{KUBERNETES_API}%/static/charts/traefik-1.81.0.tgz</span>
+      <span class="s">set:</span>
+        <span class="s">rbac.enabled: "true"</span>
+        <span class="s">ssl.enabled: "true"</span>
+        <span class="s">ssl.enforced: "true"</span>
+        <span class="s">acme.enabled: "true"</span>
+        <span class="s">acme.challengeType: "tls-alpn-01"</span>
+        <span class="s">acme.email: "admin@yourdomain.com"</span>
+        <span class="s">acme.staging: "false"</span>
+        <span class="s">metrics.prometheus.enabled: "true"</span>
+        <span class="s">kubernetes.ingressEndpoint.useDefaultPublishedService: "true"</span>
+        <span class="s">image: "rancher/library-traefik"</span>
+  <span class="na">owner</span><span class="pi">:</span> <span class="s">root</span>
+  <span class="na">path</span><span class="pi">:</span> <span class="s">/var/lib/rancher/k3s/server/manifests/traefik.yaml</span>
+  <span class="na">permissions</span><span class="pi">:</span> <span class="s1">'</span><span class="s">0755'</span>
+</pre></td></tr></tbody></table></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="how-to-use-it-for-a-container">How to use it for a container</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In case you are reading this and do not know how to use Traefik with your container now, here is how it works:</p>
+</div>
+<div class="paragraph">
+<p>It&#8217;s super simple! :)
+Of course your domain has to be configured to point to your server for all domains you wan&#8217;t to use. Your Traefik configuration has to be correct to. How to do this is documented in the <a href="https://docs.traefik.io/https/acme/" target="_blank" rel="noopener">Traefik documentation</a> and there is a example in the solution above. If these basic conditions are fulfilled it is super easy.</p>
+</div>
+<div class="paragraph">
+<p>To instruct Traefik to route a subdomain with HTTPS to a service you just need to create a <a href="https://kubernetes.io/docs/concepts/services-networking/ingress/" target="_blank" rel="noopener">Ingess</a> for your service:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml"><span class="nn">---</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Ingress</span>
+<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">extensions/v1beta1</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">myservice-ingress</span>
+  <span class="na">namespace</span><span class="pi">:</span> <span class="s">myservice</span>
+
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">rules</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">host</span><span class="pi">:</span> <span class="s">service.mydoma.in</span>
+      <span class="na">http</span><span class="pi">:</span>
+        <span class="na">paths</span><span class="pi">:</span>
+          <span class="pi">-</span> <span class="na">path</span><span class="pi">:</span> <span class="s">/</span>
+            <span class="na">backend</span><span class="pi">:</span>
+              <span class="na">serviceName</span><span class="pi">:</span> <span class="s">my-service</span>
+              <span class="na">servicePort</span><span class="pi">:</span> <span class="s">8080</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A complete service description inclunding Ingress could look like this:</p>
+</div>
+<div class="listingblock">
+<div class="title">README.md <a href="https://github.com/mediathekview/zapp-backend/blob/29d08f164dceb9f924b7248893ce6d2b202ccd40/README.md#kubernetes" target="_blank" rel="noopener">view</a> <a href="https://raw.githubusercontent.com/mediathekview/zapp-backend/29d08f164dceb9f924b7248893ce6d2b202ccd40/README.md" target="_blank" rel="noopener">raw</a></div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+</pre></td><td class="code"><pre><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Namespace</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">mediathekview</span>
+<span class="nn">---</span>
+<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Service</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">zapp-backend</span>
+  <span class="na">namespace</span><span class="pi">:</span> <span class="s">mediathekview</span>
+
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">ports</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">http</span>
+      <span class="na">protocol</span><span class="pi">:</span> <span class="s">TCP</span>
+      <span class="na">port</span><span class="pi">:</span> <span class="m">3000</span>
+  <span class="na">selector</span><span class="pi">:</span>
+    <span class="na">app</span><span class="pi">:</span> <span class="s">zapp-backend</span>
+<span class="nn">---</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Deployment</span>
+<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">apps/v1</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">namespace</span><span class="pi">:</span> <span class="s">mediathekview</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">zapp-backend</span>
+  <span class="na">labels</span><span class="pi">:</span>
+    <span class="na">app</span><span class="pi">:</span> <span class="s">zapp-backend</span>
+
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">replicas</span><span class="pi">:</span> <span class="m">1</span>
+  <span class="na">selector</span><span class="pi">:</span>
+    <span class="na">matchLabels</span><span class="pi">:</span>
+      <span class="na">app</span><span class="pi">:</span> <span class="s">zapp-backend</span>
+  <span class="na">template</span><span class="pi">:</span>
+    <span class="na">metadata</span><span class="pi">:</span>
+      <span class="na">labels</span><span class="pi">:</span>
+        <span class="na">app</span><span class="pi">:</span> <span class="s">zapp-backend</span>
+    <span class="na">spec</span><span class="pi">:</span>
+      <span class="na">containers</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">zapp-backend</span>
+          <span class="na">image</span><span class="pi">:</span> <span class="s">mediathekview/zapp-backend</span>
+          <span class="na">ports</span><span class="pi">:</span>
+            <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">web</span>
+              <span class="na">containerPort</span><span class="pi">:</span> <span class="m">3000</span>
+<span class="nn">---</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Ingress</span>
+<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">extensions/v1beta1</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">zapp-backend-ingress</span>
+  <span class="na">namespace</span><span class="pi">:</span> <span class="s">mediathekview</span>
+
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">rules</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">host</span><span class="pi">:</span> <span class="s">api.zapp.mediathekview.de</span>
+      <span class="na">http</span><span class="pi">:</span>
+        <span class="na">paths</span><span class="pi">:</span>
+          <span class="pi">-</span> <span class="na">path</span><span class="pi">:</span> <span class="s">/</span>
+            <span class="na">backend</span><span class="pi">:</span>
+              <span class="na">serviceName</span><span class="pi">:</span> <span class="s">zapp-backend</span>
+              <span class="na">servicePort</span><span class="pi">:</span> <span class="s">3000</span>
+</pre></td></tr></tbody></table></code></pre>
+</div>
+</div>
+</div>
+</div>
+    </p>
+</article>
+    </main>
+    <footer>
+      &copy; 2020 Nicklas Wiegandt
+      <address class="mail">
+        <i class="far fa-envelope"> nicklas [at] wiegandt [dot] eu</i>
+      </address>
+      <address class="github">
+        <a title="GitHub" href="https://github.com/nicklas2751" target="_blank"><i class="fab fa-github"> GitHub</i></a>
+      </address>
+      <address class="stackoverflow">
+        <a title="Stack Overflow" href="https://stackoverflow.com/story/nicklas2751" target="_blank"><i class="fab fa-stack-overflow"> Stack Overflow</i></a>
+      </address>
+      <address class="xing">
+        <a title="Xing" href="https://www.xing.com/profile/Nicklas_Wiegandt" target="_blank"><i class="fab fa-xing"> Xing</i></a>
+      </address>
+      <address class="linkedin">
+        <a title="Linked In" href="https://www.linkedin.com/in/nicklas-wiegandt-09239714a" target="_blank"><i class="fab fa-linkedin"> LinkedIn</i></a>
+      </address>
+    </footer>
+  </body>
+</html>
