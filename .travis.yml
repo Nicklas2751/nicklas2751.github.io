@@ -5,6 +5,7 @@ script:
     - git clone https://${GH_TOKEN}@github.com/nicklas2751/nicklas2751.github.io.git nicklas2751.github.io.master
     - cp -R _site/* nicklas2751.github.io.master/
     - cp README.md nicklas2751.github.io.master/
+    - cp CNAME nicklas2751.github.io.master/
     - cd nicklas2751.github.io.master
     - git config user.email "nicklas@wiegandt.eu"
     - git config user.name "Nicklas Wiegandt"
