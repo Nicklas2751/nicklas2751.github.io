@@ -2,4 +2,5 @@
     {% for item in site.data.navigation %}
       <a href="{{ item.link }}" {% if page.url == item.link %}class="current-page"{% endif %}>{{ item.name }}</a>
     {% endfor %}
+    <a href="{{ site.url }}/feed.xml" target="_blank"><i class="fas fa-rss-square"></i></a>
 </nav>
