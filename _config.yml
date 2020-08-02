@@ -63,4 +63,4 @@ exclude:
    - vendor/gems/
    - vendor/ruby/
    - CNAME
-   - README.md
+   - README.adoc
