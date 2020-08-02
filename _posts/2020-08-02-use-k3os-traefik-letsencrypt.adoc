@@ -1,6 +1,6 @@
 = Use K3OS system Traefik with Let's Encrypt
 :page-layout: post
-:page-date: 2020-08-02 20:15:00 +0200
+:page-date: 2020-08-02 14:00:00 +0200
 :page-tags: [kubernetes,traefik,letsencrypt,k3os,rancher]
 :page-liquid:
 
