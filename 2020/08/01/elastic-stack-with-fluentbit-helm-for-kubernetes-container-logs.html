@@ -13,6 +13,23 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://www.google.com/recaptcha/api.js"></script>
+    <!-- Matomo -->
+    <script type="text/javascript">
+      var _paq = window._paq = window._paq || [];
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(["setDoNotTrack", true]);
+      _paq.push(["disableCookies"]);
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function() {
+        var u="//statistics.wiegandt.eu/";
+        _paq.push(['setTrackerUrl', u+'matomo.php']);
+        _paq.push(['setSiteId', '1']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+      })();
+    </script>
+    <!-- End Matomo Code -->
   </head>
   <body>
     <header>
@@ -173,6 +190,7 @@ The default helm values already include the right Elasticsearch hostname. Why it
     </main>
     <footer>
       &copy; 2020 Nicklas Wiegandt
+      <a href="https://nicklas.wiegandt.eu/datenschutz">Datenschutzerklärung</a>
       <address class="mail">
         <i class="far fa-envelope"> nicklas [at] wiegandt [dot] eu</i>
       </address>
