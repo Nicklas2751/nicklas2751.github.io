@@ -100,7 +100,7 @@ In case you are reading this and do not know how to use Traefik with your contai
 It's super simple! :)
 Of course your domain has to be configured to point to your server for all domains you wan't to use. Your Traefik configuration has to be correct to. How to do this is documented in the https://docs.traefik.io/https/acme/[Traefik documentation,window=_blank] and there is a example in the solution above. If these basic conditions are fulfilled it is super easy.
 
-To instruct Traefik to route a subdomain with HTTPS to a service you just need to create a https://kubernetes.io/docs/concepts/services-networking/ingress/[Ingess,window=_blank] for your service:
+To instruct Traefik to route a subdomain with HTTPS to a service you just need to create a https://kubernetes.io/docs/concepts/services-networking/ingress/[Ingress,window=_blank] for your service:
 
 [source,yaml]
 ----
