@@ -1,0 +1,189 @@
+= Docker Compose log aggregation using Grafana Loki and Fluent Bit
+:page-layout: post
+:page-date: 2020-12-20 22:00:00 +0100
+:page-tags: [docker-compose,docker,grafana,log,loki,fluent-bit]
+:page-liquid:
+
+How to use https://grafana.com/oss/loki/[Grafana Loki] for https://docs.docker.com/compose/[docker compose] log aggregation using https://fluentbit.io/[Fluent Bit].
+
+Recently https://elaon.de[Alex], my co-maintainter of https://mediathekview.de[MediathekView], asked me to build an Docker Compose file to view the https://github.com/mediathekview/MServer/[MServer] logs with https://grafana.com/oss/loki/[Grafana Loki]. I chose https://fluentbit.io/[Fluent Bit] as log proccessor and forwarder becuase Docker Compose can use the fluentd logging driver https://docs.docker.com/config/containers/logging/fluentd/[out of the box].
+
+This does not seem particularly complex at first. However, there are some pitfalls hidden due to missing or outdated information.
+
+== The solution
+=== Loki, Grafana and Fluent Bit
+The Docker Compose part for Loki and Grafana is straightforward:
+
+.docker-compose-loki.yml
+[source,yaml]
+----
+version: "3.3"
+networks:
+  loki:
+    driver: bridge
+
+services:
+  loki:
+    image: grafana/loki:2.0.0
+    container_name: loki
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - loki
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - loki
+----
+
+The fluent bit part is also straightforward, but unlike the https://docs.fluentbit.io/manual/v/master/local-testing/logging-pipeline#docker-compose[sample Fluent Bit Docker Compose file], port 24224 is exposed. The port is required by the https://docs.docker.com/config/containers/logging/fluentd/[fluentd docker logging driver].
+
+.docker-compose-loki.yml
+[source,yaml]
+----
+  fluent-bit:
+    image: fluent/fluent-bit
+    container_name: fluentbit
+    ports:
+        - "24224:24224"
+        - "24224:24224/udp"
+    volumes:
+      - .docker/logging/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+    networks:
+      - loki
+----
+
+The two compose configuration can then be combined into one single compose file:
+
+.docker-compose-loki.yml
+[source,yaml]
+----
+version: "3.3"
+networks:
+  loki:
+    driver: bridge
+
+services:
+  loki:
+    image: grafana/loki:2.0.0
+    container_name: loki
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - loki
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - loki
+  
+  fluent-bit:
+    image: fluent/fluent-bit
+    container_name: fluentbit
+    ports:
+        - "24224:24224"
+        - "24224:24224/udp"
+    volumes:
+      - .docker/logging/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+    networks:
+      - loki
+----
+
+=== Fluent Bit configuration
+The configuration of Fluent Bit is almost identically to the https://docs.fluentbit.io/manual/pipeline/outputs/loki[example in the Fluent Bit documentation], but one important change must be made.
+
+The label `$sub['stream']` of the example isn't applicable for Docker Compose logs. 
+An example for a log line looks like this:
+[source,json]
+----
+{"container_id":"05070542e00a616589a3671404d34fe7374f3b6f08ef6f71431acc42fbfa8675","container_name":"/mserver_mserver_1","source":"stdout","log":"[INFO ] [EtmMonitor] Shutting down JETM."}
+----
+
+Instead of `$sub['stream']` I defined `$container_id`, `$container_name` and `$source` as labels.
+
+.fluent-bit.conf
+[source,conf]
+----
+[SERVICE]
+    Flush        1
+    Daemon       Off
+    Log_Level    info
+
+[INPUT]
+    Name   forward
+    Listen 0.0.0.0
+    Port   24224
+
+[Output]
+    Name loki
+    Match *
+    host loki
+    port 3100
+    labels job=mserver,$container_id,$container_name,$source
+    line_format json
+----
+
+=== Using the fluentd docker logging driver
+To use the fluentd docker logging driver in conjunction with other Docker Compose this snippet can be used:
+
+.docker-compose.yml
+[source,yaml]
+----
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: httpd.access
+----
+
+Sending the logs of nginx to Loki may look like this:
+.docker-compose.yml
+[source,yaml]
+----
+version: "3.3"
+services:
+  nginx:
+    image: nginx
+    volumes:
+    - ./templates:/etc/nginx/templates
+    ports:
+    - "8080:80"
+    environment:
+    - NGINX_HOST=foobar.com
+    - NGINX_PORT=80
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: httpd.access
+----
+
+=== Grafana Loki show only Log message
+When viewing the logs in the Grafana exploring view or with the Dashboard Log Panel, the individual lines are quite ugly. The entire json message is displayed, which quickly becomes very confusing. In order to get the log messages into a more readable format, one can use a https://grafana.com/docs/loki/latest/logql/#Line-Format-Expression[new feature of Loki version 2.0]: `line_format`
+
+An example query for the container `mserver_mserver_1`:
+----
+{container_name="/mserver_mserver_1"} | json | line_format "{{.log}}"
+----
+
+== Links
+Some useful Links:
+
+- https://docs.fluentbit.io/manual/pipeline/outputs/loki[Documentation - Fluent Bit]
+
+- https://grafana.com/docs/loki/latest/clients/fluentbit/[Documentation - Grafana Loki]
+
+- https://grafana.com/blog/2020/10/28/loki-2.0-released-transform-logs-as-youre-querying-them-and-set-up-alerts-within-loki/[Blog post Grafana Loki 2.0]
+
+'''
+
+[.small]#Thanks to https://friedmann.dev/[Daniel] for his review of this post#
