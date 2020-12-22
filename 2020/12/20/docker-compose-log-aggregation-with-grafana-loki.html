@@ -74,7 +74,7 @@
 <p>How to use <a href="https://grafana.com/oss/loki/">Grafana Loki</a> for <a href="https://docs.docker.com/compose/">docker compose</a> log aggregation using <a href="https://fluentbit.io/">Fluent Bit</a>.</p>
 </div>
 <div class="paragraph">
-<p>Recently <a href="https://elaon.de">Alex</a>, my co-maintainter of <a href="https://mediathekview.de">MediathekView</a>, asked me to build an Docker Compose file to view the <a href="https://github.com/mediathekview/MServer/">MServer</a> logs with <a href="https://grafana.com/oss/loki/">Grafana Loki</a>. I chose <a href="https://fluentbit.io/">Fluent Bit</a> as log proccessor and forwarder becuase Docker Compose can use the fluentd logging driver <a href="https://docs.docker.com/config/containers/logging/fluentd/">out of the box</a>.</p>
+<p>Recently <a href="https://elaon.de">Alex</a>, my co-maintainer of <a href="https://mediathekview.de">MediathekView</a>, asked me to build a Docker Compose file to view the <a href="https://github.com/mediathekview/MServer/">MServer</a> logs with <a href="https://grafana.com/oss/loki/">Grafana Loki</a>. I chose <a href="https://fluentbit.io/">Fluent Bit</a> as log proccessor and forwarder becuase Docker Compose can use the fluentd logging driver <a href="https://docs.docker.com/config/containers/logging/fluentd/">out of the box</a>.</p>
 </div>
 <div class="paragraph">
 <p>This does not seem particularly complex at first. However, there are some pitfalls hidden due to missing or outdated information.</p>
@@ -266,7 +266,7 @@ An example for a log line looks like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>{container_name="/mserver_mserver_1"} | json | line_format ""</pre>
+<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="err">container_name=</span><span class="s2">"/mserver_mserver_1"</span><span class="p">}</span><span class="w"> </span><span class="err">|</span><span class="w"> </span><span class="err">json</span><span class="w"> </span><span class="err">|</span><span class="w"> </span><span class="err">line_format</span><span class="w"> </span><span class="s2">""</span></code></pre>
 </div>
 </div>
 </div>
