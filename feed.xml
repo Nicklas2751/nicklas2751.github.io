@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="https://nicklas.wiegandt.eu/feed.xml" rel="self" type="application/atom+xml" /><link href="https://nicklas.wiegandt.eu/" rel="alternate" type="text/html" /><updated>2020-12-22T06:18:33-06:00</updated><id>https://nicklas.wiegandt.eu/feed.xml</id><title type="html">Nicklas Wiegandt</title><subtitle>About Nicklas Wiegandt (Nicklas2751) and his Blog.</subtitle><author><name>Nicklas Wiegandt</name></author><entry><title type="html">Docker Compose log aggregation using Grafana Loki and Fluent Bit</title><link href="https://nicklas.wiegandt.eu/2020/12/20/docker-compose-log-aggregation-with-grafana-loki.html" rel="alternate" type="text/html" title="Docker Compose log aggregation using Grafana Loki and Fluent Bit" /><published>2020-12-20T15:00:00-06:00</published><updated>2020-12-20T15:00:00-06:00</updated><id>https://nicklas.wiegandt.eu/2020/12/20/docker-compose-log-aggregation-with-grafana-loki</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2020/12/20/docker-compose-log-aggregation-with-grafana-loki.html">&lt;div id=&quot;preamble&quot;&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="https://nicklas.wiegandt.eu/feed.xml" rel="self" type="application/atom+xml" /><link href="https://nicklas.wiegandt.eu/" rel="alternate" type="text/html" /><updated>2020-12-22T06:35:39-06:00</updated><id>https://nicklas.wiegandt.eu/feed.xml</id><title type="html">Nicklas Wiegandt</title><subtitle>About Nicklas Wiegandt (Nicklas2751) and his Blog.</subtitle><author><name>Nicklas Wiegandt</name></author><entry><title type="html">Docker Compose log aggregation using Grafana Loki and Fluent Bit</title><link href="https://nicklas.wiegandt.eu/2020/12/20/docker-compose-log-aggregation-with-grafana-loki.html" rel="alternate" type="text/html" title="Docker Compose log aggregation using Grafana Loki and Fluent Bit" /><published>2020-12-20T15:00:00-06:00</published><updated>2020-12-20T15:00:00-06:00</updated><id>https://nicklas.wiegandt.eu/2020/12/20/docker-compose-log-aggregation-with-grafana-loki</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2020/12/20/docker-compose-log-aggregation-with-grafana-loki.html">&lt;div id=&quot;preamble&quot;&gt;
 &lt;div class=&quot;sectionbody&quot;&gt;
 &lt;div class=&quot;paragraph&quot;&gt;
 &lt;p&gt;How to use &lt;a href=&quot;https://grafana.com/oss/loki/&quot;&gt;Grafana Loki&lt;/a&gt; for &lt;a href=&quot;https://docs.docker.com/compose/&quot;&gt;docker compose&lt;/a&gt; log aggregation using &lt;a href=&quot;https://fluentbit.io/&quot;&gt;Fluent Bit&lt;/a&gt;.&lt;/p&gt;
@@ -22,28 +22,28 @@
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;title&quot;&gt;docker-compose-loki.yml&lt;/div&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;yaml&quot;&gt;&lt;span class=&quot;na&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3.3&quot;&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;loki&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;bridge&lt;/span&gt;
+&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;yaml&quot;&gt;  &lt;span class=&quot;na&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3.3&quot;&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;loki&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;bridge&lt;/span&gt;
 
-&lt;span class=&quot;na&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;loki&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;grafana/loki:2.0.0&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;container_name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;loki&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3100:3100&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;-config.file=/etc/loki/local-config.yaml&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;loki&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;loki&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;grafana/loki:2.0.0&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;container_name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;loki&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3100:3100&quot;&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;-config.file=/etc/loki/local-config.yaml&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;loki&lt;/span&gt;
 
-  &lt;span class=&quot;na&quot;&gt;grafana&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;grafana/grafana:latest&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;container_name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;grafana&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3000:3000&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;loki&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+    &lt;span class=&quot;na&quot;&gt;grafana&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;grafana/grafana:latest&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;container_name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;grafana&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3000:3000&quot;&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;loki&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class=&quot;paragraph&quot;&gt;
@@ -196,7 +196,7 @@ An example for a log line looks like this:&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;json&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;container_name=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/mserver_mserver_1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;line_format&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;container_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/mserver_mserver_1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; | json | line_format &lt;span class=&quot;s2&quot;&gt;&quot;{{.log}}&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -598,14 +598,13 @@ The default helm values already include the right Elasticsearch hostname. Why it
 40
 41
 42
-43
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;na&quot;&gt;elasticsearch&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
   &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
 
 &lt;span class=&quot;na&quot;&gt;kibana&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
   &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
   &lt;span class=&quot;na&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;ELASTICSEARCH_HOSTS&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://-elasticsearch-client:9200&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;ELASTICSEARCH_HOSTS&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://{{ .Release.Name }}-elasticsearch-client:9200&lt;/span&gt;
 
 &lt;span class=&quot;na&quot;&gt;logstash&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
   &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
@@ -617,9 +616,9 @@ The default helm values already include the right Elasticsearch hostname. Why it
   &lt;span class=&quot;c1&quot;&gt;# config:&lt;/span&gt;
   &lt;span class=&quot;c1&quot;&gt;#   output.file.enabled: false&lt;/span&gt;
   &lt;span class=&quot;c1&quot;&gt;#   output.logstash:&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;#     hosts: [&quot;-logstash:5044&quot;]&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;#     hosts: [&quot;{{ .Release.Name }}-logstash:5044&quot;]&lt;/span&gt;
   &lt;span class=&quot;c1&quot;&gt;# indexTemplateLoad:&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;#   - -elasticsearch-client:9200&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;#   - {{ .Release.Name }}-elasticsearch-client:9200&lt;/span&gt;
 
 &lt;span class=&quot;na&quot;&gt;fluentd&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
   &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
@@ -629,7 +628,7 @@ The default helm values already include the right Elasticsearch hostname. Why it
   &lt;span class=&quot;na&quot;&gt;backend&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
     &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;es&lt;/span&gt;
     &lt;span class=&quot;na&quot;&gt;es&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;host&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;-elasticsearch-client&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;host&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{{&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;.Release.Name&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;-elasticsearch-client&lt;/span&gt;
 
 &lt;span class=&quot;na&quot;&gt;fluentd-elasticsearch&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
   &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
@@ -641,7 +640,6 @@ The default helm values already include the right Elasticsearch hostname. Why it
 
 &lt;span class=&quot;na&quot;&gt;elasticsearch-exporter&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
   &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;----&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;
