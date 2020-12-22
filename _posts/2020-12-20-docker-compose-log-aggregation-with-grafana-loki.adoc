@@ -6,7 +6,7 @@
 
 How to use https://grafana.com/oss/loki/[Grafana Loki] for https://docs.docker.com/compose/[docker compose] log aggregation using https://fluentbit.io/[Fluent Bit].
 
-Recently https://elaon.de[Alex], my co-maintainter of https://mediathekview.de[MediathekView], asked me to build an Docker Compose file to view the https://github.com/mediathekview/MServer/[MServer] logs with https://grafana.com/oss/loki/[Grafana Loki]. I chose https://fluentbit.io/[Fluent Bit] as log proccessor and forwarder becuase Docker Compose can use the fluentd logging driver https://docs.docker.com/config/containers/logging/fluentd/[out of the box].
+Recently https://elaon.de[Alex], my co-maintainer of https://mediathekview.de[MediathekView], asked me to build a Docker Compose file to view the https://github.com/mediathekview/MServer/[MServer] logs with https://grafana.com/oss/loki/[Grafana Loki]. I chose https://fluentbit.io/[Fluent Bit] as log proccessor and forwarder becuase Docker Compose can use the fluentd logging driver https://docs.docker.com/config/containers/logging/fluentd/[out of the box].
 
 This does not seem particularly complex at first. However, there are some pitfalls hidden due to missing or outdated information.
 
@@ -171,6 +171,7 @@ services:
 When viewing the logs in the Grafana exploring view or with the Dashboard Log Panel, the individual lines are quite ugly. The entire json message is displayed, which quickly becomes very confusing. In order to get the log messages into a more readable format, one can use a https://grafana.com/docs/loki/latest/logql/#Line-Format-Expression[new feature of Loki version 2.0]: `line_format`
 
 An example query for the container `mserver_mserver_1`:
+[source,json]
 ----
 {container_name="/mserver_mserver_1"} | json | line_format "{{.log}}"
 ----
