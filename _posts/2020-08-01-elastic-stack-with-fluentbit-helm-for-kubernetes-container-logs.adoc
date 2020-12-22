@@ -19,6 +19,7 @@ Here is my values file to get it working:
 
 .elastic-stack-fluentbit-values.yaml
 [source,yaml,linenums]
+{%raw%}
 ----
 elasticsearch:
   enabled: true
@@ -62,4 +63,5 @@ elasticsearch-curator:
 
 elasticsearch-exporter:
   enabled: false
-  ----
+----
+{%endraw%}

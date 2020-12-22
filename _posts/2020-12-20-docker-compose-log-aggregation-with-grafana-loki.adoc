@@ -17,28 +17,28 @@ The Docker Compose part for Loki and Grafana is straightforward:
 .docker-compose-loki.yml
 [source,yaml]
 ----
-version: "3.3"
-networks:
-  loki:
-    driver: bridge
+  version: "3.3"
+  networks:
+    loki:
+      driver: bridge
 
-services:
-  loki:
-    image: grafana/loki:2.0.0
-    container_name: loki
-    ports:
-      - "3100:3100"
-    command: -config.file=/etc/loki/local-config.yaml
-    networks:
-      - loki
+  services:
+    loki:
+      image: grafana/loki:2.0.0
+      container_name: loki
+      ports:
+        - "3100:3100"
+      command: -config.file=/etc/loki/local-config.yaml
+      networks:
+        - loki
 
-  grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
-    ports:
-      - "3000:3000"
-    networks:
-      - loki
+    grafana:
+      image: grafana/grafana:latest
+      container_name: grafana
+      ports:
+        - "3000:3000"
+      networks:
+        - loki
 ----
 
 The fluent bit part is also straightforward, but unlike the https://docs.fluentbit.io/manual/v/master/local-testing/logging-pipeline#docker-compose[sample Fluent Bit Docker Compose file], port 24224 is exposed. The port is required by the https://docs.docker.com/config/containers/logging/fluentd/[fluentd docker logging driver].
@@ -171,9 +171,11 @@ services:
 When viewing the logs in the Grafana exploring view or with the Dashboard Log Panel, the individual lines are quite ugly. The entire json message is displayed, which quickly becomes very confusing. In order to get the log messages into a more readable format, one can use a https://grafana.com/docs/loki/latest/logql/#Line-Format-Expression[new feature of Loki version 2.0]: `line_format`
 
 An example query for the container `mserver_mserver_1`:
-[source,json]
+[source,bash]
 ----
+{%raw%}
 {container_name="/mserver_mserver_1"} | json | line_format "{{.log}}"
+{%endraw%}
 ----
 
 == Links
