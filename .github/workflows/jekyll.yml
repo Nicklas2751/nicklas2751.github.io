@@ -20,7 +20,6 @@ jobs:
         jekyll/builder:latest /bin/bash -c "chmod 777 /srv/jekyll && jekyll build --future"
     - name: Copy non generate files
       run: |
-        cp README.adoc _site/
         cp CNAME _site/
     - name: Deploy to GitHub Pages
       if: success()
