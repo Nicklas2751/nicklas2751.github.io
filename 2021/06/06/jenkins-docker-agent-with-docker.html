@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Nicklas Wiegandt | Using Docker in jenkins with jenkins Docker agent</title>
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=yes">
+    <base href="https://nicklas.wiegandt.eu" />
+    <link type="application/atom+xml" rel="alternate" href="https://nicklas.wiegandt.eu/feed.xml" title="Nicklas Wiegandt" />
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <!-- Matomo -->
+    <script type="text/javascript">
+      var _paq = window._paq = window._paq || [];
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(["disableCookies"]);
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function() {
+        var u="//statistics.wiegandt.eu/";
+        _paq.push(['setTrackerUrl', u+'matomo.php']);
+        _paq.push(['setSiteId', '1']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+      })();
+    </script>
+    <!-- End Matomo Code -->
+  </head>
+  <body>
+    <header>
+      <h1>Nicklas Wiegandt</h1>
+      <nav>
+    
+      <a href="/" >Home</a>
+    
+      <a href="/tags/" >Tags</a>
+    
+      <a href="/about/" >About</a>
+    
+      <a href="/contact/" >Contact</a>
+    
+    <a href="https://nicklas.wiegandt.eu/feed.xml" target="_blank"><i class="fas fa-rss-square"></i></a>
+</nav>
+    </header>
+    <div class="bg-image"></div>
+    <main>
+<article>
+    <h1>Using Docker in jenkins with jenkins Docker agent</h1>
+    <ul class="tags">
+        
+            <li><a href="/tag/jenkins">#jenkins</a></li>
+        
+            <li><a href="/tag/cicd">#cicd</a></li>
+        
+            <li><a href="/tag/docker">#docker</a></li>
+        
+            <li><a href="/tag/docker-in-docker">#docker-in-docker</a></li>
+        
+            <li><a href="/tag/containerd">#containerd</a></li>
+              
+    </ul>
+    <p>
+    <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Getting <a href="https://jenkins.io" target="_blank" rel="noopener">Jenkins CI</a> to build Docker container with a jenkins Docker agent</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-problem">The problem</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Running <a href="https://jenkins.io" target="_blank" rel="noopener">Jenkins CI</a> agents as containers is a nice thing. However it can be a
+hassle if you want to build a container inside the containerized docker agent. Using the standard Jenkins agent container
+will result in an error telling you that the Docker binary is not found.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-solution">The solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The default <a href="https://hub.docker.com/r/jenkins/agent" target="_blank" rel="noopener">Jenkins agent container</a> doesn&#8217;t contain the Docker binaries. 😔</p>
+</div>
+<div class="paragraph">
+<p>But the <a href="https://hub.docker.com/r/jenkins/jnlp-agent-docker" target="_blank" rel="noopener">Jenkins JNLP agent Docker container</a> does! 😀</p>
+</div>
+<div class="paragraph">
+<p>Unfortunately the image is missing any description and finding any documentation is hard. You can neither view the Dockerfile nor is the source linked. But in the <a href="https://github.com/jenkinsci/jnlp-agents" target="_blank" rel="noopener">GitHub repository</a> for the <a href="https://github.com/jenkinsci/jnlp-agents" target="_blank" rel="noopener">JNLP Agents</a> is a subdirectory called <code>docker</code> in which you can find this <a href="https://github.com/jenkinsci/jnlp-agents/blob/master/docker/Dockerfile">Dockerfile</a>. This seems to be the source for the linked image. One can see that the Docker binary is getting installed on build time.</p>
+</div>
+<div class="paragraph">
+<p>In order to use the agent go to your Jenkins server settings and click on <code>Manage Nodes and Clouds</code> &#8594; <code>Configure Clouds</code>.</p>
+</div>
+<div class="paragraph">
+<p>If you haven&#8217;t already set your Docker settings:<br>
+<strong>Name:</strong> <code>docker</code><br>
+<strong>Docker Host URI:</strong> <code>unix:///var/run/docker.sock</code><br></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assets/images/jenkins-configure-clouds.png" alt="The Jenkins Docker settings">
+</div>
+</div>
+<div class="paragraph">
+<div class="title">The Jenkins Docker setting</div>
+<p>Then open the Docker Agent templates section.<br>
+Change the <strong>Docker Image</strong> to: <code>jenkins/jnlp-agent-docker</code></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assets/images/jenkins-agent-template.png" alt="The Jenkins agent template settings">
+</div>
+</div>
+<div class="paragraph">
+<div class="title">The Jenkins agent template settings</div>
+<p>After that open the container settings and set the following:<br>
+<strong>User:</strong> <code>root</code><br>
+<strong>Volumes:</strong> <code>/var/run/docker.sock:/var/run/docker.sock</code></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assets/images/jenkins-agent-template-container-settings.png" alt="The Jenkins agent template container settings">
+</div>
+</div>
+<div class="paragraph">
+<div class="title">The Jenkins agent template container settings</div>
+<p>Thats it. Happy dockerizing 🙂</p>
+</div>
+</div>
+</div>
+    </p>
+</article>
+    </main>
+    <footer>
+      &copy; 2021 Nicklas Wiegandt
+      <a href="https://nicklas.wiegandt.eu/datenschutz">Datenschutzerklärung</a>
+      <address class="mail">
+        <i class="far fa-envelope"> nicklas [at] wiegandt [dot] eu</i>
+      </address>
+      <address class="github">
+        <a title="GitHub" href="https://github.com/nicklas2751" target="_blank"><i class="fab fa-github"> GitHub</i></a>
+      </address>
+      <address class="stackoverflow">
+        <a title="Stack Overflow" href="https://stackoverflow.com/story/nicklas2751" target="_blank"><i class="fab fa-stack-overflow"> Stack Overflow</i></a>
+      </address>
+      <address class="xing">
+        <a title="Xing" href="https://www.xing.com/profile/Nicklas_Wiegandt" target="_blank"><i class="fab fa-xing"> Xing</i></a>
+      </address>
+      <address class="linkedin">
+        <a title="Linked In" href="https://www.linkedin.com/in/nicklas-wiegandt-09239714a" target="_blank"><i class="fab fa-linkedin"> LinkedIn</i></a>
+      </address>
+    </footer>
+  </body>
+</html>
