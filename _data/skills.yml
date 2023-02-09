@@ -27,12 +27,16 @@
     - ionicframework
     - Vaadin
     - Angular TypeScript
+    - Vue
+    - Apache Camel
 - tools:
     - Apache Maven
     - Git
     - Gradle
     - Oracle DB
     - MySQL
+    - MariaDB
+    - Postgres
     - Microsoft Office
     - LibreOffice
     - Microsoft Outlook
@@ -42,16 +46,24 @@
     - K3OS
     - Google Cloud
     - Azure
+    - Ansible
     - WordPress
     - Jenkins
     - Jira
     - Confluence
+    - BitBucket
     - GitHub
     - GitLab
     - Travis-ci
     - AWS Lambda
+    - Amazon EKS
+    - Google Kubernetes Engine
+    - Azure Kubernetes Services 
     - Alexa Skills Kit
+    - Terraform
+    - Caffeine Cache
 - operatingSystems:
     - Linux
     - Windows
+    - MacOS
     - iOS 
