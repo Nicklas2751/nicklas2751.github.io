@@ -1,0 +1,47 @@
+= Using Docker in jenkins with jenkins Docker agent
+:page-layout: post
+:page-date: 2021-06-06 10:00:00 +0200
+:page-tags: [jenkins,cicd,docker,docker-in-docker,containerd]
+:page-liquid:
+
+Getting https://jenkins.io[Jenkins CI,window=_blank] to build Docker container with a jenkins Docker agent
+
+== The problem
+Running https://jenkins.io[Jenkins CI,window=_blank] agents as containers is a nice thing. However it can be a 
+hassle if you want to build a container inside the containerized docker agent. Using the standard Jenkins agent container 
+will result in an error telling you that the Docker binary is not found.
+
+== The solution
+
+The default https://hub.docker.com/r/jenkins/agent[Jenkins agent container,window=_blank] doesn't contain the Docker binaries. 😔
+
+But the https://hub.docker.com/r/jenkins/jnlp-agent-docker[Jenkins JNLP agent Docker container,window=_blank] does! 😀
+
+Unfortunately the image is missing any description and finding any documentation is hard. You can neither view the Dockerfile nor is the source linked. But in the https://github.com/jenkinsci/jnlp-agents[GitHub repository,window=_blank] for the https://github.com/jenkinsci/jnlp-agents[JNLP Agents,window=_blank] is a subdirectory called `docker` in which you can find this https://github.com/jenkinsci/jnlp-agents/blob/master/docker/Dockerfile[Dockerfile]. This seems to be the source for the linked image. One can see that the Docker binary is getting installed on build time.
+
+In order to use the agent go to your Jenkins server settings and click on `Manage Nodes and Clouds` -> `Configure Clouds`.
+
+If you haven't already set your Docker settings: +
+*Name:* `docker` +
+*Docker Host URI:* `unix:///var/run/docker.sock` +
+
+image::assets/images/jenkins-configure-clouds.png[The Jenkins Docker settings]
+.The Jenkins Docker setting
+
+
+Then open the Docker Agent templates section. +
+Change the *Docker Image* to: `jenkins/jnlp-agent-docker`
+
+image::assets/images/jenkins-agent-template.png[The Jenkins agent template settings]
+.The Jenkins agent template settings
+
+
+After that open the container settings and set the following: +
+*User:* `root` +
+*Volumes:* `/var/run/docker.sock:/var/run/docker.sock`
+
+image::assets/images/jenkins-agent-template-container-settings.png[The Jenkins agent template container settings]
+.The Jenkins agent template container settings
+
+
+Thats it. Happy dockerizing 🙂
