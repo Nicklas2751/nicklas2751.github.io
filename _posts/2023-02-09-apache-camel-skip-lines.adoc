@@ -1,0 +1,47 @@
+= Skip the first two lines of a file in Apache Camel
+:page-layout: post
+:page-date: 2023-02-09 22:00:00 +0200
+:page-tags: [apache-camel]
+:page-liquid:
+
+https://camel.apache.org[Apache Camel,window=_blank] is a popular open-source framework for integrating various systems and services. It provides a variety of components and tools to make it easier to integrate different systems, such as file systems, databases, and web services.
+
+However, in some cases, it might be necessary to skip some lines in a file while processing it with https://camel.apache.org[Apache Camel,window=_blank]. For instance, you might have a file that has some metadata in the first two lines, and you only want to process the actual data from the file.
+
+In this article, I'll show you how to skip the first two lines of a file in https://camel.apache.org[Apache Camel,window=_blank]. The solution can be applied to any type of message that's split by the `split` component, not just files.
+
+== The Problem
+
+When you're processing a file in https://camel.apache.org[Apache Camel,window=_blank], it's possible to use the `split` component to split the file into separate messages, one message per line. However, if you want to skip some lines, such as the first two lines, you need a way to filter out those messages before they're processed.
+
+== The Solution
+
+https://camel.apache.org[Apache Camel,window=_blank] provides a `filter` component that allows you to filter out messages based on a condition. The condition can be specified using the `simple` language, which provides a simple expression language for filtering messages.
+
+To skip the first two lines of a file, we can use the `filter` component and check the value of the `CamelSplitIndex` property. This property is set by the `split` component and indicates the current index of the message in the split list.
+
+Here's an example of how to skip the first two lines of a file in https://camel.apache.org[Apache Camel,window=_blank]:
+
+
+```java
+from("file:input?noop=true")
+.split().tokenize("\n")
+.filter(simple("${exchangeProperty.CamelSplitIndex} > 1"))
+.to("file:output");
+```
+
+In this example, we start by reading a file from the `input` directory using the `file` component. The `noop` option is set to `true`, which means that https://camel.apache.org[Apache Camel,window=_blank] will not delete the original file after processing it.
+
+Next, we use the `split` component to split the file into separate messages, one message per line. The `tokenize` option is set to `"\n"`, which means that the file will be split on newline characters.
+
+After that, we use the `filter` component to filter out messages that have an index lower than or equal to 1. This will effectively skip the first two lines of the file.
+
+Finally, we use the `to` component to write the filtered messages to the `output` directory.
+
+== Conclusion
+
+In this article, I showed you how to skip the first two lines of a file in https://camel.apache.org[Apache Camel,window=_blank]. By using the `filter` component and checking the value of the `CamelSplitIndex` property, you can easily filter out the unwanted lines in a file. With https://camel.apache.org[Apache Camel,window=_blank], it's possible to solve a variety of integration problems, and this is just one of the many examples.
+
+'''
+
+This article was created with the help of OpenAI, an AI model by OpenAI.
