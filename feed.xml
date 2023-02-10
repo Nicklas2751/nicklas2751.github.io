@@ -1,4 +1,70 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="https://nicklas.wiegandt.eu/feed.xml" rel="self" type="application/atom+xml" /><link href="https://nicklas.wiegandt.eu/" rel="alternate" type="text/html" /><updated>2022-03-16T16:16:33-05:00</updated><id>https://nicklas.wiegandt.eu/feed.xml</id><title type="html">Nicklas Wiegandt</title><subtitle>About Nicklas Wiegandt (Nicklas2751) and his Blog.</subtitle><author><name>Nicklas Wiegandt</name></author><entry><title type="html">Using Docker in jenkins with jenkins Docker agent</title><link href="https://nicklas.wiegandt.eu/2021/06/06/jenkins-docker-agent-with-docker.html" rel="alternate" type="text/html" title="Using Docker in jenkins with jenkins Docker agent" /><published>2021-06-06T03:00:00-05:00</published><updated>2021-06-06T03:00:00-05:00</updated><id>https://nicklas.wiegandt.eu/2021/06/06/jenkins-docker-agent-with-docker</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2021/06/06/jenkins-docker-agent-with-docker.html">&lt;div id=&quot;preamble&quot;&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="https://nicklas.wiegandt.eu/feed.xml" rel="self" type="application/atom+xml" /><link href="https://nicklas.wiegandt.eu/" rel="alternate" type="text/html" /><updated>2023-02-10T09:26:49-06:00</updated><id>https://nicklas.wiegandt.eu/feed.xml</id><title type="html">Nicklas Wiegandt</title><subtitle>About Nicklas Wiegandt (Nicklas2751) and his Blog.</subtitle><author><name>Nicklas Wiegandt</name></author><entry><title type="html">Skip the first two lines of a file in Apache Camel</title><link href="https://nicklas.wiegandt.eu/2023/02/09/apache-camel-skip-lines.html" rel="alternate" type="text/html" title="Skip the first two lines of a file in Apache Camel" /><published>2023-02-09T14:00:00-06:00</published><updated>2023-02-09T14:00:00-06:00</updated><id>https://nicklas.wiegandt.eu/2023/02/09/apache-camel-skip-lines</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2023/02/09/apache-camel-skip-lines.html">&lt;div id=&quot;preamble&quot;&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;&lt;a href=&quot;https://camel.apache.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Apache Camel&lt;/a&gt; is a popular open-source framework for integrating various systems and services. It provides a variety of components and tools to make it easier to integrate different systems, such as file systems, databases, and web services.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;However, in some cases, it might be necessary to skip some lines in a file while processing it with &lt;a href=&quot;https://camel.apache.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Apache Camel&lt;/a&gt;. For instance, you might have a file that has some metadata in the first two lines, and you only want to process the actual data from the file.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;In this article, I&amp;#8217;ll show you how to skip the first two lines of a file in &lt;a href=&quot;https://camel.apache.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Apache Camel&lt;/a&gt;. The solution can be applied to any type of message that&amp;#8217;s split by the &lt;code&gt;split&lt;/code&gt; component, not just files.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;When you&amp;#8217;re processing a file in &lt;a href=&quot;https://camel.apache.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Apache Camel&lt;/a&gt;, it&amp;#8217;s possible to use the &lt;code&gt;split&lt;/code&gt; component to split the file into separate messages, one message per line. However, if you want to skip some lines, such as the first two lines, you need a way to filter out those messages before they&amp;#8217;re processed.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;the-solution&quot;&gt;The Solution&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;&lt;a href=&quot;https://camel.apache.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Apache Camel&lt;/a&gt; provides a &lt;code&gt;filter&lt;/code&gt; component that allows you to filter out messages based on a condition. The condition can be specified using the &lt;code&gt;simple&lt;/code&gt; language, which provides a simple expression language for filtering messages.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;To skip the first two lines of a file, we can use the &lt;code&gt;filter&lt;/code&gt; component and check the value of the &lt;code&gt;CamelSplitIndex&lt;/code&gt; property. This property is set by the &lt;code&gt;split&lt;/code&gt; component and indicates the current index of the message in the split list.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Here&amp;#8217;s an example of how to skip the first two lines of a file in &lt;a href=&quot;https://camel.apache.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Apache Camel&lt;/a&gt;:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;from&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;file:input?noop=true&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;tokenize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;\n&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;simple&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;${exchangeProperty.CamelSplitIndex} &amp;gt; 1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;file:output&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;In this example, we start by reading a file from the &lt;code&gt;input&lt;/code&gt; directory using the &lt;code&gt;file&lt;/code&gt; component. The &lt;code&gt;noop&lt;/code&gt; option is set to &lt;code&gt;true&lt;/code&gt;, which means that &lt;a href=&quot;https://camel.apache.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Apache Camel&lt;/a&gt; will not delete the original file after processing it.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Next, we use the &lt;code&gt;split&lt;/code&gt; component to split the file into separate messages, one message per line. The &lt;code&gt;tokenize&lt;/code&gt; option is set to &lt;code&gt;&quot;\n&quot;&lt;/code&gt;, which means that the file will be split on newline characters.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;After that, we use the &lt;code&gt;filter&lt;/code&gt; component to filter out messages that have an index lower than or equal to 1. This will effectively skip the first two lines of the file.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Finally, we use the &lt;code&gt;to&lt;/code&gt; component to write the filtered messages to the &lt;code&gt;output&lt;/code&gt; directory.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;In this article, I showed you how to skip the first two lines of a file in &lt;a href=&quot;https://camel.apache.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Apache Camel&lt;/a&gt;. By using the &lt;code&gt;filter&lt;/code&gt; component and checking the value of the &lt;code&gt;CamelSplitIndex&lt;/code&gt; property, you can easily filter out the unwanted lines in a file. With &lt;a href=&quot;https://camel.apache.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Apache Camel&lt;/a&gt;, it&amp;#8217;s possible to solve a variety of integration problems, and this is just one of the many examples.&lt;/p&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;This article was created with the help of OpenAI, an AI model by OpenAI.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</content><author><name>Nicklas Wiegandt</name></author><category term="apache-camel" /><summary type="html">Apache Camel is a popular open-source framework for integrating various systems and services. It provides a variety of components and tools to make it easier to integrate different systems, such as file systems, databases, and web services.</summary></entry><entry><title type="html">Using Docker in jenkins with jenkins Docker agent</title><link href="https://nicklas.wiegandt.eu/2021/06/06/jenkins-docker-agent-with-docker.html" rel="alternate" type="text/html" title="Using Docker in jenkins with jenkins Docker agent" /><published>2021-06-06T03:00:00-05:00</published><updated>2021-06-06T03:00:00-05:00</updated><id>https://nicklas.wiegandt.eu/2021/06/06/jenkins-docker-agent-with-docker</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2021/06/06/jenkins-docker-agent-with-docker.html">&lt;div id=&quot;preamble&quot;&gt;
 &lt;div class=&quot;sectionbody&quot;&gt;
 &lt;div class=&quot;paragraph&quot;&gt;
 &lt;p&gt;Getting &lt;a href=&quot;https://jenkins.io&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Jenkins CI&lt;/a&gt; to build Docker container with a jenkins Docker agent&lt;/p&gt;
@@ -180,7 +246,7 @@ Change the &lt;strong&gt;Docker Image&lt;/strong&gt; to: &lt;code&gt;jenkins/jnl
 &lt;p&gt;The configuration of Fluent Bit is almost identically to the &lt;a href=&quot;https://docs.fluentbit.io/manual/pipeline/outputs/loki&quot;&gt;example in the Fluent Bit documentation&lt;/a&gt;, but one important change must be made.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;The label &lt;code&gt;$sub['stream']&lt;/code&gt; of the example isn&amp;#8217;t applicable for Docker Compose logs.
+&lt;p&gt;The label &lt;code&gt;$sub[&apos;stream&apos;]&lt;/code&gt; of the example isn&amp;#8217;t applicable for Docker Compose logs.
 An example for a log line looks like this:&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
@@ -189,7 +255,7 @@ An example for a log line looks like this:&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Instead of &lt;code&gt;$sub['stream']&lt;/code&gt; I defined &lt;code&gt;$container_id&lt;/code&gt;, &lt;code&gt;$container_name&lt;/code&gt; and &lt;code&gt;$source&lt;/code&gt; as labels.&lt;/p&gt;
+&lt;p&gt;Instead of &lt;code&gt;$sub[&apos;stream&apos;]&lt;/code&gt; I defined &lt;code&gt;$container_id&lt;/code&gt;, &lt;code&gt;$container_name&lt;/code&gt; and &lt;code&gt;$source&lt;/code&gt; as labels.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;listingblock&quot;&gt;
 &lt;div class=&quot;title&quot;&gt;fluent-bit.conf&lt;/div&gt;
@@ -294,7 +360,7 @@ An example for a log line looks like this:&lt;/p&gt;
 &lt;p&gt;&lt;span class=&quot;small&quot;&gt;Thanks to &lt;a href=&quot;https://friedmann.dev/&quot;&gt;Daniel&lt;/a&gt; for his review of this post&lt;/span&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;/div&gt;</content><author><name>Nicklas Wiegandt</name></author><category term="docker-compose" /><category term="docker" /><category term="grafana" /><category term="log" /><category term="loki" /><category term="fluent-bit" /><summary type="html">How to use Grafana Loki for docker compose log aggregation using Fluent Bit.</summary></entry><entry><title type="html">Use K3OS system Traefik with Let’s Encrypt</title><link href="https://nicklas.wiegandt.eu/2020/08/02/use-k3os-traefik-letsencrypt.html" rel="alternate" type="text/html" title="Use K3OS system Traefik with Let&amp;#8217;s Encrypt" /><published>2020-08-02T07:00:00-05:00</published><updated>2020-08-02T07:00:00-05:00</updated><id>https://nicklas.wiegandt.eu/2020/08/02/use-k3os-traefik-letsencrypt</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2020/08/02/use-k3os-traefik-letsencrypt.html">&lt;div id=&quot;preamble&quot;&gt;
+&lt;/div&gt;</content><author><name>Nicklas Wiegandt</name></author><category term="docker-compose" /><category term="docker" /><category term="grafana" /><category term="log" /><category term="loki" /><category term="fluent-bit" /><summary type="html">How to use Grafana Loki for docker compose log aggregation using Fluent Bit.</summary></entry><entry><title type="html">Use K3OS system Traefik with Let’s Encrypt</title><link href="https://nicklas.wiegandt.eu/2020/08/02/use-k3os-traefik-letsencrypt.html" rel="alternate" type="text/html" title="Use K3OS system Traefik with Let’s Encrypt" /><published>2020-08-02T07:00:00-05:00</published><updated>2020-08-02T07:00:00-05:00</updated><id>https://nicklas.wiegandt.eu/2020/08/02/use-k3os-traefik-letsencrypt</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2020/08/02/use-k3os-traefik-letsencrypt.html">&lt;div id=&quot;preamble&quot;&gt;
 &lt;div class=&quot;sectionbody&quot;&gt;
 &lt;div class=&quot;paragraph&quot;&gt;
 &lt;p&gt;How to use &lt;a href=&quot;https://k3os.io/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;K3OS&lt;/a&gt; system &lt;a href=&quot;https://containo.us/traefik/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Traefik&lt;/a&gt; with &lt;a href=&quot;https://letsencrypt.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Let&amp;#8217;s Encrypt&lt;/a&gt;.&lt;/p&gt;
@@ -360,7 +426,7 @@ An example for a log line looks like this:&lt;/p&gt;
         &lt;span class=&quot;s&quot;&gt;image: &quot;rancher/library-traefik&quot;&lt;/span&gt;
   &lt;span class=&quot;na&quot;&gt;owner&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;root&lt;/span&gt;
   &lt;span class=&quot;na&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/var/lib/rancher/k3s/server/manifests/traefik.yaml&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;permissions&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;0755'&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+  &lt;span class=&quot;na&quot;&gt;permissions&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;0755&apos;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class=&quot;paragraph&quot;&gt;
@@ -426,7 +492,7 @@ An example for a log line looks like this:&lt;/p&gt;
         &lt;span class=&quot;s&quot;&gt;image: &quot;rancher/library-traefik&quot;&lt;/span&gt;
   &lt;span class=&quot;na&quot;&gt;owner&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;root&lt;/span&gt;
   &lt;span class=&quot;na&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/var/lib/rancher/k3s/server/manifests/traefik.yaml&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;permissions&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;0755'&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;permissions&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;0755&apos;&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -834,7 +900,7 @@ The default helm values already include the right Elasticsearch hostname. Why it
     &lt;span class=&quot;n&quot;&gt;requestData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;secret&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;mySecret&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;response&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;captchaCode&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;requests&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;https://www.google.com/recaptcha/api/siteverify&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;requestData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'success'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;success&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;send_email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;userMail&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;c1&quot;&gt;# Replace sender@example.com with your &quot;From&quot; address.
@@ -845,7 +911,7 @@ The default helm values already include the right Elasticsearch hostname. Why it
 &lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;# is still in the sandbox, this address must be verified.
 &lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;RECIPIENT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;recipient@my.domain&quot;&lt;/span&gt;
 
-    &lt;span class=&quot;c1&quot;&gt;# If necessary, replace us-west-2 with the AWS Region you're using for Amazon SES.
+    &lt;span class=&quot;c1&quot;&gt;# If necessary, replace us-west-2 with the AWS Region you&apos;re using for Amazon SES.
 &lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;AWS_REGION&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;eu-west-1&quot;&lt;/span&gt;
 
     &lt;span class=&quot;c1&quot;&gt;# The subject line for the email.
@@ -855,14 +921,14 @@ The default helm values already include the right Elasticsearch hostname. Why it
 &lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;CHARSET&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;UTF-8&quot;&lt;/span&gt;
 
     &lt;span class=&quot;c1&quot;&gt;# Create a new SES resource and specify a region.
-&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;client&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;boto3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'ses'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;region_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AWS_REGION&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;client&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;boto3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;ses&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;region_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AWS_REGION&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
     &lt;span class=&quot;c1&quot;&gt;# Try to send the email.
 &lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
         &lt;span class=&quot;c1&quot;&gt;#Provide the contents of the email.
 &lt;/span&gt;        &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;send_email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
             &lt;span class=&quot;n&quot;&gt;Destination&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;s&quot;&gt;'ToAddresses'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+                &lt;span class=&quot;s&quot;&gt;&apos;ToAddresses&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
                     &lt;span class=&quot;n&quot;&gt;RECIPIENT&lt;/span&gt;
                 &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
             &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
@@ -870,25 +936,25 @@ The default helm values already include the right Elasticsearch hostname. Why it
                 &lt;span class=&quot;n&quot;&gt;userMail&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
             &lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
             &lt;span class=&quot;n&quot;&gt;Message&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;s&quot;&gt;'Body'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;s&quot;&gt;'Text'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-                        &lt;span class=&quot;s&quot;&gt;'Charset'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CHARSET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                        &lt;span class=&quot;s&quot;&gt;'Data'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s&quot;&gt;&apos;Body&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;s&quot;&gt;&apos;Text&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                        &lt;span class=&quot;s&quot;&gt;&apos;Charset&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CHARSET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                        &lt;span class=&quot;s&quot;&gt;&apos;Data&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
                     &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
                 &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-                &lt;span class=&quot;s&quot;&gt;'Subject'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;s&quot;&gt;'Charset'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CHARSET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                    &lt;span class=&quot;s&quot;&gt;'Data'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SUBJECT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s&quot;&gt;&apos;Subject&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;s&quot;&gt;&apos;Charset&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CHARSET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                    &lt;span class=&quot;s&quot;&gt;&apos;Data&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SUBJECT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
                 &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
             &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
             &lt;span class=&quot;n&quot;&gt;Source&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SENDER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
         &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;c1&quot;&gt;# Display an error if something goes wrong.
 &lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ClientError&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Error'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Message'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;Error&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;Message&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Email sent! Message ID:&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'MessageId'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;MessageId&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -995,9 +1061,9 @@ The default helm values already include the right Elasticsearch hostname. Why it
 
 ## next we set up our loop inside the output structure &quot;{&quot; and &quot;}&quot;
 {
-  &quot;referer&quot; : &quot;$input.params('referer')&quot;,
+  &quot;referer&quot; : &quot;$input.params(&apos;referer&apos;)&quot;,
 #foreach( $kvPair in $tokenisedEquals )
-  ## finally we output the JSON for this pair and append a comma if this isn't the last pair
+  ## finally we output the JSON for this pair and append a comma if this isn&apos;t the last pair
   #set($kvTokenised = $kvPair.split(&quot;=&quot;))
  &quot;$util.urlDecode($kvTokenised[0])&quot; : #if($kvTokenised[1].length() &amp;gt; 0)&quot;$util.urlDecode($kvTokenised[1])&quot;#{else}&quot;&quot;#end#if( $foreach.hasNext ),#end
 #end

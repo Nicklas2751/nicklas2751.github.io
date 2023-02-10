@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="https://nicklas.wiegandt.eu/feed/by_tag/helm.xml" rel="self" type="application/atom+xml" /><link href="https://nicklas.wiegandt.eu/" rel="alternate" type="text/html" /><updated>2023-02-10T09:26:49-06:00</updated><id>https://nicklas.wiegandt.eu/feed/by_tag/helm.xml</id><title type="html">Nicklas Wiegandt</title><subtitle>About Nicklas Wiegandt (Nicklas2751) and his Blog.</subtitle><author><name>Nicklas Wiegandt</name></author><entry><title type="html">Elastic Stack with Fluent Bit Helm for Kubernetes container logs</title><link href="https://nicklas.wiegandt.eu/2020/08/01/elastic-stack-with-fluentbit-helm-for-kubernetes-container-logs.html" rel="alternate" type="text/html" title="Elastic Stack with Fluent Bit Helm for Kubernetes container logs" /><published>2020-08-01T13:15:00-05:00</published><updated>2020-08-01T13:15:00-05:00</updated><id>https://nicklas.wiegandt.eu/2020/08/01/elastic-stack-with-fluentbit-helm-for-kubernetes-container-logs</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2020/08/01/elastic-stack-with-fluentbit-helm-for-kubernetes-container-logs.html">&lt;div id=&quot;preamble&quot;&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;How to install Elastic Stack with Helm and get all Kubernetes container logs in to it with Fluent Bit.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;the-problem&quot;&gt;The problem&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The helm chart for Elastic Stack (&lt;a href=&quot;https://hub.helm.sh/charts/stable/elastic-stack&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;stable/elastic-stack&lt;/a&gt;) seems to be pretty easy right? Yeah it is but if you install it with Fluent Bit activated it tries to find Fluentd and even if you install Fluentd too it can&amp;#8217;t find it. And to get it even worse Fluentd can&amp;#8217;t find Elasticsearch. But why?&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Fluent Bit uses the wrong hostname of Fluentd and Fluentd uses the wrong hostname of Elasticsearch.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;the-solution&quot;&gt;The solution&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Fortunally Fluent Bit don&amp;#8217;t need Fluentd to send its logs to Elasticsearch. So we just need to configure Fluent Bit to communicate with Elasticsearch and use the right hostname.
+The default helm values already include the right Elasticsearch hostname. Why it isn&amp;#8217;t already set for Fluentd and Fluent Bit? I don&amp;#8217;t know.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Here is my values file to get it working:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;title&quot;&gt;elastic-stack-fluentbit-values.yaml&lt;/div&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;yaml&quot;&gt;&lt;table class=&quot;linenotable&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;linenos gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt; 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;na&quot;&gt;elasticsearch&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+
+&lt;span class=&quot;na&quot;&gt;kibana&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;ELASTICSEARCH_HOSTS&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://{{ .Release.Name }}-elasticsearch-client:9200&lt;/span&gt;
+
+&lt;span class=&quot;na&quot;&gt;logstash&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# elasticsearch:&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;#   host: elastic-stack-elasticsearch-client&lt;/span&gt;
+
+&lt;span class=&quot;na&quot;&gt;filebeat&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# config:&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;#   output.file.enabled: false&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;#   output.logstash:&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;#     hosts: [&quot;{{ .Release.Name }}-logstash:5044&quot;]&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# indexTemplateLoad:&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;#   - {{ .Release.Name }}-elasticsearch-client:9200&lt;/span&gt;
+
+&lt;span class=&quot;na&quot;&gt;fluentd&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
+
+&lt;span class=&quot;na&quot;&gt;fluent-bit&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;backend&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;es&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;es&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;host&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{{&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;.Release.Name&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;-elasticsearch-client&lt;/span&gt;
+
+&lt;span class=&quot;na&quot;&gt;fluentd-elasticsearch&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
+
+&lt;span class=&quot;na&quot;&gt;nginx-ldapauth-proxy&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;elasticsearch-curator&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
+
+&lt;span class=&quot;na&quot;&gt;elasticsearch-exporter&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</content><author><name>Nicklas Wiegandt</name></author><category term="kubernetes" /><category term="elastic-stack" /><category term="fluentbit" /><category term="helm" /><summary type="html">How to install Elastic Stack with Helm and get all Kubernetes container logs in to it with Fluent Bit.</summary></entry></feed>
