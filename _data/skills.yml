@@ -17,18 +17,21 @@
     - JavaScript
     - TypeScript
     - Python
+    - Kotlin
 - frameworks:
     - Spring Boot
-    - JUnit 4 & 5
+    - Spring AI
+    - JUnit
     - AssertJ
     - mockito
     - testcontainers
     - quarkus
-    - ionicframework
+    - ionic framework
     - Vaadin
     - Angular TypeScript
     - Vue
     - Apache Camel
+    - Svelte
 - tools:
     - Apache Maven
     - Git
@@ -40,10 +43,12 @@
     - Microsoft Office
     - LibreOffice
     - Microsoft Outlook
+    - Microsoft Teams
     - Docker
     - Kubernetes
     - Rancher 2
     - K3OS
+    - Amazon Web Services
     - Google Cloud
     - Azure
     - Ansible
@@ -62,8 +67,17 @@
     - Alexa Skills Kit
     - Terraform
     - Caffeine Cache
+    - Redis
+    - OpenAPI Generator
+    - Model Context Protocol (MCP)
+    - GitHub Copilot
 - operatingSystems:
     - Linux
     - Windows
     - MacOS
-    - iOS 
+    - iOS
+- iSAQBAdvancedModules:
+      - ADOC - Architecture Documentation
+      - DDD - Domain Driven Design
+      - CLOUDINFRA - Infrastructure, Container and Cloud Native
+      - ARCEVAL - Architecture Evaluation

@@ -44,6 +44,14 @@
     {{language.name}} - {{language.level}}{% if forloop.last == false %}<br />{% endif %}
     {% endfor %}
     {% endfor %}
+    <h3>iSAQB Advanced Level Modules</h3>
+    <ul>
+    {% for skilltype in site.data.skills %}
+      {% for module in skilltype.iSAQBAdvancedModules %}
+        <li>{{module}}</li>
+      {% endfor %}
+    {% endfor %}
+    </ul>
     <h3>Technical Languages</h3>
     {% for skilltype in site.data.skills %}
     {% for technicalLanguage in skilltype.technicalLanguages %}
