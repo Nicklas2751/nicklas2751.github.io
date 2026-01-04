@@ -1,6 +1,7 @@
 ---
-layout: page
+layout: default
 ---
+<main class="article-container">
 {% for tag in site.tags %}
   {% if page.tagname == tag[0] %}
     <h1 style="margin-bottom: 2rem;">#{{ tag[0] }}</h1>
@@ -27,6 +28,7 @@ layout: page
 {% endfor %}
 
 <div style="margin-top:3rem">
-  <a href="{{ '/tags/' | relative_url }}" class="btn">Alle Themen</a>
+  <a href="{{ '/tags/' | relative_url }}" class="btn">All Topics</a>
 </div>
+</main>
 
