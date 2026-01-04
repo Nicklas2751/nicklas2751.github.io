@@ -3,11 +3,11 @@ layout: default
 ---
 <section class="layout-grid">
   <div>
-    <img src="https://www.gravatar.com/avatar/8665d18ab7949fcc3a0a4e06b6391b1e.jpg?s=200&amp;r=X" alt="Nicklas Wiegandt" style="border-radius: 50%; width: 80px; height: 80px; border: 2px solid var(--accent); margin-bottom: 1.5rem;">
-    <div class="eyebrow">Architecture · Systems · Teams</div>
-    <h1>{{ page.hero_title | default: "From <span>Monoliths</span> to Sustainable Platforms." }}</h1>
+    <img src="{{ site.author_avatar }}" alt="{{ site.author_avatar_alt }}" style="border-radius: 50%; width: 80px; height: 80px; border: 2px solid var(--accent); margin-bottom: 1.5rem;">
+    <div class="eyebrow">{{ page.hero_eyebrow }}</div>
+    <h1>{{ page.hero_title }}</h1>
     <p class="lead">
-      {{ page.hero_description | default: "Support on the journey from historically grown systems to clearly structured, maintainable architectures – always with the reality of the teams in mind." }}
+      {{ page.hero_description }}
     </p>
     <div class="badges">
       {% for skill_group in site.data.skills %}
@@ -38,6 +38,6 @@ layout: default
     {% endfor %}
   </aside>
   <div style="grid-column: 2; padding-left: 2rem; margin-top: -1rem;">
-    <a href="{{ '/blog/' | relative_url }}" style="color:var(--accent); font-weight:600;">Read latest posts →</a>
+    <a href="{{ '/blog/' | relative_url }}" style="color:var(--accent); font-weight:600;">{{ page.latest_posts_text | default: "Read latest posts →" }}</a>
   </div>
 </section>
