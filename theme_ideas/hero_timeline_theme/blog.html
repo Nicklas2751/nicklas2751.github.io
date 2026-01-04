@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Hero Timeline — Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@main/css/iconoir.css">
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="brand">Dein Name</div>
+      <nav class="nav">
+        <a href="landing.html">Home</a>
+        <a href="blog.html" class="active">Blog</a>
+        <a href="about.html">Über mich</a>
+        <button class="theme-btn" id="themeToggle" aria-label="Theme umschalten"><i class="iconoir-sun-light"></i></button>
+      </nav>
+    </header>
+
+    <main class="article-container" style="width:100%">
+      <h1 style="margin-bottom:2rem">Blog</h1>
+
+      <div class="blog-list">
+        <article class="blog-card">
+          <h2><a href="post.html" style="color:inherit;text-decoration:none">Event‑Driven ohne Over‑Engineering</a></h2>
+          <div class="meta">12. Nov 2024 · Patterns & Praxis</div>
+          <p>In diesem Beitrag beschreibe ich, wie man Events gezielt einsetzt, ohne das System unnötig zu verkomplizieren.</p>
+          <a href="post.html" class="btn">Artikel lesen</a>
+        </article>
+
+        <article class="blog-card">
+          <h2><a href="post.html" style="color:inherit;text-decoration:none">ADR in der Praxis</a></h2>
+          <div class="meta">20. Dez 2020 · Architektur</div>
+          <p>Wie du Entscheidungen so festhältst, dass sie Teams wirklich helfen, ohne zum Selbstzweck zu werden.</p>
+          <a href="post.html" class="btn">Artikel lesen</a>
+        </article>
+
+        <article class="blog-card">
+          <h2><a href="post.html" style="color:inherit;text-decoration:none">Bounded Contexts in Legacy‑Systemen finden</a></h2>
+          <div class="meta">5. Okt 2023 · Workshops</div>
+          <p>Konkrete Schritte, um Schnittkanten zu identifizieren – mit Beispielen aus echten Projekten.</p>
+          <a href="post.html" class="btn">Artikel lesen</a>
+        </article>
+      </div>
+    </main>
+
+    <footer class="footer">Kontakt · Impressum · RSS</footer>
+  </div>
+
+  <script>
+    (function() {
+      const btn = document.getElementById('themeToggle');
+      const icon = btn.querySelector('i');
+
+      function setTheme(theme) {
+        document.body.setAttribute('data-theme', theme);
+        icon.className = theme === 'dark' ? 'iconoir-half-moon' : 'iconoir-sun-light';
+      }
+
+      const initial = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      setTheme(initial);
+
+      btn.addEventListener('click', function () {
+        const cur = document.body.getAttribute('data-theme');
+        const next = cur === 'dark' ? 'light' : 'dark';
+        setTheme(next);
+        localStorage.setItem('theme', next);
+      });
+    })();
+  </script>
+</body>
+</html>

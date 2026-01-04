@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Hero Timeline — About</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@main/css/iconoir.css">
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="brand">Dein Name</div>
+      <nav class="nav">
+        <a href="landing.html">Home</a>
+        <a href="blog.html">Blog</a>
+        <a href="about.html" class="active">Über mich</a>
+        <button class="theme-btn" id="themeToggle" aria-label="Theme umschalten"><i class="iconoir-sun-light"></i></button>
+      </nav>
+    </header>
+
+    <section class="layout-grid">
+      <div>
+        <div class="eyebrow">Profil &amp; Fokus</div>
+        <h1>Software Architekt mit <span>Leidenschaft</span> für klare Strukturen.</h1>
+        <p class="lead">
+          Ich helfe Organisationen dabei, komplexe Systeme beherrschbar zu machen.
+          Mein Fokus liegt auf Domain-Driven Design, Event-Driven Architecture und
+          der Modernisierung von Legacy-Anwendungen.
+        </p>
+
+        <h2 style="font-size:1.4rem; margin-top:2rem; margin-bottom:1rem;">Skills</h2>
+        <div class="badges">
+          <span class="badge">Domain-Driven Design</span>
+          <span class="badge">Event-Driven Architecture</span>
+          <span class="badge">Kubernetes</span>
+          <span class="badge">Java / Kotlin</span>
+          <span class="badge">TypeScript</span>
+          <span class="badge">AWS</span>
+          <span class="badge">Terraform</span>
+        </div>
+      </div>
+
+      <aside class="timeline">
+        <div class="rail"></div>
+        <div class="timeline-item">
+          <div class="dot"></div>
+          <div class="timeline-meta">2021 – heute</div>
+          <div class="timeline-title">Lead Architect · Plattform</div>
+          <div class="timeline-body">
+            Verantwortlich für die technische Strategie und Architektur der neuen Cloud-Plattform.
+            Einführung von Team Topologies und Self-Service APIs.
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="dot"></div>
+          <div class="timeline-meta">2017 – 2021</div>
+          <div class="timeline-title">Senior Architect · Kernsysteme</div>
+          <div class="timeline-body">
+            Modernisierung des monolithischen Kernsystems hin zu einer modularen Architektur.
+            Etablierung von ADRs und Architektur-Gilden.
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="dot"></div>
+          <div class="timeline-meta">2013 – 2017</div>
+          <div class="timeline-title">Senior Developer · Microservices</div>
+          <div class="timeline-body">
+            Entwicklung von hochverfügbaren Microservices im E-Commerce Umfeld.
+            Fokus auf Resilienz und Observability.
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <footer class="footer">Kontakt · Impressum · RSS</footer>
+  </div>
+
+  <script>
+    (function() {
+      const btn = document.getElementById('themeToggle');
+      const icon = btn.querySelector('i');
+
+      function setTheme(theme) {
+        document.body.setAttribute('data-theme', theme);
+        icon.className = theme === 'dark' ? 'iconoir-half-moon' : 'iconoir-sun-light';
+      }
+
+      const initial = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      setTheme(initial);
+
+      btn.addEventListener('click', function () {
+        const cur = document.body.getAttribute('data-theme');
+        const next = cur === 'dark' ? 'light' : 'dark';
+        setTheme(next);
+        localStorage.setItem('theme', next);
+      });
+    })();
+  </script>
+</body>
+</html>

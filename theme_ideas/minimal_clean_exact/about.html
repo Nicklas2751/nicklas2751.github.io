@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Über mich</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@main/css/iconoir.css">
+</head>
+<body>
+  <!-- Fixed header (no border line) -->
+  <div class="header-fixed" id="headerFixed">
+    <div class="header-inner">
+      <div class="header-name">Dein Name</div>
+      <nav class="header-nav" id="headerNav">
+        <a href="landing.html">Home</a>
+        <a href="blog.html">Blog</a>
+        <a href="about.html">Über mich</a>
+        <button class="theme-btn" id="themeToggle" aria-label="Theme umschalten"><i class="iconoir-sun-light"></i></button>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Mobile two-line header -->
+  <div class="header-2line hidden" id="header2">
+    <div class="top"><div class="header-name">Dein Name</div><div></div></div>
+    <div class="bottom">
+      <a href="landing.html">Home</a>
+      <a href="blog.html">Blog</a>
+      <a href="about.html">Über mich</a>
+      <button class="theme-btn" id="themeToggleMobile" aria-label="Theme umschalten"><i class="iconoir-sun-light"></i></button>
+    </div>
+  </div>
+
+  <main class="container fullwidth-on-mobile" id="main">
+    <h1>Dein Name — CV (Kurz)</h1>
+    <section>
+      <h2>Erfahrung</h2>
+      <ul>
+        <li><strong>Lead Architect</strong> · 2021 – heute</li>
+        <li><strong>Senior Architect</strong> · 2017 – 2021</li>
+        <li><strong>Developer</strong> · 2013 – 2017</li>
+      </ul>
+    </section>
+    <section>
+      <h2>Skills</h2>
+      <p>DDD, Kubernetes, Event‑Driven, CI/CD</p>
+    </section>
+  </main>
+  <footer class="footer">Kontakt · Impressum · RSS</footer>
+
+  <script>
+    // header behavior: show mobile 2-line on small screens and hide desktop header name on scroll
+    (function(){
+      const header2 = document.getElementById('header2');
+      const headerFixed = document.getElementById('headerFixed');
+      const mq = window.matchMedia('(max-width:900px)');
+      function updateHeader(){
+        if(mq.matches){ header2.classList.remove('hidden'); headerFixed.classList.add('hidden'); }
+        else { header2.classList.add('hidden'); headerFixed.classList.remove('hidden'); }
+      }
+      updateHeader(); mq.addListener(updateHeader);
+
+      // hide name on scroll for mobile behavior (when header2 visible we keep name until scroll)
+      let lastScroll = 0; window.addEventListener('scroll', ()=>{
+        const body = document.body;
+        const cur = window.scrollY;
+        if(mq.matches){
+          if(cur>60) body.classList.add('hide-name'); else body.classList.remove('hide-name');
+        } else {
+          // on desktop no hide-name
+          body.classList.remove('hide-name');
+        }
+        lastScroll = cur;
+      });
+
+      // Theme toggle logic
+      const btn = document.getElementById('themeToggle');
+      const btnMobile = document.getElementById('themeToggleMobile');
+
+      function setTheme(theme) {
+        document.body.setAttribute('data-theme', theme);
+        const iconClass = theme === 'dark' ? 'iconoir-half-moon' : 'iconoir-sun-light';
+        if(btn) btn.querySelector('i').className = iconClass;
+        if(btnMobile) btnMobile.querySelector('i').className = iconClass;
+      }
+
+      const initial = document.body.getAttribute('data-theme') || localStorage.getItem('theme') || 'light';
+      setTheme(initial);
+
+      function toggleTheme() {
+        const cur = document.body.getAttribute('data-theme') || 'light';
+        const next = cur === 'light' ? 'dark' : 'light';
+        setTheme(next);
+        try { localStorage.setItem('theme', next); } catch (e) {}
+      }
+
+      if(btn) btn.addEventListener('click', toggleTheme);
+      if(btnMobile) btnMobile.addEventListener('click', toggleTheme);
+    })();
+  </script>
+</body>
+</html>

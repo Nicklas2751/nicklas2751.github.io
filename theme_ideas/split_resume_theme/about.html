@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Split Resume — About</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@main/css/iconoir.css">
+</head>
+<body>
+  <header class="nav-header">
+    <div class="header-inner">
+      <div class="nav-brand">Dein Name</div>
+      <nav class="nav-links">
+        <a href="landing.html">Home</a>
+        <a href="blog.html">Blog</a>
+        <a href="about.html" class="active">Über mich</a>
+        <button class="theme-btn" id="themeToggle" aria-label="Theme umschalten"><i class="iconoir-sun-light"></i></button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page single-layout">
+    <section class="panel">
+      <h1>Über mich</h1>
+      <p class="sub">Detaillierter Werdegang und Skills.</p>
+
+      <div class="section-title">Profil</div>
+      <p class="item">
+        Ich bin Software Architekt mit Leidenschaft für klare Strukturen und pragmatische Lösungen.
+        Mein Fokus liegt auf der Modernisierung von Legacy-Systemen und dem Aufbau skalierbarer Plattformen.
+      </p>
+
+      <div class="section-title">Berufliche Stationen</div>
+      <div style="margin-bottom: 1.5rem;">
+        <p class="item"><strong>Lead Architect</strong> · Plattform‑Modernisierung</p>
+        <p class="sub" style="margin-bottom:0.5rem">2021 – heute</p>
+        <p class="item">Verantwortlich für die technische Strategie und Architektur der neuen Cloud-Plattform.</p>
+      </div>
+      <div style="margin-bottom: 1.5rem;">
+        <p class="item"><strong>Senior Architect</strong> · Kernsysteme</p>
+        <p class="sub" style="margin-bottom:0.5rem">2017 – 2021</p>
+        <p class="item">Modernisierung des monolithischen Kernsystems hin zu einer modularen Architektur.</p>
+      </div>
+      <div style="margin-bottom: 1.5rem;">
+        <p class="item"><strong>Senior Developer</strong> · Microservices</p>
+        <p class="sub" style="margin-bottom:0.5rem">2013 – 2017</p>
+        <p class="item">Entwicklung von hochverfügbaren Microservices im E-Commerce Umfeld.</p>
+      </div>
+
+      <div class="section-title">Skills & Technologien</div>
+      <div class="tag-row">
+        <span class="tag">Domain-Driven Design</span>
+        <span class="tag">Event-Driven Architecture</span>
+        <span class="tag">Kubernetes</span>
+        <span class="tag">Java / Kotlin</span>
+        <span class="tag">TypeScript</span>
+        <span class="tag">AWS</span>
+        <span class="tag">Terraform</span>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">Kontakt · Impressum · RSS</footer>
+
+  <script>
+    (function() {
+      const btn = document.getElementById('themeToggle');
+      const icon = btn.querySelector('i');
+
+      function setTheme(theme) {
+        document.body.setAttribute('data-theme', theme);
+        icon.className = theme === 'dark' ? 'iconoir-half-moon' : 'iconoir-sun-light';
+      }
+
+      const initial = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      setTheme(initial);
+
+      btn.addEventListener('click', function () {
+        const cur = document.body.getAttribute('data-theme');
+        const next = cur === 'dark' ? 'light' : 'dark';
+        setTheme(next);
+        localStorage.setItem('theme', next);
+      });
+    })();
+  </script>
+</body>
+</html>
