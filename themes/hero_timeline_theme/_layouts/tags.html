@@ -1,21 +1,13 @@
 ---
-layout: page
+layout: default
 ---
-<div class="badges">
+<main class="article-container">
+<h1 style="margin-bottom: 2rem;">Topics</h1>
+<div class="badges" style="gap: 1rem;">
   {% for tag in site.tags %}
-    <a href="#{{ tag[0] | slugify }}" class="badge">{{ tag[0] }} ({{ tag[1].size }})</a>
+    <a href="{{ '/tag/' | append: tag[0] | relative_url }}" class="badge" style="font-size: 1rem; padding: 0.5rem 1rem;">{{ tag[0] }} ({{ tag[1].size }})</a>
   {% endfor %}
 </div>
+</main>
 
-{% for tag in site.tags %}
-  <h2 id="{{ tag[0] | slugify }}">{{ tag[0] }}</h2>
-  <ul>
-    {% for post in tag[1] %}
-      <li>
-        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-        <span style="color:var(--muted); font-size:0.85rem"> - {{ post.date | date: "%d. %b %Y" }}</span>
-      </li>
-    {% endfor %}
-  </ul>
-{% endfor %}
 
