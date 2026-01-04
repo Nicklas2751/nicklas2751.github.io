@@ -189,4 +189,4 @@ Some useful Links:
 
 '''
 
-[.small]#Thanks to https://friedmann.dev/[Daniel] for his review of this post#
+[.small]#Thanks to https://www.friedmann-it.de[Daniel] for his review of this post#
