@@ -37,7 +37,7 @@ layout: default
     </div>
     {% endfor %}
   </aside>
-  <div style="grid-column: 2; padding-left: 2rem; margin-top: -1rem;">
+  <div class="latest-posts-link">
     <a href="{{ '/blog/' | relative_url }}" style="color:var(--accent); font-weight:600;">{{ page.latest_posts_text | default: "Read latest posts →" }}</a>
   </div>
 </section>

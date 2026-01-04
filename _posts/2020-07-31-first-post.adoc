@@ -8,7 +8,7 @@ My first post on my new blog. This posts is about the blog itself and how it's m
 
 I created this blog to write about DevOp's things that keep me occupied. These will mainly be solutions to problems for which I had to search and try around for a long time. With this I want to achieve that others do not have to search so long for the right solution. Maybe, if I find time and motivation, I will also write articles about my work on MediathekView. And maybe I will also write articles about frameworks & technologies I am currently busy oneself with. And maybe I write articles about frameworks and technologies I'm currently working with.
 
-The blog itself is made with https://jekyllrb.com/[Jekyll] and https://github.com/asciidoctor/jekyll-asciidoc[AsciiDoc]. It's hosted on GitHub where you can also find the source: https://github.com/nicklas2751/nicklas2751.github.io Because this don't allows to send E-Mails on server side, I created a AWS Lambda for the contact form.
+The blog itself is made with https://jekyllrb.com/[Jekyll] and https://github.com/asciidoctor/jekyll-asciidoc[AsciiDoc]. It's hosted on https://github.com/nicklas2751/nicklas2751.github.io[GitHub] where you can also find the https://github.com/nicklas2751/nicklas2751.github.io[source]. Because this don't allow to send E-Mails on server side, I created an AWS Lambda for the contact form.
 
 This is the source of my contact form lambda:
 
