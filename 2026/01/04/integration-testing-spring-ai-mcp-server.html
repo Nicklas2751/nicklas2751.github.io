@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Integration Testing Spring AI MCP Server | Nicklas Wiegandt</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@main/css/iconoir.css">
+  <link type="application/atom+xml" rel="alternate" href="https://nicklas.wiegandt.eu/feed.xml" title="Nicklas Wiegandt" />
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Integration Testing Spring AI MCP Server | Nicklas Wiegandt</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Integration Testing Spring AI MCP Server" />
+<meta name="author" content="Nicklas Wiegandt" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="While working on my ZDF Mediathek MCP Server, I noticed a lack of good resources on how to properly integration test a Spring AI MCP Server. Since I usually follow a Test-Driven Development (TDD) approach, this was a bit of a hurdle." />
+<meta property="og:description" content="While working on my ZDF Mediathek MCP Server, I noticed a lack of good resources on how to properly integration test a Spring AI MCP Server. Since I usually follow a Test-Driven Development (TDD) approach, this was a bit of a hurdle." />
+<link rel="canonical" href="https://nicklas.wiegandt.eu/2026/01/04/integration-testing-spring-ai-mcp-server.html" />
+<meta property="og:url" content="https://nicklas.wiegandt.eu/2026/01/04/integration-testing-spring-ai-mcp-server.html" />
+<meta property="og:site_name" content="Nicklas Wiegandt" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-01-04T13:00:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Integration Testing Spring AI MCP Server" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Nicklas Wiegandt"},"dateModified":"2026-01-04T13:00:00-06:00","datePublished":"2026-01-04T13:00:00-06:00","description":"While working on my ZDF Mediathek MCP Server, I noticed a lack of good resources on how to properly integration test a Spring AI MCP Server. Since I usually follow a Test-Driven Development (TDD) approach, this was a bit of a hurdle.","headline":"Integration Testing Spring AI MCP Server","mainEntityOfPage":{"@type":"WebPage","@id":"https://nicklas.wiegandt.eu/2026/01/04/integration-testing-spring-ai-mcp-server.html"},"url":"https://nicklas.wiegandt.eu/2026/01/04/integration-testing-spring-ai-mcp-server.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="brand"><a href="/" style="color: var(--accent);">Nicklas Wiegandt</a></div>
+      <nav class="nav">
+        
+          <a href="/" >Home</a>
+        
+          <a href="/blog/" >Blog</a>
+        
+          <a href="/tags/" >Tags</a>
+        
+          <a href="/about/" >About</a>
+        
+          <a href="/contact/" >Contact</a>
+        
+        <button class="theme-btn" id="themeToggle" aria-label="Theme umschalten"><i class="iconoir-sun-light"></i></button>
+      </nav>
+    </header>
+
+    <main class="article-container">
+  <div class="eyebrow">SPRING-AI</div>
+  <h1 style="margin-bottom:0.5rem">Integration Testing Spring AI MCP Server</h1>
+  <div style="color:var(--muted); margin-bottom:2rem; font-size:0.9rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+    04. Jan 2026
+    
+      ·
+      
+        <a href="/tag/spring-ai" class="badge" style="font-size: 0.75rem; padding: 0.2rem 0.5rem;">spring-ai</a>
+      
+        <a href="/tag/mcp" class="badge" style="font-size: 0.75rem; padding: 0.2rem 0.5rem;">mcp</a>
+      
+        <a href="/tag/testing" class="badge" style="font-size: 0.75rem; padding: 0.2rem 0.5rem;">testing</a>
+      
+    
+  </div>
+
+  <div class="article-content">
+    <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>While working on my <a href="https://github.com/Nicklas2751/zdfmediathek-mcp">ZDF Mediathek MCP Server</a>, I noticed a lack of good resources on how to properly integration test a <a href="https://docs.spring.io/spring-ai/reference/">Spring AI</a> MCP Server. Since I usually follow a Test-Driven Development (TDD) approach, this was a bit of a hurdle.</p>
+</div>
+<div class="paragraph">
+<p>I wanted to test my MCP tools integratively, meaning I wanted to ensure that the part I&#8217;m testing is actually called via the Model Context Protocol.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-approach">The Approach</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>My solution involves using the Spring AI MCP Client within the test to establish a connection to the MCP Server that is started via <code>@SpringBootTest</code>. This allows me to simulate a real client interaction.</p>
+</div>
+<div class="paragraph">
+<p>To make this work, I first needed to add the MCP Client dependency to my <code>build.gradle.kts</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="kotlin"><span class="nf">testImplementation</span><span class="p">(</span><span class="s">"org.springframework.ai:spring-ai-starter-mcp-client-webflux"</span><span class="p">)</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-integration-test">The Integration Test</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Here is an example based on my <code>SearchContentServiceIT</code>, which tests the <code>search_content</code> tool.</p>
+</div>
+<div class="paragraph">
+<p>The key part is the <code>setUp</code> and <code>tearDown</code> methods. In <code>setUp</code>, I initialize the <code>mcpClient</code> so that it connects to the server running on the random local port provided by <code>@SpringBootTest</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="kotlin"><span class="nd">@SpringBootTest</span><span class="p">(</span>
+    <span class="n">webEnvironment</span> <span class="p">=</span> <span class="nc">SpringBootTest</span><span class="p">.</span><span class="nc">WebEnvironment</span><span class="p">.</span><span class="nc">RANDOM_PORT</span><span class="p">,</span>
+    <span class="n">properties</span> <span class="p">=</span> <span class="p">[</span>
+        <span class="s">"spring.ai.mcp.client.enabled=true"</span><span class="p">,</span>
+        <span class="s">"spring.ai.mcp.client.type=async"</span><span class="p">,</span>
+        <span class="c1">// ... other properties</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+<span class="nd">@EnableWireMock</span><span class="p">(</span>
+    <span class="nc">ConfigureWireMock</span><span class="p">(</span>
+        <span class="n">baseUrlProperties</span> <span class="p">=</span> <span class="p">[</span><span class="s">"zdf.url"</span><span class="p">]</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="kd">class</span> <span class="nc">SearchContentServiceIT</span> <span class="p">{</span>
+    <span class="nd">@LocalServerPort</span>
+    <span class="k">private</span> <span class="kd">var</span> <span class="py">port</span><span class="p">:</span> <span class="nc">Int</span> <span class="p">=</span> <span class="mi">0</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="k">private</span> <span class="k">lateinit</span> <span class="kd">var</span> <span class="py">webClientBuilder</span><span class="p">:</span> <span class="nc">WebClient</span><span class="p">.</span><span class="nc">Builder</span>
+
+    <span class="k">private</span> <span class="k">lateinit</span> <span class="kd">var</span> <span class="py">mcpClient</span><span class="p">:</span> <span class="nc">McpAsyncClient</span>
+
+    <span class="nd">@BeforeEach</span>
+    <span class="k">fun</span> <span class="nf">setUp</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">val</span> <span class="py">transport</span> <span class="p">=</span> <span class="nc">WebClientStreamableHttpTransport</span><span class="p">.</span><span class="nf">builder</span><span class="p">(</span>
+            <span class="n">webClientBuilder</span><span class="p">.</span><span class="nf">baseUrl</span><span class="p">(</span><span class="s">"http://localhost:$port"</span><span class="p">)</span>
+        <span class="p">)</span>
+            <span class="p">.</span><span class="nf">endpoint</span><span class="p">(</span><span class="s">"/"</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">build</span><span class="p">()</span>
+
+        <span class="n">mcpClient</span> <span class="p">=</span> <span class="nc">McpClient</span><span class="p">.</span><span class="nf">async</span><span class="p">(</span><span class="n">transport</span><span class="p">).</span><span class="nf">build</span><span class="p">()</span>
+        <span class="n">mcpClient</span><span class="p">.</span><span class="nf">initialize</span><span class="p">().</span><span class="nf">block</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="nd">@AfterEach</span>
+    <span class="k">fun</span> <span class="nf">tearDown</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">mcpClient</span><span class="p">.</span><span class="nf">closeGracefully</span><span class="p">().</span><span class="nf">block</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="c1">// ... tests</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>I use <strong>WireMock</strong> to mock the actual external API (in this case, the ZDF API) that my MCP tool talks to. This keeps the test isolated from the real backend while testing the full MCP flow.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="calling-the-tool">Calling the Tool</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the test method itself, I can now use the <code>mcpClient</code> to call the tool and verify the result.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="kotlin">    <span class="nd">@Test</span>
+    <span class="k">fun</span> <span class="nf">`search_content</span> <span class="n">valid</span> <span class="nc">Query</span> <span class="n">returns</span> <span class="n">expected</span> <span class="nf">result`</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// ... setup expectations and WireMock stubs ...</span>
+
+        <span class="c1">// when</span>
+        <span class="kd">val</span> <span class="py">response</span> <span class="p">=</span> <span class="nf">parseTextContent</span><span class="p">(</span>
+            <span class="n">mcpClient</span><span class="p">.</span><span class="nf">callTool</span><span class="p">(</span>
+                <span class="nc">McpSchema</span><span class="p">.</span><span class="nc">CallToolRequest</span><span class="p">(</span>
+                    <span class="s">"search_content"</span><span class="p">,</span>
+                    <span class="n">mapOf</span><span class="p">&lt;</span><span class="nc">String</span><span class="p">,</span> <span class="nc">String</span><span class="p">&gt;(</span>
+                        <span class="nc">Pair</span><span class="p">(</span><span class="s">"query"</span><span class="p">,</span> <span class="s">"Tagesschau"</span><span class="p">),</span>
+                        <span class="nc">Pair</span><span class="p">(</span><span class="s">"limit"</span><span class="p">,</span> <span class="s">"2"</span><span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1">// then</span>
+        <span class="nf">assertThat</span><span class="p">(</span><span class="n">response</span><span class="p">).</span><span class="nf">usingRecursiveComparison</span><span class="p">().</span><span class="nf">isEqualTo</span><span class="p">(</span><span class="n">expectedResponse</span><span class="p">)</span>
+    <span class="p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="parsing-the-response">Parsing the Response</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>One interesting helper method I created is <code>parseTextContent</code>. It helps to convert the text content from the MCP Client&#8217;s response back into a typed object using the Jackson <code>ObjectMapper</code>. This makes assertions much easier.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="kotlin">    <span class="k">private</span> <span class="k">fun</span> <span class="nf">parseTextContent</span><span class="p">(</span><span class="n">result</span><span class="p">:</span> <span class="nc">Mono</span><span class="p">&lt;</span><span class="nc">McpSchema</span><span class="err">.</span><span class="nc">CallToolResult</span><span class="p">&gt;):</span> <span class="nc">ZdfSearchResponse</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">objectMapper</span><span class="p">.</span><span class="n">readValue</span><span class="p">&lt;</span><span class="nc">ZdfSearchResponse</span><span class="p">&gt;(</span>
+            <span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="nf">block</span><span class="p">()</span><span class="o">!!</span>
+                <span class="p">.</span><span class="nf">content</span><span class="p">()</span>
+                <span class="p">.</span><span class="nf">first</span><span class="p">()</span> <span class="k">as</span> <span class="nc">McpSchema</span><span class="p">.</span><span class="nc">TextContent</span><span class="p">).</span><span class="nf">text</span><span class="p">()</span>
+        <span class="p">)</span>
+    <span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This approach allows me to test my MCP tools end-to-end within the Spring context, ensuring that the MCP layer, the tool implementation, and the integration with external services (mocked) work together as expected.</p>
+</div>
+</div>
+</div>
+  </div>
+
+  <div style="margin-top:3rem">
+    <a href="/blog/" class="btn">Back to Overview</a>
+  </div>
+</main>
+
+
+
+    <footer class="footer">
+      &copy; 2026 Nicklas Wiegandt <a href="/contact/">Contact</a> · <a href="/datenschutz/">Datenschutz</a> · <a href="/feed.xml">RSS</a>
+      <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 1rem; font-size: 1.2rem;">
+        
+        <a href="mailto:nicklas [at] wiegandt [dot] eu" aria-label="Email"><i class="iconoir-mail"></i></a>
+        
+        
+        <a href="https://github.com/nicklas2751" aria-label="GitHub"><i class="iconoir-github"></i></a>
+        
+        
+        <a href="https://linkedin.com/in/nicklas-wiegandt-09239714a" aria-label="LinkedIn"><i class="iconoir-linkedin"></i></a>
+        
+        
+        <a href="https://stackoverflow.com/users/2988111" aria-label="Stack Overflow"><i class="iconoir-code"></i></a>
+        
+      </div>
+    </footer>
+  </div>
+
+  <script language="javascript" type="text/javascript">
+    (function() {
+      const btn = document.getElementById('themeToggle');
+      const icon = btn.querySelector('i');
+
+      function setTheme(theme) {
+        document.body.setAttribute('data-theme', theme);
+        icon.className = theme === 'dark' ? 'iconoir-sun-light' : 'iconoir-half-moon';
+      }
+
+      const initial = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      setTheme(initial);
+
+      btn.addEventListener('click', function () {
+        const cur = document.body.getAttribute('data-theme');
+        const next = cur === 'dark' ? 'light' : 'dark';
+        setTheme(next);
+        localStorage.setItem('theme', next);
+      });
+    })();
+  </script>
+</body>
+</html>
+
