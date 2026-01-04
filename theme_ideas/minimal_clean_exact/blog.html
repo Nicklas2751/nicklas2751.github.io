@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Blog</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@main/css/iconoir.css">
+</head>
+<body>
+  <div class="header-fixed" id="headerFixed">
+    <div class="header-inner">
+      <div class="header-name">Dein Name</div>
+      <nav class="header-nav" id="headerNav">
+        <a href="landing.html">Home</a>
+        <a href="blog.html">Blog</a>
+        <a href="about.html">Über mich</a>
+        <button class="theme-btn" id="themeToggle" aria-label="Theme umschalten"><i class="iconoir-sun-light"></i></button>
+      </nav>
+    </div>
+  </div>
+  <div class="header-2line hidden" id="header2">
+    <div class="top"><div class="header-name">Dein Name</div><div></div></div>
+    <div class="bottom">
+      <a href="landing.html">Home</a>
+      <a href="blog.html">Blog</a>
+      <a href="about.html">Über mich</a>
+      <button class="theme-btn" id="themeToggleMobile" aria-label="Theme umschalten"><i class="iconoir-sun-light"></i></button>
+    </div>
+  </div>
+
+  <main class="container fullwidth-on-mobile" id="main">
+    <h1>Blog</h1>
+    <article>
+      <h2><a href="post.html">Event‑Driven ohne Over‑Engineering</a></h2>
+      <p class="muted">Patterns & Praxis</p>
+    </article>
+    <article>
+      <h2><a href="post.html">ADR in der Praxis</a></h2>
+      <p class="muted">ADR Templates & Beispiele</p>
+    </article>
+  </main>
+  <footer class="footer">Kontakt · Impressum · RSS</footer>
+
+  <script>
+    (function(){
+      const header2 = document.getElementById('header2');
+      const headerFixed = document.getElementById('headerFixed');
+      const mq = window.matchMedia('(max-width:900px)');
+      function updateHeader(){
+        if(mq.matches){ header2.classList.remove('hidden'); headerFixed.classList.add('hidden'); }
+        else { header2.classList.add('hidden'); headerFixed.classList.remove('hidden'); }
+      }
+      updateHeader(); mq.addListener(updateHeader);
+      window.addEventListener('scroll', ()=>{ if(mq.matches){ if(window.scrollY>60) document.body.classList.add('hide-name'); else document.body.classList.remove('hide-name'); } });
+
+      // Theme toggle logic
+      const btn = document.getElementById('themeToggle');
+      const btnMobile = document.getElementById('themeToggleMobile');
+
+      function setTheme(theme) {
+        document.body.setAttribute('data-theme', theme);
+        const iconClass = theme === 'dark' ? 'iconoir-half-moon' : 'iconoir-sun-light';
+        if(btn) btn.querySelector('i').className = iconClass;
+        if(btnMobile) btnMobile.querySelector('i').className = iconClass;
+      }
+
+      const initial = document.body.getAttribute('data-theme') || localStorage.getItem('theme') || 'light';
+      setTheme(initial);
+
+      function toggleTheme() {
+        const cur = document.body.getAttribute('data-theme') || 'light';
+        const next = cur === 'light' ? 'dark' : 'light';
+        setTheme(next);
+        try { localStorage.setItem('theme', next); } catch (e) {}
+      }
+
+      if(btn) btn.addEventListener('click', toggleTheme);
+      if(btnMobile) btnMobile.addEventListener('click', toggleTheme);
+    })();
+  </script>
+</body>
+</html>

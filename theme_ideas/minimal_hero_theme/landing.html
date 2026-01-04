@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Minimal Hero — Landing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@main/css/iconoir.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="header">
+      <div class="brand">Dein Name</div>
+      <nav class="nav">
+        <a href="landing.html" class="active">Home</a>
+        <a href="blog.html">Blog</a>
+        <a href="about.html">Über mich</a>
+        <button class="theme-btn" id="themeToggle" aria-label="Theme umschalten"><i class="iconoir-sun-light"></i></button>
+      </nav>
+    </header>
+
+    <div class="tag">Software Architecture · Technical Leadership</div>
+    <h1>Hi, ich bin <span>Dein Name</span>.</h1>
+    <p class="subtitle">
+      Software Architekt mit Fokus auf wartbare, evolvierbare Systeme,
+      Domain‑Driven Design und pragmatische Developer Experience.
+    </p>
+
+    <section class="meta" aria-label="Kurze Fakten">
+      <div><span class="dot"></span>Remote / Deutschland</div>
+      <div><span class="dot"></span>Architektur · Backend · DevEx</div>
+      <div><span class="dot"></span>Blog zu Architektur und Delivery</div>
+    </section>
+
+    <section class="links" aria-label="Aktionen">
+      <a class="btn btn-primary" href="about.html">Projekte &amp; CV</a>
+      <a class="btn" href="blog.html">Blog lesen</a>
+    </section>
+
+    <section class="skills" aria-label="Tech Stack">
+      <span class="chip">Architecture</span>
+      <span class="chip">DDD</span>
+      <span class="chip">Event‑Driven</span>
+      <span class="chip">Kubernetes</span>
+      <span class="chip">Java / Kotlin</span>
+      <span class="chip">TypeScript</span>
+      <span class="chip">Jekyll · AsciiDoc</span>
+    </section>
+
+    <footer class="footer">Kontakt · Impressum · RSS</footer>
+  </main>
+
+  <script>
+    (function() {
+      const btn = document.getElementById('themeToggle');
+      const icon = btn.querySelector('i');
+
+      function setTheme(theme) {
+        document.body.setAttribute('data-theme', theme);
+        icon.className = theme === 'dark' ? 'iconoir-half-moon' : 'iconoir-sun-light';
+      }
+
+      const initial = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      setTheme(initial);
+
+      btn.addEventListener('click', function () {
+        const cur = document.body.getAttribute('data-theme');
+        const next = cur === 'dark' ? 'light' : 'dark';
+        setTheme(next);
+        localStorage.setItem('theme', next);
+      });
+    })();
+  </script>
+</body>
+</html>

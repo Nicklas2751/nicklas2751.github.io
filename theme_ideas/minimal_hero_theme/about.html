@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Minimal Hero — About</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@main/css/iconoir.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="header">
+      <div class="brand">Dein Name</div>
+      <nav class="nav">
+        <a href="landing.html">Home</a>
+        <a href="blog.html">Blog</a>
+        <a href="about.html" class="active">Über mich</a>
+        <button class="theme-btn" id="themeToggle" aria-label="Theme umschalten"><i class="iconoir-sun-light"></i></button>
+      </nav>
+    </header>
+
+    <h2>Über mich</h2>
+    <p class="subtitle" style="margin-bottom:2rem">Werdegang und Fokus.</p>
+
+    <div style="margin-bottom:2rem">
+      <h3 style="font-size:1.1rem; margin-bottom:1rem; color:var(--fg)">Erfahrung</h3>
+
+      <div style="margin-bottom:1.2rem">
+        <div style="display:flex; justify-content:space-between; margin-bottom:0.2rem; font-size:0.95rem; font-weight:600; color:var(--fg)">
+          <span>Lead Architect</span>
+          <span style="color:var(--accent)">2021 – heute</span>
+        </div>
+        <div style="font-size:0.9rem; color:var(--muted)">Plattform‑Modernisierung</div>
+      </div>
+
+      <div style="margin-bottom:1.2rem">
+        <div style="display:flex; justify-content:space-between; margin-bottom:0.2rem; font-size:0.95rem; font-weight:600; color:var(--fg)">
+          <span>Senior Architect</span>
+          <span style="color:var(--muted)">2017 – 2021</span>
+        </div>
+        <div style="font-size:0.9rem; color:var(--muted)">Kernsysteme</div>
+      </div>
+
+      <div style="margin-bottom:1.2rem">
+        <div style="display:flex; justify-content:space-between; margin-bottom:0.2rem; font-size:0.95rem; font-weight:600; color:var(--fg)">
+          <span>Senior Developer</span>
+          <span style="color:var(--muted)">2013 – 2017</span>
+        </div>
+        <div style="font-size:0.9rem; color:var(--muted)">Microservices</div>
+      </div>
+    </div>
+
+    <div>
+      <h3 style="font-size:1.1rem; margin-bottom:1rem; color:var(--fg)">Skills</h3>
+      <div class="skills">
+        <span class="chip">DDD</span>
+        <span class="chip">Event‑Driven</span>
+        <span class="chip">Kubernetes</span>
+        <span class="chip">Java · Kotlin</span>
+        <span class="chip">TypeScript</span>
+        <span class="chip">Jekyll · AsciiDoc</span>
+      </div>
+    </div>
+
+    <footer class="footer">Kontakt · Impressum · RSS</footer>
+  </main>
+
+  <script>
+    (function() {
+      const btn = document.getElementById('themeToggle');
+      const icon = btn.querySelector('i');
+
+      function setTheme(theme) {
+        document.body.setAttribute('data-theme', theme);
+        icon.className = theme === 'dark' ? 'iconoir-half-moon' : 'iconoir-sun-light';
+      }
+
+      const initial = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      setTheme(initial);
+
+      btn.addEventListener('click', function () {
+        const cur = document.body.getAttribute('data-theme');
+        const next = cur === 'dark' ? 'light' : 'dark';
+        setTheme(next);
+        localStorage.setItem('theme', next);
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Minimal — Clean</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@main/css/iconoir.css">
+</head>
+<body data-theme="light" class="is-landing">
+  <div class="header-fixed" id="headerFixed">
+    <div class="header-inner">
+      <div class="header-name">Dein Name</div>
+      <nav class="header-nav" id="headerNav">
+        <a href="landing.html">Home</a>
+        <a href="blog.html">Blog</a>
+        <a href="about.html">Über mich</a>
+        <button class="theme-btn" id="themeToggle" aria-label="Theme umschalten"><i class="iconoir-sun-light"></i></button>
+      </nav>
+    </div>
+  </div>
+  <!-- mobile header2 removed on landing to avoid duplicate navigation; shared header is used -->
+  <div class="landing-wrap">
+    <header>
+      <h1>Max Mustermann — Software Architekt</h1>
+      <p class="lead">Klar, reduziert, fokussiert. Kurze Vorstellung, Skills und aktuelle Projekte — ohne Ablenkung.</p>
+      <div class="skills">
+        <span class="chip">Architektur</span>
+        <span class="chip">Kubernetes</span>
+        <span class="chip">CI/CD</span>
+        <span class="chip">Asciidoc</span>
+        <span class="chip">Jekyll</span>
+      </div>
+      <div style="margin-top:16px; text-align:center;">
+        <a href="about.html" class="btn" style="margin-right:8px;">Über mich</a>
+        <a href="blog.html" class="btn">Blog</a>
+      </div>
+    </header>
+  </div>
+  <footer class="footer">Kontakt · Impressum · RSS</footer>
+  <script>
+    (function() {
+      const btn = document.getElementById('themeToggle');
+      const icon = btn.querySelector('i');
+
+      function setTheme(theme) {
+        document.body.setAttribute('data-theme', theme);
+        if(theme === 'dark') {
+          icon.className = 'iconoir-half-moon';
+        } else {
+          icon.className = 'iconoir-sun-light';
+        }
+      }
+
+      // set initial theme from attribute (or default to light)
+      const initial = document.body.getAttribute('data-theme') || 'light';
+      setTheme(initial);
+
+      // toggle and persist in localStorage
+      btn.addEventListener('click', function () {
+        const cur = document.body.getAttribute('data-theme') || 'light';
+        const next = cur === 'light' ? 'dark' : 'light';
+        setTheme(next);
+        try { localStorage.setItem('theme', next); } catch (e) { /* ignore */ }
+      });
+
+      // if localStorage has saved theme, apply it on load
+      try {
+        const saved = localStorage.getItem('theme');
+        if (saved) setTheme(saved);
+      } catch (e) { /* ignore */ }
+    })();
+
+    // No mobile header logic on landing (header name hidden via .is-landing)
+  </script>
+</body>
+</html>
