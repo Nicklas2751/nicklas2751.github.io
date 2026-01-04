@@ -1,0 +1,17 @@
+---
+layout: default
+---
+<main class="article-container">
+  <div class="eyebrow">{% if page.tags %}{{ page.tags | first | upcase }}{% else %}BLOG{% endif %}</div>
+  <h1 style="margin-bottom:0.5rem">{{ page.title }}</h1>
+  <div style="color:var(--muted); margin-bottom:2rem; font-size:0.9rem">{{ page.date | date: "%d. %b %Y" }}</div>
+
+  <div class="article-content">
+    {{ content }}
+  </div>
+
+  <div style="margin-top:3rem">
+    <a href="{{ '/blog/' | relative_url }}" class="btn">Back to Overview</a>
+  </div>
+</main>
+

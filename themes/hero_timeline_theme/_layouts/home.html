@@ -1,0 +1,43 @@
+---
+layout: default
+---
+<section class="layout-grid">
+  <div>
+    <img src="https://www.gravatar.com/avatar/8665d18ab7949fcc3a0a4e06b6391b1e.jpg?s=200&amp;r=X" alt="Nicklas Wiegandt" style="border-radius: 50%; width: 80px; height: 80px; border: 2px solid var(--accent); margin-bottom: 1.5rem;">
+    <div class="eyebrow">Architecture · Systems · Teams</div>
+    <h1>{{ page.hero_title | default: "From <span>Monoliths</span> to Sustainable Platforms." }}</h1>
+    <p class="lead">
+      {{ page.hero_description | default: "Support on the journey from historically grown systems to clearly structured, maintainable architectures – always with the reality of the teams in mind." }}
+    </p>
+    <div class="badges">
+      {% for skill_group in site.data.skills %}
+        {% if skill_group.skills %}
+          {% for skill in skill_group.skills %}
+            <span class="badge">{{ skill }}</span>
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div style="display:flex; gap:1rem;">
+      <a href="{{ '/about/' | relative_url }}" class="btn btn-primary">View Career</a>
+      <a href="{{ '/blog/' | relative_url }}" class="btn">Blog</a>
+    </div>
+  </div>
+
+  <aside class="timeline">
+    <div class="rail"></div>
+    {% for post in site.posts limit:5 %}
+    <div class="timeline-item">
+      <div class="dot"></div>
+      <div class="timeline-meta">{{ post.date | date: "%b %Y" }}</div>
+      <div class="timeline-title"><a href="{{ post.url | relative_url }}" style="color:inherit;">{{ post.title }}</a></div>
+      <div class="timeline-body">
+        {{ post.excerpt | strip_html | truncatewords: 15 }}
+      </div>
+    </div>
+    {% endfor %}
+  </aside>
+  <div style="grid-column: 2; padding-left: 2rem; margin-top: -1rem;">
+    <a href="{{ '/blog/' | relative_url }}" style="color:var(--accent); font-weight:600;">Read latest posts →</a>
+  </div>
+</section>
