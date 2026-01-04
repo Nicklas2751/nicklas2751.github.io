@@ -2,4 +2,13 @@
 layout: about
 title: About
 permalink: /about/
+hero_eyebrow: Profile & Passion
+hero_title: Quality-driven <span>Software Architect</span> with a DevOps Mindset.
+hero_description: I focus on quality, problem understanding, and comprehensive architecture documentation. While my core lies in Java Backend, I feel at home in Frontend, DevOps, and Requirements Analysis.
 ---
+
+I am a passionate Software Architecture All-rounder with over 10 years of experience in conceiving and realizing diverse software projects within the Java environment.
+
+My clear focus lies on **quality** and **problem understanding**. While my core competencies are in the Java Backend area, I am also well-versed in topics such as Frontend Development, DevOps, and Requirements Analysis. I am a team player who enjoys sharing knowledge and quickly adapting to new topics.
+
+Recently, a major focus of mine has been on **Software Architecture Documentation**.

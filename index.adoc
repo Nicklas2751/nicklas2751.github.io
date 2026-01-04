@@ -1,4 +1,7 @@
 ---
 layout: home
 name: Home
+hero_eyebrow: Software Architecture · Java · DevOps
+hero_title: Passionate <span>Software Architect</span> & All-rounder.
+hero_description: Over 10 years of experience in the Java ecosystem with a strong focus on quality, problem understanding, and architecture documentation. Bridging Backend, Frontend, and DevOps.
 ---

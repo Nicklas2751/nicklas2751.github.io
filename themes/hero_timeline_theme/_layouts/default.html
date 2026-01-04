@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ page.lang | default: site.lang | default: "de" }}">
+<html lang="{{ page.lang | default: "de" }}">
 <head>
   <meta charset="utf-8" />
   <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
@@ -24,7 +24,7 @@
     {{ content }}
 
     <footer class="footer">
-      &copy; {{ site.time | date: '%Y' }} {{ site.author }}. <a href="{{ '/contact/' | relative_url }}">Contact</a> · <a href="{{ '/datenschutz/' | relative_url }}">Datenschutz</a> · <a href="{{ '/feed.xml' | relative_url }}">RSS</a>
+      &copy; {{ site.time | date: '%Y' }} {{ site.author }} <a href="{{ '/contact/' | relative_url }}">Contact</a> · <a href="{{ '/datenschutz/' | relative_url }}">Datenschutz</a> · <a href="{{ '/feed.xml' | relative_url }}">RSS</a>
       <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 1rem; font-size: 1.2rem;">
         {% if site.email %}
         <a href="mailto:{{ site.email }}" aria-label="Email"><i class="iconoir-mail"></i></a>
@@ -42,7 +42,7 @@
     </footer>
   </div>
 
-  <script>
+  <script language="javascript" type="text/javascript">
     (function() {
       const btn = document.getElementById('themeToggle');
       const icon = btn.querySelector('i');

@@ -2,6 +2,8 @@
     - software architecture
     - software development
     - project management
+    - software architecture documentation
+    - cloud computing
 - languages:
     - name: German
       level: native language
@@ -32,6 +34,7 @@
     - Vue
     - Apache Camel
     - Svelte
+    - Arc42
 - tools:
     - Apache Maven
     - Git
@@ -71,6 +74,7 @@
     - OpenAPI Generator
     - Model Context Protocol (MCP)
     - GitHub Copilot
+    - DocAsCode Toolchain
 - operatingSystems:
     - Linux
     - Windows

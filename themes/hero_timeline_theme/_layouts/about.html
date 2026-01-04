@@ -3,40 +3,33 @@ layout: default
 ---
 <section class="layout-grid">
   <div>
-    <div class="eyebrow">Profile & Focus</div>
-    <h1>{{ page.hero_title | default: "Software Architect with a <span>Passion</span> for Clear Structures." }}</h1>
+    <div class="eyebrow">Profile & Passion</div>
+    <h1>{{ page.hero_title }}</h1>
 
     <!-- Quickfacts -->
     <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap;">
         <img src="https://www.gravatar.com/avatar/8665d18ab7949fcc3a0a4e06b6391b1e.jpg?s=200&amp;r=X" alt="Nicklas Wiegandt" style="border-radius: 50%; width: 100px; height: 100px; border: 2px solid var(--accent);">
         <div style="font-size: 0.95rem; color: var(--muted); line-height: 1.6;">
-            <div><i class="iconoir-user"></i> Nicklas Wiegandt</div>
-            <div><i class="iconoir-code"></i> Software Architect</div>
-            <div><i class="iconoir-birthday-cake"></i> 9th August 1995 in Erlangen</div>
-            <div><i class="iconoir-language"></i> German & English</div>
+            <div><i class="iconoir-user"></i> {{ site.author }}</div>
+            <div><i class="iconoir-code"></i> {{ site.author_role }}</div>
+            <div><i class="iconoir-birthday-cake"></i> {{ site.author_birthdate }}</div>
+            <div><i class="iconoir-language"></i> {{ site.author_languages }}</div>
             <div><i class="iconoir-mail"></i> {{ site.email }}</div>
         </div>
     </div>
 
     <p class="lead">
-      {{ page.hero_description | default: "I help organizations master complex systems. My focus is on Domain-Driven Design, Event-Driven Architecture, and modernizing legacy applications." }}
+      {{ page.hero_description }}
     </p>
 
     <!-- Certificates -->
     <h2 style="font-size:1.4rem; margin-top:2rem; margin-bottom:1rem;">Certificates</h2>
     <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;">
-        <a href="https://certificates.future-network-cert.com/4d39a4cb-9224-4b2f-b8ba-f1781d3b18f2" target="_blank">
-            <img src="https://eu.api.accredible.com/v1/frontend/credential_website_embed_image/badge/10722920" alt="iSAQB® Software Architecture - Advanced Level" width="100" height="100">
+        {% for cert in site.data.certificates %}
+        <a href="{{ cert.url }}" target="_blank">
+            <img src="{{ cert.image | relative_url }}" alt="{{ cert.title }}" width="100" height="100">
         </a>
-        <a href="https://skillshub.isqi.org/zl3ujgnl" target="_blank">
-            <img src="https://api.accredible.com/v1/frontend/credential_website_embed_image/badge/13709734" alt="iSAQB® Software Architecture - Foundation Level" width="100" height="100">
-        </a>
-        <a href="https://www.youracclaim.com/badges/f6e26265-b547-426d-8296-f9f06571b848/public_url" target="_blank">
-            <img src="{{ '/assets/images/oracle-certified-associate-java-se-7-programmer.png' | relative_url }}" alt="Oracle Certified Associate" width="100" height="100">
-        </a>
-        <a href="https://www.youracclaim.com/badges/c5360073-f9a2-4a04-8834-20d9343b546f/public_url" target="_blank">
-            <img src="{{ '/assets/images/oracle-certified-professional-java-se-7-programmer.png' | relative_url }}" alt="Oracle Certified Professional" width="100" height="100">
-        </a>
+        {% endfor %}
     </div>
 
     <!-- Skills from Data -->
