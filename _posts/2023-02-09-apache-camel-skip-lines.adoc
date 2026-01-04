@@ -44,4 +44,4 @@ In this article, I showed you how to skip the first two lines of a file in https
 
 '''
 
-This article was created with the help of OpenAI, an AI model by OpenAI.
+This article was created with the help of ChatGPT, an AI model by OpenAI.
