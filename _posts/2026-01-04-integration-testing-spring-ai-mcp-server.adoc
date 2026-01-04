@@ -1,0 +1,119 @@
+= Integration Testing Spring AI MCP Server
+:page-layout: post
+:page-date: 2026-01-04 20:00:00 +0100
+:page-tags: [spring-ai,mcp,testing]
+:page-liquid:
+
+While working on my https://github.com/Nicklas2751/zdfmediathek-mcp[ZDF Mediathek MCP Server], I noticed a lack of good resources on how to properly integration test a https://docs.spring.io/spring-ai/reference/[Spring AI] MCP Server. Since I usually follow a Test-Driven Development (TDD) approach, this was a bit of a hurdle.
+
+I wanted to test my MCP tools integratively, meaning I wanted to ensure that the part I'm testing is actually called via the Model Context Protocol.
+
+== The Approach
+
+My solution involves using the Spring AI MCP Client within the test to establish a connection to the MCP Server that is started via `@SpringBootTest`. This allows me to simulate a real client interaction.
+
+To make this work, I first needed to add the MCP Client dependency to my `build.gradle.kts`:
+
+[source,kotlin]
+----
+testImplementation("org.springframework.ai:spring-ai-starter-mcp-client-webflux")
+----
+
+== The Integration Test
+
+Here is an example based on my `SearchContentServiceIT`, which tests the `search_content` tool.
+
+The key part is the `setUp` and `tearDown` methods. In `setUp`, I initialize the `mcpClient` so that it connects to the server running on the random local port provided by `@SpringBootTest`.
+
+[source,kotlin]
+----
+@SpringBootTest(
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    properties = [
+        "spring.ai.mcp.client.enabled=true",
+        "spring.ai.mcp.client.type=async",
+        // ... other properties
+    ]
+)
+@EnableWireMock(
+    ConfigureWireMock(
+        baseUrlProperties = ["zdf.url"]
+    )
+)
+class SearchContentServiceIT {
+    @LocalServerPort
+    private var port: Int = 0
+
+    @Autowired
+    private lateinit var webClientBuilder: WebClient.Builder
+
+    private lateinit var mcpClient: McpAsyncClient
+
+    @BeforeEach
+    fun setUp() {
+        val transport = WebClientStreamableHttpTransport.builder(
+            webClientBuilder.baseUrl("http://localhost:$port")
+        )
+            .endpoint("/")
+            .build()
+
+        mcpClient = McpClient.async(transport).build()
+        mcpClient.initialize().block()
+    }
+
+    @AfterEach
+    fun tearDown() {
+        mcpClient.closeGracefully().block()
+    }
+
+    // ... tests
+}
+----
+
+I use **WireMock** to mock the actual external API (in this case, the ZDF API) that my MCP tool talks to. This keeps the test isolated from the real backend while testing the full MCP flow.
+
+== Calling the Tool
+
+In the test method itself, I can now use the `mcpClient` to call the tool and verify the result.
+
+[source,kotlin]
+----
+    @Test
+    fun `search_content valid Query returns expected result`() {
+        // ... setup expectations and WireMock stubs ...
+
+        // when
+        val response = parseTextContent(
+            mcpClient.callTool(
+                McpSchema.CallToolRequest(
+                    "search_content",
+                    mapOf<String, String>(
+                        Pair("query", "Tagesschau"),
+                        Pair("limit", "2")
+                    )
+                )
+            )
+        )
+
+        // then
+        assertThat(response).usingRecursiveComparison().isEqualTo(expectedResponse)
+    }
+----
+
+== Parsing the Response
+
+One interesting helper method I created is `parseTextContent`. It helps to convert the text content from the MCP Client's response back into a typed object using the Jackson `ObjectMapper`. This makes assertions much easier.
+
+[source,kotlin]
+----
+    private fun parseTextContent(result: Mono<McpSchema.CallToolResult>): ZdfSearchResponse {
+        return objectMapper.readValue<ZdfSearchResponse>(
+            (result.block()!!
+                .content()
+                .first() as McpSchema.TextContent).text()
+        )
+    }
+----
+
+This approach allows me to test my MCP tools end-to-end within the Spring context, ensuring that the MCP layer, the tool implementation, and the integration with external services (mocked) work together as expected.
+
