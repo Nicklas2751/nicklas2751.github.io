@@ -1,0 +1,28 @@
+= Creating a new website Theme with the help of GenerativeAI
+:page-layout: post
+:page-date: 2026-01-04 12:00:00 +0100
+:page-tags: [webdesign,generative-ai,general]
+:page-liquid:
+
+I decided it was time to give my website a fresh look. But instead of starting from scratch or browsing endless theme galleries, I turned to Generative AI for help.
+
+== The Idea Generation
+
+First, I used **Perplexity Pro** to generate a variety of design concepts. I asked it to create 20 distinct, responsive, and theme-aware single-page HTML design proposals for a personal portfolio and blog of a Software Architect. I specified that the designs should range from standard to minimalist styles and utilize tools like https://iconoir.com[iconoir] if needed.
+
+Perplexity provided me with 20 different design proposals, each as a single HTML file. This was a fantastic way to quickly visualize different directions I could take.
+
+== Refining the Selection
+
+From these 20 ideas, I selected the four that appealed to me the most. But a static HTML file is just the beginning. To take it further, I used **GitHub Copilot** with the **Claude Sonnet 4.5** and **Gemini 3 Pro** models. I asked Copilot to create example themes based on these four selected designs.
+
+I then iterated on these themes, refining them further to better suit my content and personal style.
+
+== The Final Implementation
+
+After playing around with the four refined themes, I picked the winner: the "Hero Timeline Theme".
+
+To turn this design into a fully functional Jekyll theme, I once again relied on **GitHub Copilot**, specifically using the **Gemini 3 Pro** model. Copilot helped me convert the HTML and CSS into a proper Jekyll theme structure, creating layouts, includes, and assets. It also assisted in migrating my existing content and ensuring that features like the blog and tags worked seamlessly with the new design.
+
+The result is what you are seeing right now! A modern, responsive website created with the power of Generative AI.
+
