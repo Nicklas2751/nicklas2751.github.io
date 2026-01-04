@@ -24,10 +24,13 @@ description: >- # this means to ignore newlines until "baseurl:"
   About Nicklas Wiegandt (Nicklas2751) and his Blog.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://nicklas.wiegandt.eu" # the base hostname & protocol for your site, e.g. http://example.com
-stackoverflow_username: nicklas2751
+lang: en
 github_username:  nicklas2751
 linkedin_username: nicklas-wiegandt-09239714a
+stackoverflow_username: 2988111
 author: Nicklas Wiegandt
+
+theme: hero-timeline-theme
 
 feed:
   tags: true
@@ -36,11 +39,14 @@ asciidoctor:
   attributes:
     - icons=font
     - source-highlighter=rouge
+    - rouge-css=class
+    - imagesdir=/
 
 # Build settings
 plugins:
   - jekyll-feed
   - jekyll-asciidoc
+  - hero-timeline-theme
 
 # Exclude from processing.
 # The following items will not be processed, by default.
@@ -51,7 +57,6 @@ plugins:
 # their entries' file path in the `include:` list.
 #
 exclude:
-   - .sass-cache/
    - .jekyll-cache/
    - gemfiles/
    - Gemfile

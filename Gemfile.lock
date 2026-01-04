@@ -1,3 +1,11 @@
+PATH
+  remote: themes/hero_timeline_theme
+  specs:
+    hero-timeline-theme (0.1.0)
+      jekyll (>= 3.9)
+      jekyll-feed
+      jekyll-seo-tag
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -265,6 +273,7 @@ PLATFORMS
 
 DEPENDENCIES
   github-pages
+  hero-timeline-theme!
   jekyll-asciidoc
   jekyll-feed
   tzinfo (~> 1.2)

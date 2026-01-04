@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "de" }}">
+<head>
+  <meta charset="utf-8" />
+  <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{{ "/assets/css/styles.css" | relative_url }}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@main/css/iconoir.css">
+  {% feed_meta %}
+  {% seo %}
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="brand"><a href="{{ '/' | relative_url }}" style="color: var(--accent);">{{ site.title }}</a></div>
+      <nav class="nav">
+        {% for item in site.data.navigation %}
+          <a href="{{ item.link | relative_url }}" {% if page.url == item.link %}class="active"{% endif %}>{{ item.name }}</a>
+        {% endfor %}
+        <button class="theme-btn" id="themeToggle" aria-label="Theme umschalten"><i class="iconoir-sun-light"></i></button>
+      </nav>
+    </header>
+
+    {{ content }}
+
+    <footer class="footer">
+      &copy; {{ site.time | date: '%Y' }} {{ site.author }}. <a href="{{ '/contact/' | relative_url }}">Contact</a> · <a href="{{ '/datenschutz/' | relative_url }}">Datenschutz</a> · <a href="{{ '/feed.xml' | relative_url }}">RSS</a>
+      <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 1rem; font-size: 1.2rem;">
+        {% if site.email %}
+        <a href="mailto:{{ site.email }}" aria-label="Email"><i class="iconoir-mail"></i></a>
+        {% endif %}
+        {% if site.github_username %}
+        <a href="https://github.com/{{ site.github_username }}" aria-label="GitHub"><i class="iconoir-github"></i></a>
+        {% endif %}
+        {% if site.linkedin_username %}
+        <a href="https://linkedin.com/in/{{ site.linkedin_username }}" aria-label="LinkedIn"><i class="iconoir-linkedin"></i></a>
+        {% endif %}
+        {% if site.stackoverflow_username %}
+        <a href="https://stackoverflow.com/users/{{ site.stackoverflow_username }}" aria-label="Stack Overflow"><i class="iconoir-code"></i></a>
+        {% endif %}
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (function() {
+      const btn = document.getElementById('themeToggle');
+      const icon = btn.querySelector('i');
+
+      function setTheme(theme) {
+        document.body.setAttribute('data-theme', theme);
+        icon.className = theme === 'dark' ? 'iconoir-sun-light' : 'iconoir-half-moon';
+      }
+
+      const initial = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      setTheme(initial);
+
+      btn.addEventListener('click', function () {
+        const cur = document.body.getAttribute('data-theme');
+        const next = cur === 'dark' ? 'light' : 'dark';
+        setTheme(next);
+        localStorage.setItem('theme', next);
+      });
+    })();
+  </script>
+</body>
+</html>
+
