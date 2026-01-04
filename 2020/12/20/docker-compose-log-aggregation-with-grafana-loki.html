@@ -1,73 +1,76 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Nicklas Wiegandt | Docker Compose log aggregation using Grafana Loki and Fluent Bit</title>
-    <meta name="HandheldFriendly" content="true"/>
-    <meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=yes">
-    <base href="https://nicklas.wiegandt.eu" />
-    <link type="application/atom+xml" rel="alternate" href="https://nicklas.wiegandt.eu/feed.xml" title="Nicklas Wiegandt" />
-    <link rel="stylesheet" href="/assets/css/styles.css">
-    <link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js"></script>
-    <!-- Matomo -->
-    <script type="text/javascript">
-      var _paq = window._paq = window._paq || [];
-      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-      _paq.push(["disableCookies"]);
-      _paq.push(['trackPageView']);
-      _paq.push(['enableLinkTracking']);
-      (function() {
-        var u="//statistics.wiegandt.eu/";
-        _paq.push(['setTrackerUrl', u+'matomo.php']);
-        _paq.push(['setSiteId', '1']);
-        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-        g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-      })();
-    </script>
-    <!-- End Matomo Code -->
-  </head>
-  <body>
-    <header>
-      <h1>Nicklas Wiegandt</h1>
-      <nav>
-    
-      <a href="/" >Home</a>
-    
-      <a href="/tags/" >Tags</a>
-    
-      <a href="/about/" >About</a>
-    
-      <a href="/contact/" >Contact</a>
-    
-    <a href="https://nicklas.wiegandt.eu/feed.xml" target="_blank"><i class="fas fa-rss-square"></i></a>
-</nav>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Docker Compose log aggregation using Grafana Loki and Fluent Bit | Nicklas Wiegandt</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@main/css/iconoir.css">
+  <link type="application/atom+xml" rel="alternate" href="https://nicklas.wiegandt.eu/feed.xml" title="Nicklas Wiegandt" />
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Docker Compose log aggregation using Grafana Loki and Fluent Bit | Nicklas Wiegandt</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Docker Compose log aggregation using Grafana Loki and Fluent Bit" />
+<meta name="author" content="Nicklas Wiegandt" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="How to use Grafana Loki for docker compose log aggregation using Fluent Bit." />
+<meta property="og:description" content="How to use Grafana Loki for docker compose log aggregation using Fluent Bit." />
+<link rel="canonical" href="https://nicklas.wiegandt.eu/2020/12/20/docker-compose-log-aggregation-with-grafana-loki.html" />
+<meta property="og:url" content="https://nicklas.wiegandt.eu/2020/12/20/docker-compose-log-aggregation-with-grafana-loki.html" />
+<meta property="og:site_name" content="Nicklas Wiegandt" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-12-20T15:00:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Docker Compose log aggregation using Grafana Loki and Fluent Bit" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Nicklas Wiegandt"},"dateModified":"2020-12-20T15:00:00-06:00","datePublished":"2020-12-20T15:00:00-06:00","description":"How to use Grafana Loki for docker compose log aggregation using Fluent Bit.","headline":"Docker Compose log aggregation using Grafana Loki and Fluent Bit","mainEntityOfPage":{"@type":"WebPage","@id":"https://nicklas.wiegandt.eu/2020/12/20/docker-compose-log-aggregation-with-grafana-loki.html"},"url":"https://nicklas.wiegandt.eu/2020/12/20/docker-compose-log-aggregation-with-grafana-loki.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="brand"><a href="/" style="color: var(--accent);">Nicklas Wiegandt</a></div>
+      <nav class="nav">
+        
+          <a href="/" >Home</a>
+        
+          <a href="/blog/" >Blog</a>
+        
+          <a href="/tags/" >Tags</a>
+        
+          <a href="/about/" >About</a>
+        
+          <a href="/contact/" >Contact</a>
+        
+        <button class="theme-btn" id="themeToggle" aria-label="Theme umschalten"><i class="iconoir-sun-light"></i></button>
+      </nav>
     </header>
-    <div class="bg-image"></div>
-    <main>
-<article>
-    <h1>Docker Compose log aggregation using Grafana Loki and Fluent Bit</h1>
-    <ul class="tags">
-        
-            <li><a href="/tag/docker-compose">#docker-compose</a></li>
-        
-            <li><a href="/tag/docker">#docker</a></li>
-        
-            <li><a href="/tag/grafana">#grafana</a></li>
-        
-            <li><a href="/tag/log">#log</a></li>
-        
-            <li><a href="/tag/loki">#loki</a></li>
-        
-            <li><a href="/tag/fluent-bit">#fluent-bit</a></li>
-              
-    </ul>
-    <p>
+
+    <main class="article-container">
+  <div class="eyebrow">DOCKER-COMPOSE</div>
+  <h1 style="margin-bottom:0.5rem">Docker Compose log aggregation using Grafana Loki and Fluent Bit</h1>
+  <div style="color:var(--muted); margin-bottom:2rem; font-size:0.9rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+    20. Dec 2020
+    
+      ·
+      
+        <a href="/tag/docker-compose" class="badge" style="font-size: 0.75rem; padding: 0.2rem 0.5rem;">docker-compose</a>
+      
+        <a href="/tag/docker" class="badge" style="font-size: 0.75rem; padding: 0.2rem 0.5rem;">docker</a>
+      
+        <a href="/tag/grafana" class="badge" style="font-size: 0.75rem; padding: 0.2rem 0.5rem;">grafana</a>
+      
+        <a href="/tag/log" class="badge" style="font-size: 0.75rem; padding: 0.2rem 0.5rem;">log</a>
+      
+        <a href="/tag/loki" class="badge" style="font-size: 0.75rem; padding: 0.2rem 0.5rem;">loki</a>
+      
+        <a href="/tag/fluent-bit" class="badge" style="font-size: 0.75rem; padding: 0.2rem 0.5rem;">fluent-bit</a>
+      
+    
+  </div>
+
+  <div class="article-content">
     <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
@@ -293,31 +296,59 @@ An example for a log line looks like this:</p>
 </div>
 <hr>
 <div class="paragraph">
-<p><span class="small">Thanks to <a href="https://friedmann.dev/">Daniel</a> for his review of this post</span></p>
+<p><span class="small">Thanks to <a href="https://www.friedmann-it.de">Daniel</a> for his review of this post</span></p>
 </div>
 </div>
 </div>
-    </p>
-</article>
-    </main>
-    <footer>
-      &copy; 2025 Nicklas Wiegandt
-      <a href="https://nicklas.wiegandt.eu/datenschutz">Datenschutzerklärung</a>
-      <address class="mail">
-        <i class="far fa-envelope"> nicklas [at] wiegandt [dot] eu</i>
-      </address>
-      <address class="github">
-        <a title="GitHub" href="https://github.com/nicklas2751" target="_blank"><i class="fab fa-github"> GitHub</i></a>
-      </address>
-      <address class="stackoverflow">
-        <a title="Stack Overflow" href="https://stackoverflow.com/story/nicklas2751" target="_blank"><i class="fab fa-stack-overflow"> Stack Overflow</i></a>
-      </address>
-      <address class="xing">
-        <a title="Xing" href="https://www.xing.com/profile/Nicklas_Wiegandt" target="_blank"><i class="fab fa-xing"> Xing</i></a>
-      </address>
-      <address class="linkedin">
-        <a title="Linked In" href="https://www.linkedin.com/in/nicklas-wiegandt-09239714a" target="_blank"><i class="fab fa-linkedin"> LinkedIn</i></a>
-      </address>
+  </div>
+
+  <div style="margin-top:3rem">
+    <a href="/blog/" class="btn">Back to Overview</a>
+  </div>
+</main>
+
+
+
+    <footer class="footer">
+      &copy; 2026 Nicklas Wiegandt <a href="/contact/">Contact</a> · <a href="/datenschutz/">Datenschutz</a> · <a href="/feed.xml">RSS</a>
+      <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 1rem; font-size: 1.2rem;">
+        
+        <a href="mailto:nicklas [at] wiegandt [dot] eu" aria-label="Email"><i class="iconoir-mail"></i></a>
+        
+        
+        <a href="https://github.com/nicklas2751" aria-label="GitHub"><i class="iconoir-github"></i></a>
+        
+        
+        <a href="https://linkedin.com/in/nicklas-wiegandt-09239714a" aria-label="LinkedIn"><i class="iconoir-linkedin"></i></a>
+        
+        
+        <a href="https://stackoverflow.com/users/2988111" aria-label="Stack Overflow"><i class="iconoir-code"></i></a>
+        
+      </div>
     </footer>
-  </body>
+  </div>
+
+  <script language="javascript" type="text/javascript">
+    (function() {
+      const btn = document.getElementById('themeToggle');
+      const icon = btn.querySelector('i');
+
+      function setTheme(theme) {
+        document.body.setAttribute('data-theme', theme);
+        icon.className = theme === 'dark' ? 'iconoir-sun-light' : 'iconoir-half-moon';
+      }
+
+      const initial = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      setTheme(initial);
+
+      btn.addEventListener('click', function () {
+        const cur = document.body.getAttribute('data-theme');
+        const next = cur === 'dark' ? 'light' : 'dark';
+        setTheme(next);
+        localStorage.setItem('theme', next);
+      });
+    })();
+  </script>
+</body>
 </html>
+
