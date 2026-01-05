@@ -1,13 +1,11 @@
-name: Jekyll site CI
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches: [ jekyll ]
-  pull_request:
-    branches: [ jekyll ]
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
