@@ -1,229 +1,229 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="https://nicklas.wiegandt.eu/feed/by_tag/loki.xml" rel="self" type="application/atom+xml" /><link href="https://nicklas.wiegandt.eu/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-01-05T08:21:32-06:00</updated><id>https://nicklas.wiegandt.eu/feed/by_tag/loki.xml</id><title type="html">Nicklas Wiegandt</title><subtitle>About Nicklas Wiegandt (Nicklas2751) and his Blog.</subtitle><author><name>Nicklas Wiegandt</name></author><entry><title type="html">Docker Compose log aggregation using Grafana Loki and Fluent Bit</title><link href="https://nicklas.wiegandt.eu/2020/12/20/docker-compose-log-aggregation-with-grafana-loki.html" rel="alternate" type="text/html" title="Docker Compose log aggregation using Grafana Loki and Fluent Bit" /><published>2020-12-20T15:00:00-06:00</published><updated>2020-12-20T15:00:00-06:00</updated><id>https://nicklas.wiegandt.eu/2020/12/20/docker-compose-log-aggregation-with-grafana-loki</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2020/12/20/docker-compose-log-aggregation-with-grafana-loki.html">&lt;div id=&quot;preamble&quot;&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;How to use &lt;a href=&quot;https://grafana.com/oss/loki/&quot;&gt;Grafana Loki&lt;/a&gt; for &lt;a href=&quot;https://docs.docker.com/compose/&quot;&gt;docker compose&lt;/a&gt; log aggregation using &lt;a href=&quot;https://fluentbit.io/&quot;&gt;Fluent Bit&lt;/a&gt;.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Recently &lt;a href=&quot;https://elaon.de&quot;&gt;Alex&lt;/a&gt;, my co-maintainer of &lt;a href=&quot;https://mediathekview.de&quot;&gt;MediathekView&lt;/a&gt;, asked me to build a Docker Compose file to view the &lt;a href=&quot;https://github.com/mediathekview/MServer/&quot;&gt;MServer&lt;/a&gt; logs with &lt;a href=&quot;https://grafana.com/oss/loki/&quot;&gt;Grafana Loki&lt;/a&gt;. I chose &lt;a href=&quot;https://fluentbit.io/&quot;&gt;Fluent Bit&lt;/a&gt; as log proccessor and forwarder becuase Docker Compose can use the fluentd logging driver &lt;a href=&quot;https://docs.docker.com/config/containers/logging/fluentd/&quot;&gt;out of the box&lt;/a&gt;.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;This does not seem particularly complex at first. However, there are some pitfalls hidden due to missing or outdated information.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;the-solution&quot;&gt;The solution&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;sect2&quot;&gt;
-&lt;h3 id=&quot;loki-grafana-and-fluent-bit&quot;&gt;Loki, Grafana and Fluent Bit&lt;/h3&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;The Docker Compose part for Loki and Grafana is straightforward:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;title&quot;&gt;docker-compose-loki.yml&lt;/div&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;yaml&quot;&gt;  &lt;span class=&quot;na&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3.3&quot;&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;loki&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;bridge&lt;/span&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://nicklas.wiegandt.eu/feed/by_tag/loki.xml" rel="self" type="application/atom+xml" /><link href="https://nicklas.wiegandt.eu/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-01-05T12:41:19-06:00</updated><id>https://nicklas.wiegandt.eu/feed/by_tag/loki.xml</id><title type="html">Nicklas Wiegandt</title><subtitle>About Nicklas Wiegandt (Nicklas2751) and his Blog.</subtitle><author><name>Nicklas Wiegandt</name></author><entry><title type="html">Docker Compose log aggregation using Grafana Loki and Fluent Bit</title><link href="https://nicklas.wiegandt.eu/2020/12/20/docker-compose-log-aggregation-with-grafana-loki.html" rel="alternate" type="text/html" title="Docker Compose log aggregation using Grafana Loki and Fluent Bit" /><published>2020-12-20T15:00:00-06:00</published><updated>2020-12-20T15:00:00-06:00</updated><id>https://nicklas.wiegandt.eu/2020/12/20/docker-compose-log-aggregation-with-grafana-loki</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2020/12/20/docker-compose-log-aggregation-with-grafana-loki.html"><![CDATA[<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>How to use <a href="https://grafana.com/oss/loki/">Grafana Loki</a> for <a href="https://docs.docker.com/compose/">docker compose</a> log aggregation using <a href="https://fluentbit.io/">Fluent Bit</a>.</p>
+</div>
+<div class="paragraph">
+<p>Recently <a href="https://elaon.de">Alex</a>, my co-maintainer of <a href="https://mediathekview.de">MediathekView</a>, asked me to build a Docker Compose file to view the <a href="https://github.com/mediathekview/MServer/">MServer</a> logs with <a href="https://grafana.com/oss/loki/">Grafana Loki</a>. I chose <a href="https://fluentbit.io/">Fluent Bit</a> as log proccessor and forwarder becuase Docker Compose can use the fluentd logging driver <a href="https://docs.docker.com/config/containers/logging/fluentd/">out of the box</a>.</p>
+</div>
+<div class="paragraph">
+<p>This does not seem particularly complex at first. However, there are some pitfalls hidden due to missing or outdated information.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-solution">The solution</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="loki-grafana-and-fluent-bit">Loki, Grafana and Fluent Bit</h3>
+<div class="paragraph">
+<p>The Docker Compose part for Loki and Grafana is straightforward:</p>
+</div>
+<div class="listingblock">
+<div class="title">docker-compose-loki.yml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml">  <span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.3"</span>
+  <span class="na">networks</span><span class="pi">:</span>
+    <span class="na">loki</span><span class="pi">:</span>
+      <span class="na">driver</span><span class="pi">:</span> <span class="s">bridge</span>
 
-  &lt;span class=&quot;na&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;loki&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;grafana/loki:2.0.0&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;container_name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;loki&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3100:3100&quot;&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;-config.file=/etc/loki/local-config.yaml&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;loki&lt;/span&gt;
+  <span class="na">services</span><span class="pi">:</span>
+    <span class="na">loki</span><span class="pi">:</span>
+      <span class="na">image</span><span class="pi">:</span> <span class="s">grafana/loki:2.0.0</span>
+      <span class="na">container_name</span><span class="pi">:</span> <span class="s">loki</span>
+      <span class="na">ports</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s2">"</span><span class="s">3100:3100"</span>
+      <span class="na">command</span><span class="pi">:</span> <span class="s">-config.file=/etc/loki/local-config.yaml</span>
+      <span class="na">networks</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s">loki</span>
 
-    &lt;span class=&quot;na&quot;&gt;grafana&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;grafana/grafana:latest&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;container_name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;grafana&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3000:3000&quot;&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;loki&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;The fluent bit part is also straightforward, but unlike the &lt;a href=&quot;https://docs.fluentbit.io/manual/v/master/local-testing/logging-pipeline#docker-compose&quot;&gt;sample Fluent Bit Docker Compose file&lt;/a&gt;, port 24224 is exposed. The port is required by the &lt;a href=&quot;https://docs.docker.com/config/containers/logging/fluentd/&quot;&gt;fluentd docker logging driver&lt;/a&gt;.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;title&quot;&gt;docker-compose-loki.yml&lt;/div&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;yaml&quot;&gt;  &lt;span class=&quot;na&quot;&gt;fluent-bit&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;fluent/fluent-bit&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;container_name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;fluentbit&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;24224:24224&quot;&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;24224:24224/udp&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;volumes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;.docker/logging/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;loki&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;The two compose configuration can then be combined into one single compose file:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;title&quot;&gt;docker-compose-loki.yml&lt;/div&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;yaml&quot;&gt;&lt;span class=&quot;na&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3.3&quot;&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;loki&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;bridge&lt;/span&gt;
+    <span class="na">grafana</span><span class="pi">:</span>
+      <span class="na">image</span><span class="pi">:</span> <span class="s">grafana/grafana:latest</span>
+      <span class="na">container_name</span><span class="pi">:</span> <span class="s">grafana</span>
+      <span class="na">ports</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s2">"</span><span class="s">3000:3000"</span>
+      <span class="na">networks</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s">loki</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The fluent bit part is also straightforward, but unlike the <a href="https://docs.fluentbit.io/manual/v/master/local-testing/logging-pipeline#docker-compose">sample Fluent Bit Docker Compose file</a>, port 24224 is exposed. The port is required by the <a href="https://docs.docker.com/config/containers/logging/fluentd/">fluentd docker logging driver</a>.</p>
+</div>
+<div class="listingblock">
+<div class="title">docker-compose-loki.yml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml">  <span class="na">fluent-bit</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">fluent/fluent-bit</span>
+    <span class="na">container_name</span><span class="pi">:</span> <span class="s">fluentbit</span>
+    <span class="na">ports</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s2">"</span><span class="s">24224:24224"</span>
+        <span class="pi">-</span> <span class="s2">"</span><span class="s">24224:24224/udp"</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">.docker/logging/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">loki</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The two compose configuration can then be combined into one single compose file:</p>
+</div>
+<div class="listingblock">
+<div class="title">docker-compose-loki.yml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml"><span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.3"</span>
+<span class="na">networks</span><span class="pi">:</span>
+  <span class="na">loki</span><span class="pi">:</span>
+    <span class="na">driver</span><span class="pi">:</span> <span class="s">bridge</span>
 
-&lt;span class=&quot;na&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;loki&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;grafana/loki:2.0.0&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;container_name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;loki&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3100:3100&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;-config.file=/etc/loki/local-config.yaml&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;loki&lt;/span&gt;
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">loki</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">grafana/loki:2.0.0</span>
+    <span class="na">container_name</span><span class="pi">:</span> <span class="s">loki</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">3100:3100"</span>
+    <span class="na">command</span><span class="pi">:</span> <span class="s">-config.file=/etc/loki/local-config.yaml</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">loki</span>
 
-  &lt;span class=&quot;na&quot;&gt;grafana&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;grafana/grafana:latest&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;container_name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;grafana&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3000:3000&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;loki&lt;/span&gt;
+  <span class="na">grafana</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">grafana/grafana:latest</span>
+    <span class="na">container_name</span><span class="pi">:</span> <span class="s">grafana</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">3000:3000"</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">loki</span>
 
-  &lt;span class=&quot;na&quot;&gt;fluent-bit&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;fluent/fluent-bit&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;container_name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;fluentbit&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;24224:24224&quot;&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;24224:24224/udp&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;volumes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;.docker/logging/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;loki&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect2&quot;&gt;
-&lt;h3 id=&quot;fluent-bit-configuration&quot;&gt;Fluent Bit configuration&lt;/h3&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;The configuration of Fluent Bit is almost identically to the &lt;a href=&quot;https://docs.fluentbit.io/manual/pipeline/outputs/loki&quot;&gt;example in the Fluent Bit documentation&lt;/a&gt;, but one important change must be made.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;The label &lt;code&gt;$sub[&apos;stream&apos;]&lt;/code&gt; of the example isn&amp;#8217;t applicable for Docker Compose logs.
-An example for a log line looks like this:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;json&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;container_id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;05070542e00a616589a3671404d34fe7374f3b6f08ef6f71431acc42fbfa8675&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;container_name&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/mserver_mserver_1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;source&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;stdout&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;log&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;[INFO ] [EtmMonitor] Shutting down JETM.&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Instead of &lt;code&gt;$sub[&apos;stream&apos;]&lt;/code&gt; I defined &lt;code&gt;$container_id&lt;/code&gt;, &lt;code&gt;$container_name&lt;/code&gt; and &lt;code&gt;$source&lt;/code&gt; as labels.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;title&quot;&gt;fluent-bit.conf&lt;/div&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;conf&quot;&gt;[&lt;span class=&quot;n&quot;&gt;SERVICE&lt;/span&gt;]
-    &lt;span class=&quot;n&quot;&gt;Flush&lt;/span&gt;        &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Daemon&lt;/span&gt;       &lt;span class=&quot;n&quot;&gt;Off&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Log_Level&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;info&lt;/span&gt;
+  <span class="na">fluent-bit</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">fluent/fluent-bit</span>
+    <span class="na">container_name</span><span class="pi">:</span> <span class="s">fluentbit</span>
+    <span class="na">ports</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s2">"</span><span class="s">24224:24224"</span>
+        <span class="pi">-</span> <span class="s2">"</span><span class="s">24224:24224/udp"</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">.docker/logging/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">loki</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="fluent-bit-configuration">Fluent Bit configuration</h3>
+<div class="paragraph">
+<p>The configuration of Fluent Bit is almost identically to the <a href="https://docs.fluentbit.io/manual/pipeline/outputs/loki">example in the Fluent Bit documentation</a>, but one important change must be made.</p>
+</div>
+<div class="paragraph">
+<p>The label <code>$sub['stream']</code> of the example isn&#8217;t applicable for Docker Compose logs.
+An example for a log line looks like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="nl">"container_id"</span><span class="p">:</span><span class="s2">"05070542e00a616589a3671404d34fe7374f3b6f08ef6f71431acc42fbfa8675"</span><span class="p">,</span><span class="nl">"container_name"</span><span class="p">:</span><span class="s2">"/mserver_mserver_1"</span><span class="p">,</span><span class="nl">"source"</span><span class="p">:</span><span class="s2">"stdout"</span><span class="p">,</span><span class="nl">"log"</span><span class="p">:</span><span class="s2">"[INFO ] [EtmMonitor] Shutting down JETM."</span><span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Instead of <code>$sub['stream']</code> I defined <code>$container_id</code>, <code>$container_name</code> and <code>$source</code> as labels.</p>
+</div>
+<div class="listingblock">
+<div class="title">fluent-bit.conf</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="conf">[<span class="n">SERVICE</span>]
+    <span class="n">Flush</span>        <span class="m">1</span>
+    <span class="n">Daemon</span>       <span class="n">Off</span>
+    <span class="n">Log_Level</span>    <span class="n">info</span>
 
-[&lt;span class=&quot;n&quot;&gt;INPUT&lt;/span&gt;]
-    &lt;span class=&quot;n&quot;&gt;Name&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;forward&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Listen&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;.&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;.&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;.&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Port&lt;/span&gt;   &lt;span class=&quot;m&quot;&gt;24224&lt;/span&gt;
+[<span class="n">INPUT</span>]
+    <span class="n">Name</span>   <span class="n">forward</span>
+    <span class="n">Listen</span> <span class="m">0</span>.<span class="m">0</span>.<span class="m">0</span>.<span class="m">0</span>
+    <span class="n">Port</span>   <span class="m">24224</span>
 
-[&lt;span class=&quot;n&quot;&gt;Output&lt;/span&gt;]
-    &lt;span class=&quot;n&quot;&gt;Name&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loki&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Match&lt;/span&gt; *
-    &lt;span class=&quot;n&quot;&gt;host&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loki&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;port&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3100&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;labels&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;job&lt;/span&gt;=&lt;span class=&quot;n&quot;&gt;mserver&lt;/span&gt;,$&lt;span class=&quot;n&quot;&gt;container_id&lt;/span&gt;,$&lt;span class=&quot;n&quot;&gt;container_name&lt;/span&gt;,$&lt;span class=&quot;n&quot;&gt;source&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;line_format&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect2&quot;&gt;
-&lt;h3 id=&quot;using-the-fluentd-docker-logging-driver&quot;&gt;Using the fluentd docker logging driver&lt;/h3&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;To use the fluentd docker logging driver in conjunction with other Docker Compose this snippet can be used:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;title&quot;&gt;docker-compose.yml&lt;/div&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;yaml&quot;&gt;    &lt;span class=&quot;na&quot;&gt;logging&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;fluentd&quot;&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;fluentd-address&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;localhost:24224&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;tag&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;httpd.access&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Sending the logs of nginx to Loki may look like this:
-.docker-compose.yml&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;yaml&quot;&gt;&lt;span class=&quot;na&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3.3&quot;&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;nginx&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;volumes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;./templates:/etc/nginx/templates&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;8080:80&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;environment&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;NGINX_HOST=foobar.com&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;NGINX_PORT=80&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;logging&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;fluentd&quot;&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;fluentd-address&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;localhost:24224&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;tag&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;httpd.access&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect2&quot;&gt;
-&lt;h3 id=&quot;grafana-loki-show-only-log-message&quot;&gt;Grafana Loki show only Log message&lt;/h3&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;When viewing the logs in the Grafana exploring view or with the Dashboard Log Panel, the individual lines are quite ugly. The entire json message is displayed, which quickly becomes very confusing. In order to get the log messages into a more readable format, one can use a &lt;a href=&quot;https://grafana.com/docs/loki/latest/logql/#Line-Format-Expression&quot;&gt;new feature of Loki version 2.0&lt;/a&gt;: &lt;code&gt;line_format&lt;/code&gt;&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;An example query for the container &lt;code&gt;mserver_mserver_1&lt;/code&gt;:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;container_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/mserver_mserver_1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; | json | line_format &lt;span class=&quot;s2&quot;&gt;&quot;{{.log}}&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;links&quot;&gt;Links&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Some useful Links:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;ulist&quot;&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&quot;https://docs.fluentbit.io/manual/pipeline/outputs/loki&quot;&gt;Documentation - Fluent Bit&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&quot;https://grafana.com/docs/loki/latest/clients/fluentbit/&quot;&gt;Documentation - Grafana Loki&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&quot;https://grafana.com/blog/2020/10/28/loki-2.0-released-transform-logs-as-youre-querying-them-and-set-up-alerts-within-loki/&quot;&gt;Blog post Grafana Loki 2.0&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-&lt;hr&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;&lt;span class=&quot;small&quot;&gt;Thanks to &lt;a href=&quot;https://www.friedmann-it.de&quot;&gt;Daniel&lt;/a&gt; for his review of this post&lt;/span&gt;&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;</content><author><name>Nicklas Wiegandt</name></author><category term="docker-compose" /><category term="docker" /><category term="grafana" /><category term="log" /><category term="loki" /><category term="fluent-bit" /><summary type="html">How to use Grafana Loki for docker compose log aggregation using Fluent Bit.</summary></entry></feed>
+[<span class="n">Output</span>]
+    <span class="n">Name</span> <span class="n">loki</span>
+    <span class="n">Match</span> *
+    <span class="n">host</span> <span class="n">loki</span>
+    <span class="n">port</span> <span class="m">3100</span>
+    <span class="n">labels</span> <span class="n">job</span>=<span class="n">mserver</span>,$<span class="n">container_id</span>,$<span class="n">container_name</span>,$<span class="n">source</span>
+    <span class="n">line_format</span> <span class="n">json</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-the-fluentd-docker-logging-driver">Using the fluentd docker logging driver</h3>
+<div class="paragraph">
+<p>To use the fluentd docker logging driver in conjunction with other Docker Compose this snippet can be used:</p>
+</div>
+<div class="listingblock">
+<div class="title">docker-compose.yml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml">    <span class="na">logging</span><span class="pi">:</span>
+      <span class="na">driver</span><span class="pi">:</span> <span class="s2">"</span><span class="s">fluentd"</span>
+      <span class="na">options</span><span class="pi">:</span>
+        <span class="na">fluentd-address</span><span class="pi">:</span> <span class="s">localhost:24224</span>
+        <span class="na">tag</span><span class="pi">:</span> <span class="s">httpd.access</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Sending the logs of nginx to Loki may look like this:
+.docker-compose.yml</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml"><span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.3"</span>
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">nginx</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nginx</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">./templates:/etc/nginx/templates</span>
+    <span class="na">ports</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s2">"</span><span class="s">8080:80"</span>
+    <span class="na">environment</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">NGINX_HOST=foobar.com</span>
+    <span class="pi">-</span> <span class="s">NGINX_PORT=80</span>
+    <span class="na">logging</span><span class="pi">:</span>
+      <span class="na">driver</span><span class="pi">:</span> <span class="s2">"</span><span class="s">fluentd"</span>
+      <span class="na">options</span><span class="pi">:</span>
+        <span class="na">fluentd-address</span><span class="pi">:</span> <span class="s">localhost:24224</span>
+        <span class="na">tag</span><span class="pi">:</span> <span class="s">httpd.access</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="grafana-loki-show-only-log-message">Grafana Loki show only Log message</h3>
+<div class="paragraph">
+<p>When viewing the logs in the Grafana exploring view or with the Dashboard Log Panel, the individual lines are quite ugly. The entire json message is displayed, which quickly becomes very confusing. In order to get the log messages into a more readable format, one can use a <a href="https://grafana.com/docs/loki/latest/logql/#Line-Format-Expression">new feature of Loki version 2.0</a>: <code>line_format</code></p>
+</div>
+<div class="paragraph">
+<p>An example query for the container <code>mserver_mserver_1</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="o">{</span><span class="nv">container_name</span><span class="o">=</span><span class="s2">"/mserver_mserver_1"</span><span class="o">}</span> | json | line_format <span class="s2">"{{.log}}"</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="links">Links</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Some useful Links:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.fluentbit.io/manual/pipeline/outputs/loki">Documentation - Fluent Bit</a></p>
+</li>
+<li>
+<p><a href="https://grafana.com/docs/loki/latest/clients/fluentbit/">Documentation - Grafana Loki</a></p>
+</li>
+<li>
+<p><a href="https://grafana.com/blog/2020/10/28/loki-2.0-released-transform-logs-as-youre-querying-them-and-set-up-alerts-within-loki/">Blog post Grafana Loki 2.0</a></p>
+</li>
+</ul>
+</div>
+<hr>
+<div class="paragraph">
+<p><span class="small">Thanks to <a href="https://www.friedmann-it.de">Daniel</a> for his review of this post</span></p>
+</div>
+</div>
+</div>]]></content><author><name>Nicklas Wiegandt</name></author><category term="docker-compose" /><category term="docker" /><category term="grafana" /><category term="log" /><category term="loki" /><category term="fluent-bit" /><summary type="html"><![CDATA[How to use Grafana Loki for docker compose log aggregation using Fluent Bit.]]></summary></entry></feed>

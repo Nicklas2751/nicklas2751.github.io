@@ -9,7 +9,7 @@
   <link type="application/atom+xml" rel="alternate" href="https://nicklas.wiegandt.eu/feed.xml" title="Nicklas Wiegandt" />
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>Integration Testing Spring AI MCP Server | Nicklas Wiegandt</title>
-<meta name="generator" content="Jekyll v3.9.3" />
+<meta name="generator" content="Jekyll v3.10.0" />
 <meta property="og:title" content="Integration Testing Spring AI MCP Server" />
 <meta name="author" content="Nicklas Wiegandt" />
 <meta property="og:locale" content="en" />
@@ -190,7 +190,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="kotlin">    <span class="k">private</span> <span class="k">fun</span> <span class="nf">parseTextContent</span><span class="p">(</span><span class="n">result</span><span class="p">:</span> <span class="nc">Mono</span><span class="p">&lt;</span><span class="nc">McpSchema</span><span class="err">.</span><span class="nc">CallToolResult</span><span class="p">&gt;):</span> <span class="nc">ZdfSearchResponse</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="kotlin">    <span class="k">private</span> <span class="k">fun</span> <span class="nf">parseTextContent</span><span class="p">(</span><span class="n">result</span><span class="p">:</span> <span class="nc">Mono</span><span class="p">&lt;</span><span class="nc">McpSchema</span><span class="p">.</span><span class="nc">CallToolResult</span><span class="p">&gt;):</span> <span class="nc">ZdfSearchResponse</span> <span class="p">{</span>
         <span class="k">return</span> <span class="n">objectMapper</span><span class="p">.</span><span class="n">readValue</span><span class="p">&lt;</span><span class="nc">ZdfSearchResponse</span><span class="p">&gt;(</span>
             <span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="nf">block</span><span class="p">()</span><span class="o">!!</span>
                 <span class="p">.</span><span class="nf">content</span><span class="p">()</span>

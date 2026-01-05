@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="https://nicklas.wiegandt.eu/feed/by_tag/aws.xml" rel="self" type="application/atom+xml" /><link href="https://nicklas.wiegandt.eu/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-01-05T08:21:32-06:00</updated><id>https://nicklas.wiegandt.eu/feed/by_tag/aws.xml</id><title type="html">Nicklas Wiegandt</title><subtitle>About Nicklas Wiegandt (Nicklas2751) and his Blog.</subtitle><author><name>Nicklas Wiegandt</name></author><entry><title type="html">About this blog</title><link href="https://nicklas.wiegandt.eu/2020/07/31/first-post.html" rel="alternate" type="text/html" title="About this blog" /><published>2020-07-31T13:15:00-05:00</published><updated>2020-07-31T13:15:00-05:00</updated><id>https://nicklas.wiegandt.eu/2020/07/31/first-post</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2020/07/31/first-post.html">&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;My first post on my new blog. This posts is about the blog itself and how it&amp;#8217;s made.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;I created this blog to write about DevOp&amp;#8217;s things that keep me occupied. These will mainly be solutions to problems for which I had to search and try around for a long time. With this I want to achieve that others do not have to search so long for the right solution. Maybe, if I find time and motivation, I will also write articles about my work on MediathekView. And maybe I will also write articles about frameworks &amp;amp; technologies I am currently busy oneself with. And maybe I write articles about frameworks and technologies I&amp;#8217;m currently working with.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;The blog itself is made with &lt;a href=&quot;https://jekyllrb.com/&quot;&gt;Jekyll&lt;/a&gt; and &lt;a href=&quot;https://github.com/asciidoctor/jekyll-asciidoc&quot;&gt;AsciiDoc&lt;/a&gt;. It&amp;#8217;s hosted on &lt;a href=&quot;https://github.com/nicklas2751/nicklas2751.github.io&quot;&gt;GitHub&lt;/a&gt; where you can also find the &lt;a href=&quot;https://github.com/nicklas2751/nicklas2751.github.io&quot;&gt;source&lt;/a&gt;. Because this don&amp;#8217;t allow to send E-Mails on server side, I created an AWS Lambda for the contact form.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;This is the source of my contact form lambda:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;title&quot;&gt;lambda_function.py &lt;a href=&quot;https://github.com/Nicklas2751/contact-form-lambda/blob/30b833e/lambda_function.py&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;view&lt;/a&gt; &lt;a href=&quot;https://raw.githubusercontent.com/Nicklas2751/contact-form-lambda/30b833e/lambda_function.py&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;raw&lt;/a&gt;&lt;/div&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;python&quot;&gt;&lt;table class=&quot;linenotable&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;linenos gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt; 1
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://nicklas.wiegandt.eu/feed/by_tag/aws.xml" rel="self" type="application/atom+xml" /><link href="https://nicklas.wiegandt.eu/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-01-05T12:41:19-06:00</updated><id>https://nicklas.wiegandt.eu/feed/by_tag/aws.xml</id><title type="html">Nicklas Wiegandt</title><subtitle>About Nicklas Wiegandt (Nicklas2751) and his Blog.</subtitle><author><name>Nicklas Wiegandt</name></author><entry><title type="html">About this blog</title><link href="https://nicklas.wiegandt.eu/2020/07/31/first-post.html" rel="alternate" type="text/html" title="About this blog" /><published>2020-07-31T13:15:00-05:00</published><updated>2020-07-31T13:15:00-05:00</updated><id>https://nicklas.wiegandt.eu/2020/07/31/first-post</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2020/07/31/first-post.html"><![CDATA[<div class="paragraph">
+<p>My first post on my new blog. This posts is about the blog itself and how it&#8217;s made.</p>
+</div>
+<div class="paragraph">
+<p>I created this blog to write about DevOp&#8217;s things that keep me occupied. These will mainly be solutions to problems for which I had to search and try around for a long time. With this I want to achieve that others do not have to search so long for the right solution. Maybe, if I find time and motivation, I will also write articles about my work on MediathekView. And maybe I will also write articles about frameworks &amp; technologies I am currently busy oneself with. And maybe I write articles about frameworks and technologies I&#8217;m currently working with.</p>
+</div>
+<div class="paragraph">
+<p>The blog itself is made with <a href="https://jekyllrb.com/">Jekyll</a> and <a href="https://github.com/asciidoctor/jekyll-asciidoc">AsciiDoc</a>. It&#8217;s hosted on <a href="https://github.com/nicklas2751/nicklas2751.github.io">GitHub</a> where you can also find the <a href="https://github.com/nicklas2751/nicklas2751.github.io">source</a>. Because this don&#8217;t allow to send E-Mails on server side, I created an AWS Lambda for the contact form.</p>
+</div>
+<div class="paragraph">
+<p>This is the source of my contact form lambda:</p>
+</div>
+<div class="listingblock">
+<div class="title">lambda_function.py <a href="https://github.com/Nicklas2751/contact-form-lambda/blob/30b833e/lambda_function.py" target="_blank" rel="noopener">view</a> <a href="https://raw.githubusercontent.com/Nicklas2751/contact-form-lambda/30b833e/lambda_function.py" target="_blank" rel="noopener">raw</a></div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="python"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
  2
  3
  4
@@ -94,97 +94,97 @@
 79
 80
 81
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;__future__&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;print_function&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;botocore.exceptions&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ClientError&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;urllib.request&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;urlopen&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;boto3&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;json&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;requests&lt;/span&gt;
+</pre></td><td class="code"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">botocore.exceptions</span> <span class="kn">import</span> <span class="n">ClientError</span>
+<span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+<span class="kn">import</span> <span class="nn">boto3</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">requests</span>
 
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;lambda_handler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;g-recaptcha-response&quot;&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;mail&quot;&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;text&quot;&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;success&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;checkRecaptcha&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;g-recaptcha-response&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;success&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
+<span class="k">def</span> <span class="nf">lambda_handler</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s">"g-recaptcha-response"</span> <span class="ow">in</span> <span class="n">event</span> <span class="ow">and</span> <span class="s">"mail"</span> <span class="ow">in</span> <span class="n">event</span> <span class="ow">and</span> <span class="s">"text"</span> <span class="ow">in</span> <span class="n">event</span><span class="p">:</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="n">checkRecaptcha</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s">"g-recaptcha-response"</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="bp">False</span>
 
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;success&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;send_email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;mail&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;RECaptcha failed!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+        <span class="n">send_email</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s">"mail"</span><span class="p">],</span><span class="n">event</span><span class="p">[</span><span class="s">"text"</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"RECaptcha failed!"</span><span class="p">)</span>
 
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;&quot;location&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;referer&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s">"location"</span><span class="p">:</span> <span class="n">event</span><span class="p">[</span><span class="s">"referer"</span><span class="p">]</span>
+    <span class="p">}</span>
 
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;checkRecaptcha&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;captchaCode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;requestData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;secret&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;mySecret&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;response&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;captchaCode&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;requests&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;https://www.google.com/recaptcha/api/siteverify&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;requestData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;success&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+<span class="k">def</span> <span class="nf">checkRecaptcha</span><span class="p">(</span><span class="n">captchaCode</span><span class="p">):</span>
+    <span class="n">requestData</span> <span class="o">=</span> <span class="p">{</span> <span class="s">"secret"</span><span class="p">:</span> <span class="s">"mySecret"</span><span class="p">,</span> <span class="s">"response"</span><span class="p">:</span> <span class="n">captchaCode</span> <span class="p">}</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="s">"https://www.google.com/recaptcha/api/siteverify"</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">requestData</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'success'</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
 
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;send_email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;userMail&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# Replace sender@example.com with your &quot;From&quot; address.
-&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;# This address must be verified with Amazon SES.
-&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;SENDER&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;My Sender &amp;lt;cloud@my.domain&amp;gt;&quot;&lt;/span&gt;
+<span class="k">def</span> <span class="nf">send_email</span><span class="p">(</span><span class="n">userMail</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+    <span class="c1"># Replace sender@example.com with your "From" address.
+</span>    <span class="c1"># This address must be verified with Amazon SES.
+</span>    <span class="n">SENDER</span> <span class="o">=</span> <span class="s">"My Sender &lt;cloud@my.domain&gt;"</span>
 
-    &lt;span class=&quot;c1&quot;&gt;# Replace recipient@example.com with a &quot;To&quot; address. If your account
-&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;# is still in the sandbox, this address must be verified.
-&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;RECIPIENT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;recipient@my.domain&quot;&lt;/span&gt;
+    <span class="c1"># Replace recipient@example.com with a "To" address. If your account
+</span>    <span class="c1"># is still in the sandbox, this address must be verified.
+</span>    <span class="n">RECIPIENT</span> <span class="o">=</span> <span class="s">"recipient@my.domain"</span>
 
-    &lt;span class=&quot;c1&quot;&gt;# If necessary, replace us-west-2 with the AWS Region you&apos;re using for Amazon SES.
-&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;AWS_REGION&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;eu-west-1&quot;&lt;/span&gt;
+    <span class="c1"># If necessary, replace us-west-2 with the AWS Region you're using for Amazon SES.
+</span>    <span class="n">AWS_REGION</span> <span class="o">=</span> <span class="s">"eu-west-1"</span>
 
-    &lt;span class=&quot;c1&quot;&gt;# The subject line for the email.
-&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;SUBJECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;A user has sent you a message&quot;&lt;/span&gt;
+    <span class="c1"># The subject line for the email.
+</span>    <span class="n">SUBJECT</span> <span class="o">=</span> <span class="s">"A user has sent you a message"</span>
 
-    &lt;span class=&quot;c1&quot;&gt;# The character encoding for the email.
-&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;CHARSET&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;UTF-8&quot;&lt;/span&gt;
+    <span class="c1"># The character encoding for the email.
+</span>    <span class="n">CHARSET</span> <span class="o">=</span> <span class="s">"UTF-8"</span>
 
-    &lt;span class=&quot;c1&quot;&gt;# Create a new SES resource and specify a region.
-&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;client&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;boto3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;ses&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;region_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AWS_REGION&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    <span class="c1"># Create a new SES resource and specify a region.
+</span>    <span class="n">client</span> <span class="o">=</span> <span class="n">boto3</span><span class="p">.</span><span class="n">client</span><span class="p">(</span><span class="s">'ses'</span><span class="p">,</span><span class="n">region_name</span><span class="o">=</span><span class="n">AWS_REGION</span><span class="p">)</span>
 
-    &lt;span class=&quot;c1&quot;&gt;# Try to send the email.
-&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;#Provide the contents of the email.
-&lt;/span&gt;        &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;send_email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;Destination&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;s&quot;&gt;&apos;ToAddresses&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;RECIPIENT&lt;/span&gt;
-                &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;ReplyToAddresses&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;userMail&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;Message&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;s&quot;&gt;&apos;Body&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;s&quot;&gt;&apos;Text&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-                        &lt;span class=&quot;s&quot;&gt;&apos;Charset&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CHARSET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                        &lt;span class=&quot;s&quot;&gt;&apos;Data&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                    &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-                &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-                &lt;span class=&quot;s&quot;&gt;&apos;Subject&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;s&quot;&gt;&apos;Charset&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CHARSET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                    &lt;span class=&quot;s&quot;&gt;&apos;Data&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SUBJECT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;Source&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SENDER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# Display an error if something goes wrong.
-&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ClientError&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;Error&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;Message&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Email sent! Message ID:&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;MessageId&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Because the HTML form sends it&amp;#8217;s data as www-form-urlencoded the following API gateway integration request mapping template is needed:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;title&quot;&gt;api_gateway_mapping_template.vtl &lt;a href=&quot;https://github.com/Nicklas2751/contact-form-lambda/blob/30b833e/api_gateway_mapping_template.vtl&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;view&lt;/a&gt; &lt;a href=&quot;https://raw.githubusercontent.com/Nicklas2751/contact-form-lambda/30b833e/api_gateway_mapping_template.vtl&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;raw&lt;/a&gt;&lt;/div&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;vtl&quot;&gt;&lt;table class=&quot;linenotable&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;linenos gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt; 1
+    <span class="c1"># Try to send the email.
+</span>    <span class="k">try</span><span class="p">:</span>
+        <span class="c1">#Provide the contents of the email.
+</span>        <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">send_email</span><span class="p">(</span>
+            <span class="n">Destination</span><span class="o">=</span><span class="p">{</span>
+                <span class="s">'ToAddresses'</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="n">RECIPIENT</span>
+                <span class="p">]</span>
+            <span class="p">},</span>
+            <span class="n">ReplyToAddresses</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">userMail</span><span class="p">,</span>
+            <span class="p">],</span>
+            <span class="n">Message</span><span class="o">=</span><span class="p">{</span>
+                <span class="s">'Body'</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">'Text'</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s">'Charset'</span><span class="p">:</span> <span class="n">CHARSET</span><span class="p">,</span>
+                        <span class="s">'Data'</span><span class="p">:</span> <span class="n">content</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+                <span class="s">'Subject'</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">'Charset'</span><span class="p">:</span> <span class="n">CHARSET</span><span class="p">,</span>
+                    <span class="s">'Data'</span><span class="p">:</span> <span class="n">SUBJECT</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">},</span>
+            <span class="n">Source</span><span class="o">=</span><span class="n">SENDER</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="c1"># Display an error if something goes wrong.
+</span>    <span class="k">except</span> <span class="n">ClientError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">response</span><span class="p">[</span><span class="s">'Error'</span><span class="p">][</span><span class="s">'Message'</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"Email sent! Message ID:"</span><span class="p">),</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s">'MessageId'</span><span class="p">])</span>
+</pre></td></tr></tbody></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Because the HTML form sends it&#8217;s data as www-form-urlencoded the following API gateway integration request mapping template is needed:</p>
+</div>
+<div class="listingblock">
+<div class="title">api_gateway_mapping_template.vtl <a href="https://github.com/Nicklas2751/contact-form-lambda/blob/30b833e/api_gateway_mapping_template.vtl" target="_blank" rel="noopener">view</a> <a href="https://raw.githubusercontent.com/Nicklas2751/contact-form-lambda/30b833e/api_gateway_mapping_template.vtl" target="_blank" rel="noopener">raw</a></div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="vtl"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
  2
  3
  4
@@ -236,58 +236,58 @@
 50
 51
 52
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;## convert HTML POST data or HTTP GET query string to JSON
+</pre></td><td class="code"><pre>## convert HTML POST data or HTTP GET query string to JSON
 
 ## get the raw post data from the AWS built-in variable and give it a nicer name
-#if ($context.httpMethod == &quot;POST&quot;)
- #set($rawAPIData = $input.path(&quot;$&quot;))
-#elseif ($context.httpMethod == &quot;GET&quot;)
+#if ($context.httpMethod == "POST")
+ #set($rawAPIData = $input.path("$"))
+#elseif ($context.httpMethod == "GET")
  #set($rawAPIData = $input.params().querystring)
  #set($rawAPIData = $rawAPIData.toString())
  #set($rawAPIDataLength = $rawAPIData.length() - 1)
  #set($rawAPIData = $rawAPIData.substring(1, $rawAPIDataLength))
- #set($rawAPIData = $rawAPIData.replace(&quot;, &quot;, &quot;&amp;amp;&quot;))
+ #set($rawAPIData = $rawAPIData.replace(", ", "&amp;"))
 #else
- #set($rawAPIData = &quot;&quot;)
+ #set($rawAPIData = "")
 #end
 
-## first we get the number of &quot;&amp;amp;&quot; in the string, this tells us if there is more than one key value pair
-#set($countAmpersands = $rawAPIData.length() - $rawAPIData.replace(&quot;&amp;amp;&quot;, &quot;&quot;).length())
+## first we get the number of "&amp;" in the string, this tells us if there is more than one key value pair
+#set($countAmpersands = $rawAPIData.length() - $rawAPIData.replace("&amp;", "").length())
 
-## if there are no &quot;&amp;amp;&quot; at all then we have only one key value pair.
+## if there are no "&amp;" at all then we have only one key value pair.
 ## we append an ampersand to the string so that we can tokenise it the same way as multiple kv pairs.
-## the &quot;empty&quot; kv pair to the right of the ampersand will be ignored anyway.
+## the "empty" kv pair to the right of the ampersand will be ignored anyway.
 #if ($countAmpersands == 0)
- #set($rawPostData = $rawAPIData + &quot;&amp;amp;&quot;)
+ #set($rawPostData = $rawAPIData + "&amp;")
 #end
 
 ## now we tokenise using the ampersand(s)
-#set($tokenisedAmpersand = $rawAPIData.split(&quot;&amp;amp;&quot;))
+#set($tokenisedAmpersand = $rawAPIData.split("&amp;"))
 
 ## we set up a variable to hold the valid key value pairs
 #set($tokenisedEquals = [])
 
-## now we set up a loop to find the valid key value pairs, which must contain only one &quot;=&quot;
+## now we set up a loop to find the valid key value pairs, which must contain only one "="
 #foreach( $kvPair in $tokenisedAmpersand )
- #set($countEquals = $kvPair.length() - $kvPair.replace(&quot;=&quot;, &quot;&quot;).length())
+ #set($countEquals = $kvPair.length() - $kvPair.replace("=", "").length())
  #if ($countEquals == 1)
-  #set($kvTokenised = $kvPair.split(&quot;=&quot;))
-  #if ($kvTokenised[0].length() &amp;gt; 0)
+  #set($kvTokenised = $kvPair.split("="))
+  #if ($kvTokenised[0].length() &gt; 0)
    ## we found a valid key value pair. add it to the list.
    #set($devNull = $tokenisedEquals.add($kvPair))
   #end
  #end
 #end
 
-## next we set up our loop inside the output structure &quot;{&quot; and &quot;}&quot;
+## next we set up our loop inside the output structure "{" and "}"
 {
-  &quot;referer&quot; : &quot;$input.params(&apos;referer&apos;)&quot;,
+  "referer" : "$input.params('referer')",
 #foreach( $kvPair in $tokenisedEquals )
-  ## finally we output the JSON for this pair and append a comma if this isn&apos;t the last pair
-  #set($kvTokenised = $kvPair.split(&quot;=&quot;))
- &quot;$util.urlDecode($kvTokenised[0])&quot; : #if($kvTokenised[1].length() &amp;gt; 0)&quot;$util.urlDecode($kvTokenised[1])&quot;#{else}&quot;&quot;#end#if( $foreach.hasNext ),#end
+  ## finally we output the JSON for this pair and append a comma if this isn't the last pair
+  #set($kvTokenised = $kvPair.split("="))
+ "$util.urlDecode($kvTokenised[0])" : #if($kvTokenised[1].length() &gt; 0)"$util.urlDecode($kvTokenised[1])"#{else}""#end#if( $foreach.hasNext ),#end
 #end
 }
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;</content><author><name>Nicklas Wiegandt</name></author><category term="general" /><category term="aws" /><category term="lambda" /><summary type="html">My first post on my new blog. This posts is about the blog itself and how it&amp;#8217;s made.</summary></entry></feed>
+</pre></td></tr></tbody></table></code></pre>
+</div>
+</div>]]></content><author><name>Nicklas Wiegandt</name></author><category term="general" /><category term="aws" /><category term="lambda" /><summary type="html"><![CDATA[My first post on my new blog. This posts is about the blog itself and how it&#8217;s made.]]></summary></entry></feed>

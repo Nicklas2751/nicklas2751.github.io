@@ -9,7 +9,7 @@
   <link type="application/atom+xml" rel="alternate" href="https://nicklas.wiegandt.eu/feed.xml" title="Nicklas Wiegandt" />
   <!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>Contact | Nicklas Wiegandt</title>
-<meta name="generator" content="Jekyll v3.9.3" />
+<meta name="generator" content="Jekyll v3.10.0" />
 <meta property="og:title" content="Contact" />
 <meta name="author" content="Nicklas Wiegandt" />
 <meta property="og:locale" content="en" />
@@ -49,27 +49,62 @@
     <main class="article-container">
   <h1 style="margin-bottom:2rem">Contact</h1>
   <div class="article-content">
+    <div class="article-container">
+  <div class="article-content">
     <div class="paragraph">
 <p><span class="icon"><i class="fa fa-envelope"></i></span> nicklas [at] wiegandt [dot] eu</p>
 </div>
-<form id="contact" class="form-horizontal" method="post" action="https://gy9kx6l66c.execute-api.eu-west-1.amazonaws.com/default/website-contact-form">
-<label for="mail">E-Mail</label>
-<input
-type="email"
-name="mail"
-id="mail"
-placeholder="yourmail@adress.com"
-required
-/>
-<label for="text">Text</label>
-<textarea id="text" name="text" rows="3" required></textarea>
-<div
-class="g-recaptcha"
-data-sitekey="6LfYmBkTAAAAALIJIQv0t5TQNX2OTm-KdrWt7iX3"
-></div>
-<input type="submit" value="Send" />
-</form>
+  </div>
 
+  <div class="contact-form-container">
+    <script async defer src="https://cdn.jsdelivr.net/gh/altcha-org/altcha@main/dist/altcha.min.js" type="module"></script>
+
+    <form id="contact" class="form-vertical" method="post" action="https://gy9kx6l66c.execute-api.eu-west-1.amazonaws.com/default/website-contact-form">
+
+      <div class="form-group">
+        <label for="mail" class="form-label">E-Mail</label>
+        <input
+          type="email"
+          name="mail"
+          id="mail"
+          placeholder="your@email.com"
+          required
+          class="form-input"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="subject" class="form-label">Subject</label>
+        <input
+          type="text"
+          id="subject"
+          name="subject"
+          required
+          placeholder="What is this about?"
+          class="form-input"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="text" class="form-label">Message</label>
+        <textarea
+          id="text"
+          name="text"
+          rows="5"
+          required
+          class="form-input"
+          placeholder="Your message..."
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <altcha-widget challengeurl="https://gy9kx6l66c.execute-api.eu-west-1.amazonaws.com/default/website-contact-form"></altcha-widget>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 1rem; padding: 0.8rem;">Send Message</button>
+    </form>
+  </div>
+</div>
 
 
   </div>

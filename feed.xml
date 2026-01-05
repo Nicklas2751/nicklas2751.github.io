@@ -1,621 +1,621 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="https://nicklas.wiegandt.eu/feed.xml" rel="self" type="application/atom+xml" /><link href="https://nicklas.wiegandt.eu/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-01-05T08:21:32-06:00</updated><id>https://nicklas.wiegandt.eu/feed.xml</id><title type="html">Nicklas Wiegandt</title><subtitle>About Nicklas Wiegandt (Nicklas2751) and his Blog.</subtitle><author><name>Nicklas Wiegandt</name></author><entry><title type="html">Integration Testing Spring AI MCP Server</title><link href="https://nicklas.wiegandt.eu/2026/01/04/integration-testing-spring-ai-mcp-server.html" rel="alternate" type="text/html" title="Integration Testing Spring AI MCP Server" /><published>2026-01-04T13:00:00-06:00</published><updated>2026-01-04T13:00:00-06:00</updated><id>https://nicklas.wiegandt.eu/2026/01/04/integration-testing-spring-ai-mcp-server</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2026/01/04/integration-testing-spring-ai-mcp-server.html">&lt;div id=&quot;preamble&quot;&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;While working on my &lt;a href=&quot;https://github.com/Nicklas2751/zdfmediathek-mcp&quot;&gt;ZDF Mediathek MCP Server&lt;/a&gt;, I noticed a lack of good resources on how to properly integration test a &lt;a href=&quot;https://docs.spring.io/spring-ai/reference/&quot;&gt;Spring AI&lt;/a&gt; MCP Server. Since I usually follow a Test-Driven Development (TDD) approach, this was a bit of a hurdle.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;I wanted to test my MCP tools integratively, meaning I wanted to ensure that the part I&amp;#8217;m testing is actually called via the Model Context Protocol.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;the-approach&quot;&gt;The Approach&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;My solution involves using the Spring AI MCP Client within the test to establish a connection to the MCP Server that is started via &lt;code&gt;@SpringBootTest&lt;/code&gt;. This allows me to simulate a real client interaction.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;To make this work, I first needed to add the MCP Client dependency to my &lt;code&gt;build.gradle.kts&lt;/code&gt;:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;kotlin&quot;&gt;&lt;span class=&quot;nf&quot;&gt;testImplementation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;org.springframework.ai:spring-ai-starter-mcp-client-webflux&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;the-integration-test&quot;&gt;The Integration Test&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Here is an example based on my &lt;code&gt;SearchContentServiceIT&lt;/code&gt;, which tests the &lt;code&gt;search_content&lt;/code&gt; tool.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;The key part is the &lt;code&gt;setUp&lt;/code&gt; and &lt;code&gt;tearDown&lt;/code&gt; methods. In &lt;code&gt;setUp&lt;/code&gt;, I initialize the &lt;code&gt;mcpClient&lt;/code&gt; so that it connects to the server running on the random local port provided by &lt;code&gt;@SpringBootTest&lt;/code&gt;.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;kotlin&quot;&gt;&lt;span class=&quot;nd&quot;&gt;@SpringBootTest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;webEnvironment&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SpringBootTest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;WebEnvironment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;RANDOM_PORT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;properties&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;&quot;spring.ai.mcp.client.enabled=true&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;&quot;spring.ai.mcp.client.type=async&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// ... other properties&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@EnableWireMock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-    &lt;span class=&quot;nc&quot;&gt;ConfigureWireMock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;baseUrlProperties&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;zdf.url&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SearchContentServiceIT&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@LocalServerPort&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://nicklas.wiegandt.eu/feed.xml" rel="self" type="application/atom+xml" /><link href="https://nicklas.wiegandt.eu/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-01-05T12:41:19-06:00</updated><id>https://nicklas.wiegandt.eu/feed.xml</id><title type="html">Nicklas Wiegandt</title><subtitle>About Nicklas Wiegandt (Nicklas2751) and his Blog.</subtitle><author><name>Nicklas Wiegandt</name></author><entry><title type="html">Integration Testing Spring AI MCP Server</title><link href="https://nicklas.wiegandt.eu/2026/01/04/integration-testing-spring-ai-mcp-server.html" rel="alternate" type="text/html" title="Integration Testing Spring AI MCP Server" /><published>2026-01-04T13:00:00-06:00</published><updated>2026-01-04T13:00:00-06:00</updated><id>https://nicklas.wiegandt.eu/2026/01/04/integration-testing-spring-ai-mcp-server</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2026/01/04/integration-testing-spring-ai-mcp-server.html"><![CDATA[<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>While working on my <a href="https://github.com/Nicklas2751/zdfmediathek-mcp">ZDF Mediathek MCP Server</a>, I noticed a lack of good resources on how to properly integration test a <a href="https://docs.spring.io/spring-ai/reference/">Spring AI</a> MCP Server. Since I usually follow a Test-Driven Development (TDD) approach, this was a bit of a hurdle.</p>
+</div>
+<div class="paragraph">
+<p>I wanted to test my MCP tools integratively, meaning I wanted to ensure that the part I&#8217;m testing is actually called via the Model Context Protocol.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-approach">The Approach</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>My solution involves using the Spring AI MCP Client within the test to establish a connection to the MCP Server that is started via <code>@SpringBootTest</code>. This allows me to simulate a real client interaction.</p>
+</div>
+<div class="paragraph">
+<p>To make this work, I first needed to add the MCP Client dependency to my <code>build.gradle.kts</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="kotlin"><span class="nf">testImplementation</span><span class="p">(</span><span class="s">"org.springframework.ai:spring-ai-starter-mcp-client-webflux"</span><span class="p">)</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-integration-test">The Integration Test</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Here is an example based on my <code>SearchContentServiceIT</code>, which tests the <code>search_content</code> tool.</p>
+</div>
+<div class="paragraph">
+<p>The key part is the <code>setUp</code> and <code>tearDown</code> methods. In <code>setUp</code>, I initialize the <code>mcpClient</code> so that it connects to the server running on the random local port provided by <code>@SpringBootTest</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="kotlin"><span class="nd">@SpringBootTest</span><span class="p">(</span>
+    <span class="n">webEnvironment</span> <span class="p">=</span> <span class="nc">SpringBootTest</span><span class="p">.</span><span class="nc">WebEnvironment</span><span class="p">.</span><span class="nc">RANDOM_PORT</span><span class="p">,</span>
+    <span class="n">properties</span> <span class="p">=</span> <span class="p">[</span>
+        <span class="s">"spring.ai.mcp.client.enabled=true"</span><span class="p">,</span>
+        <span class="s">"spring.ai.mcp.client.type=async"</span><span class="p">,</span>
+        <span class="c1">// ... other properties</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+<span class="nd">@EnableWireMock</span><span class="p">(</span>
+    <span class="nc">ConfigureWireMock</span><span class="p">(</span>
+        <span class="n">baseUrlProperties</span> <span class="p">=</span> <span class="p">[</span><span class="s">"zdf.url"</span><span class="p">]</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="kd">class</span> <span class="nc">SearchContentServiceIT</span> <span class="p">{</span>
+    <span class="nd">@LocalServerPort</span>
+    <span class="k">private</span> <span class="kd">var</span> <span class="py">port</span><span class="p">:</span> <span class="nc">Int</span> <span class="p">=</span> <span class="mi">0</span>
 
-    &lt;span class=&quot;nd&quot;&gt;@Autowired&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;lateinit&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;webClientBuilder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;WebClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Builder&lt;/span&gt;
+    <span class="nd">@Autowired</span>
+    <span class="k">private</span> <span class="k">lateinit</span> <span class="kd">var</span> <span class="py">webClientBuilder</span><span class="p">:</span> <span class="nc">WebClient</span><span class="p">.</span><span class="nc">Builder</span>
 
-    &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;lateinit&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;mcpClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;McpAsyncClient&lt;/span&gt;
+    <span class="k">private</span> <span class="k">lateinit</span> <span class="kd">var</span> <span class="py">mcpClient</span><span class="p">:</span> <span class="nc">McpAsyncClient</span>
 
-    &lt;span class=&quot;nd&quot;&gt;@BeforeEach&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setUp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;transport&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;WebClientStreamableHttpTransport&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;builder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;webClientBuilder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;baseUrl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://localhost:$port&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;endpoint&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    <span class="nd">@BeforeEach</span>
+    <span class="k">fun</span> <span class="nf">setUp</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">val</span> <span class="py">transport</span> <span class="p">=</span> <span class="nc">WebClientStreamableHttpTransport</span><span class="p">.</span><span class="nf">builder</span><span class="p">(</span>
+            <span class="n">webClientBuilder</span><span class="p">.</span><span class="nf">baseUrl</span><span class="p">(</span><span class="s">"http://localhost:$port"</span><span class="p">)</span>
+        <span class="p">)</span>
+            <span class="p">.</span><span class="nf">endpoint</span><span class="p">(</span><span class="s">"/"</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">build</span><span class="p">()</span>
 
-        &lt;span class=&quot;n&quot;&gt;mcpClient&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;McpClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;async&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;transport&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;mcpClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        <span class="n">mcpClient</span> <span class="p">=</span> <span class="nc">McpClient</span><span class="p">.</span><span class="nf">async</span><span class="p">(</span><span class="n">transport</span><span class="p">).</span><span class="nf">build</span><span class="p">()</span>
+        <span class="n">mcpClient</span><span class="p">.</span><span class="nf">initialize</span><span class="p">().</span><span class="nf">block</span><span class="p">()</span>
+    <span class="p">}</span>
 
-    &lt;span class=&quot;nd&quot;&gt;@AfterEach&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;tearDown&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;mcpClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;closeGracefully&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    <span class="nd">@AfterEach</span>
+    <span class="k">fun</span> <span class="nf">tearDown</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">mcpClient</span><span class="p">.</span><span class="nf">closeGracefully</span><span class="p">().</span><span class="nf">block</span><span class="p">()</span>
+    <span class="p">}</span>
 
-    &lt;span class=&quot;c1&quot;&gt;// ... tests&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;I use &lt;strong&gt;WireMock&lt;/strong&gt; to mock the actual external API (in this case, the ZDF API) that my MCP tool talks to. This keeps the test isolated from the real backend while testing the full MCP flow.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;calling-the-tool&quot;&gt;Calling the Tool&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;In the test method itself, I can now use the &lt;code&gt;mcpClient&lt;/code&gt; to call the tool and verify the result.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;kotlin&quot;&gt;    &lt;span class=&quot;nd&quot;&gt;@Test&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;`search_content&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;valid&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Query&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;returns&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expected&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;result`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// ... setup expectations and WireMock stubs ...&lt;/span&gt;
+    <span class="c1">// ... tests</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>I use <strong>WireMock</strong> to mock the actual external API (in this case, the ZDF API) that my MCP tool talks to. This keeps the test isolated from the real backend while testing the full MCP flow.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="calling-the-tool">Calling the Tool</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the test method itself, I can now use the <code>mcpClient</code> to call the tool and verify the result.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="kotlin">    <span class="nd">@Test</span>
+    <span class="k">fun</span> <span class="nf">`search_content</span> <span class="n">valid</span> <span class="nc">Query</span> <span class="n">returns</span> <span class="n">expected</span> <span class="nf">result`</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// ... setup expectations and WireMock stubs ...</span>
 
-        &lt;span class=&quot;c1&quot;&gt;// when&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;response&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;parseTextContent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;mcpClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;callTool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-                &lt;span class=&quot;nc&quot;&gt;McpSchema&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;CallToolRequest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-                    &lt;span class=&quot;s&quot;&gt;&quot;search_content&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;mapOf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;(&lt;/span&gt;
-                        &lt;span class=&quot;nc&quot;&gt;Pair&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;query&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Tagesschau&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-                        &lt;span class=&quot;nc&quot;&gt;Pair&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;limit&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-                    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-                &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        <span class="c1">// when</span>
+        <span class="kd">val</span> <span class="py">response</span> <span class="p">=</span> <span class="nf">parseTextContent</span><span class="p">(</span>
+            <span class="n">mcpClient</span><span class="p">.</span><span class="nf">callTool</span><span class="p">(</span>
+                <span class="nc">McpSchema</span><span class="p">.</span><span class="nc">CallToolRequest</span><span class="p">(</span>
+                    <span class="s">"search_content"</span><span class="p">,</span>
+                    <span class="n">mapOf</span><span class="p">&lt;</span><span class="nc">String</span><span class="p">,</span> <span class="nc">String</span><span class="p">&gt;(</span>
+                        <span class="nc">Pair</span><span class="p">(</span><span class="s">"query"</span><span class="p">,</span> <span class="s">"Tagesschau"</span><span class="p">),</span>
+                        <span class="nc">Pair</span><span class="p">(</span><span class="s">"limit"</span><span class="p">,</span> <span class="s">"2"</span><span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
 
-        &lt;span class=&quot;c1&quot;&gt;// then&lt;/span&gt;
-        &lt;span class=&quot;nf&quot;&gt;assertThat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;usingRecursiveComparison&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;isEqualTo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expectedResponse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;parsing-the-response&quot;&gt;Parsing the Response&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;One interesting helper method I created is &lt;code&gt;parseTextContent&lt;/code&gt;. It helps to convert the text content from the MCP Client&amp;#8217;s response back into a typed object using the Jackson &lt;code&gt;ObjectMapper&lt;/code&gt;. This makes assertions much easier.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;kotlin&quot;&gt;    &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;parseTextContent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Mono&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;McpSchema&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;CallToolResult&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;):&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ZdfSearchResponse&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;objectMapper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;readValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;ZdfSearchResponse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;(&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!!&lt;/span&gt;
-                &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-                &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;first&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;McpSchema&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;TextContent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;This approach allows me to test my MCP tools end-to-end within the Spring context, ensuring that the MCP layer, the tool implementation, and the integration with external services (mocked) work together as expected.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;</content><author><name>Nicklas Wiegandt</name></author><category term="spring-ai" /><category term="mcp" /><category term="testing" /><summary type="html">While working on my ZDF Mediathek MCP Server, I noticed a lack of good resources on how to properly integration test a Spring AI MCP Server. Since I usually follow a Test-Driven Development (TDD) approach, this was a bit of a hurdle.</summary></entry><entry><title type="html">Creating a new website Theme with the help of GenerativeAI</title><link href="https://nicklas.wiegandt.eu/2026/01/04/creating-a-new-website-theme-with-the-help-of-generative-ai.html" rel="alternate" type="text/html" title="Creating a new website Theme with the help of GenerativeAI" /><published>2026-01-04T05:00:00-06:00</published><updated>2026-01-04T05:00:00-06:00</updated><id>https://nicklas.wiegandt.eu/2026/01/04/creating-a-new-website-theme-with-the-help-of-generative-ai</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2026/01/04/creating-a-new-website-theme-with-the-help-of-generative-ai.html">&lt;div id=&quot;preamble&quot;&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;I decided it was time to give my website a fresh look. But instead of starting from scratch or browsing endless theme galleries, I turned to Generative AI for help.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;the-idea-generation&quot;&gt;The Idea Generation&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;First, I used &lt;strong&gt;Perplexity Pro&lt;/strong&gt; to generate a variety of design concepts. I asked it to create 20 distinct, responsive, and theme-aware single-page HTML design proposals for a personal portfolio and blog of a Software Architect. I specified that the designs should range from standard to minimalist styles and utilize tools like &lt;a href=&quot;https://iconoir.com&quot;&gt;iconoir&lt;/a&gt; if needed.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Perplexity provided me with 20 different design proposals, each as a single HTML file. This was a fantastic way to quickly visualize different directions I could take.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;refining-the-selection&quot;&gt;Refining the Selection&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;From these 20 ideas, I selected the four that appealed to me the most. But a static HTML file is just the beginning. To take it further, I used &lt;strong&gt;GitHub Copilot&lt;/strong&gt; with the &lt;strong&gt;Claude Sonnet 4.5&lt;/strong&gt; and &lt;strong&gt;Gemini 3 Pro&lt;/strong&gt; models. I asked Copilot to create example themes based on these four selected designs.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;I then iterated on these themes, refining them further to better suit my content and personal style.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;the-final-implementation&quot;&gt;The Final Implementation&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;After playing around with the four refined themes, I picked the winner: the &quot;Hero Timeline Theme&quot;.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;To turn this design into a fully functional Jekyll theme, I once again relied on &lt;strong&gt;GitHub Copilot&lt;/strong&gt;, specifically using the &lt;strong&gt;Gemini 3 Pro&lt;/strong&gt; model. Copilot helped me convert the HTML and CSS into a proper Jekyll theme structure, creating layouts, includes, and assets. It also assisted in migrating my existing content and ensuring that features like the blog and tags worked seamlessly with the new design.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;The result is what you are seeing right now! A modern, responsive website created with the power of Generative AI.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;</content><author><name>Nicklas Wiegandt</name></author><category term="webdesign" /><category term="generative-ai" /><category term="general" /><summary type="html">I decided it was time to give my website a fresh look. But instead of starting from scratch or browsing endless theme galleries, I turned to Generative AI for help.</summary></entry><entry><title type="html">Skip the first two lines of a file in Apache Camel</title><link href="https://nicklas.wiegandt.eu/2023/02/09/apache-camel-skip-lines.html" rel="alternate" type="text/html" title="Skip the first two lines of a file in Apache Camel" /><published>2023-02-09T14:00:00-06:00</published><updated>2023-02-09T14:00:00-06:00</updated><id>https://nicklas.wiegandt.eu/2023/02/09/apache-camel-skip-lines</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2023/02/09/apache-camel-skip-lines.html">&lt;div id=&quot;preamble&quot;&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;&lt;a href=&quot;https://camel.apache.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Apache Camel&lt;/a&gt; is a popular open-source framework for integrating various systems and services. It provides a variety of components and tools to make it easier to integrate different systems, such as file systems, databases, and web services.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;However, in some cases, it might be necessary to skip some lines in a file while processing it with &lt;a href=&quot;https://camel.apache.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Apache Camel&lt;/a&gt;. For instance, you might have a file that has some metadata in the first two lines, and you only want to process the actual data from the file.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;In this article, I&amp;#8217;ll show you how to skip the first two lines of a file in &lt;a href=&quot;https://camel.apache.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Apache Camel&lt;/a&gt;. The solution can be applied to any type of message that&amp;#8217;s split by the &lt;code&gt;split&lt;/code&gt; component, not just files.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;When you&amp;#8217;re processing a file in &lt;a href=&quot;https://camel.apache.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Apache Camel&lt;/a&gt;, it&amp;#8217;s possible to use the &lt;code&gt;split&lt;/code&gt; component to split the file into separate messages, one message per line. However, if you want to skip some lines, such as the first two lines, you need a way to filter out those messages before they&amp;#8217;re processed.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;the-solution&quot;&gt;The Solution&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;&lt;a href=&quot;https://camel.apache.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Apache Camel&lt;/a&gt; provides a &lt;code&gt;filter&lt;/code&gt; component that allows you to filter out messages based on a condition. The condition can be specified using the &lt;code&gt;simple&lt;/code&gt; language, which provides a simple expression language for filtering messages.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;To skip the first two lines of a file, we can use the &lt;code&gt;filter&lt;/code&gt; component and check the value of the &lt;code&gt;CamelSplitIndex&lt;/code&gt; property. This property is set by the &lt;code&gt;split&lt;/code&gt; component and indicates the current index of the message in the split list.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Here&amp;#8217;s an example of how to skip the first two lines of a file in &lt;a href=&quot;https://camel.apache.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Apache Camel&lt;/a&gt;:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;from&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;file:input?noop=true&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;tokenize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;\n&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;simple&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;${exchangeProperty.CamelSplitIndex} &amp;gt; 1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;file:output&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;In this example, we start by reading a file from the &lt;code&gt;input&lt;/code&gt; directory using the &lt;code&gt;file&lt;/code&gt; component. The &lt;code&gt;noop&lt;/code&gt; option is set to &lt;code&gt;true&lt;/code&gt;, which means that &lt;a href=&quot;https://camel.apache.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Apache Camel&lt;/a&gt; will not delete the original file after processing it.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Next, we use the &lt;code&gt;split&lt;/code&gt; component to split the file into separate messages, one message per line. The &lt;code&gt;tokenize&lt;/code&gt; option is set to &lt;code&gt;&quot;\n&quot;&lt;/code&gt;, which means that the file will be split on newline characters.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;After that, we use the &lt;code&gt;filter&lt;/code&gt; component to filter out messages that have an index lower than or equal to 1. This will effectively skip the first two lines of the file.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Finally, we use the &lt;code&gt;to&lt;/code&gt; component to write the filtered messages to the &lt;code&gt;output&lt;/code&gt; directory.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;In this article, I showed you how to skip the first two lines of a file in &lt;a href=&quot;https://camel.apache.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Apache Camel&lt;/a&gt;. By using the &lt;code&gt;filter&lt;/code&gt; component and checking the value of the &lt;code&gt;CamelSplitIndex&lt;/code&gt; property, you can easily filter out the unwanted lines in a file. With &lt;a href=&quot;https://camel.apache.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Apache Camel&lt;/a&gt;, it&amp;#8217;s possible to solve a variety of integration problems, and this is just one of the many examples.&lt;/p&gt;
-&lt;/div&gt;
-&lt;hr&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;This article was created with the help of ChatGPT, an AI model by OpenAI.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;</content><author><name>Nicklas Wiegandt</name></author><category term="apache-camel" /><summary type="html">Apache Camel is a popular open-source framework for integrating various systems and services. It provides a variety of components and tools to make it easier to integrate different systems, such as file systems, databases, and web services.</summary></entry><entry><title type="html">Using Docker in jenkins with jenkins Docker agent</title><link href="https://nicklas.wiegandt.eu/2021/06/06/jenkins-docker-agent-with-docker.html" rel="alternate" type="text/html" title="Using Docker in jenkins with jenkins Docker agent" /><published>2021-06-06T03:00:00-05:00</published><updated>2021-06-06T03:00:00-05:00</updated><id>https://nicklas.wiegandt.eu/2021/06/06/jenkins-docker-agent-with-docker</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2021/06/06/jenkins-docker-agent-with-docker.html">&lt;div id=&quot;preamble&quot;&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Getting &lt;a href=&quot;https://jenkins.io&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Jenkins CI&lt;/a&gt; to build Docker container with a jenkins Docker agent&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;the-problem&quot;&gt;The problem&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Running &lt;a href=&quot;https://jenkins.io&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Jenkins CI&lt;/a&gt; agents as containers is a nice thing. However it can be a
+        <span class="c1">// then</span>
+        <span class="nf">assertThat</span><span class="p">(</span><span class="n">response</span><span class="p">).</span><span class="nf">usingRecursiveComparison</span><span class="p">().</span><span class="nf">isEqualTo</span><span class="p">(</span><span class="n">expectedResponse</span><span class="p">)</span>
+    <span class="p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="parsing-the-response">Parsing the Response</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>One interesting helper method I created is <code>parseTextContent</code>. It helps to convert the text content from the MCP Client&#8217;s response back into a typed object using the Jackson <code>ObjectMapper</code>. This makes assertions much easier.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="kotlin">    <span class="k">private</span> <span class="k">fun</span> <span class="nf">parseTextContent</span><span class="p">(</span><span class="n">result</span><span class="p">:</span> <span class="nc">Mono</span><span class="p">&lt;</span><span class="nc">McpSchema</span><span class="p">.</span><span class="nc">CallToolResult</span><span class="p">&gt;):</span> <span class="nc">ZdfSearchResponse</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">objectMapper</span><span class="p">.</span><span class="n">readValue</span><span class="p">&lt;</span><span class="nc">ZdfSearchResponse</span><span class="p">&gt;(</span>
+            <span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="nf">block</span><span class="p">()</span><span class="o">!!</span>
+                <span class="p">.</span><span class="nf">content</span><span class="p">()</span>
+                <span class="p">.</span><span class="nf">first</span><span class="p">()</span> <span class="k">as</span> <span class="nc">McpSchema</span><span class="p">.</span><span class="nc">TextContent</span><span class="p">).</span><span class="nf">text</span><span class="p">()</span>
+        <span class="p">)</span>
+    <span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This approach allows me to test my MCP tools end-to-end within the Spring context, ensuring that the MCP layer, the tool implementation, and the integration with external services (mocked) work together as expected.</p>
+</div>
+</div>
+</div>]]></content><author><name>Nicklas Wiegandt</name></author><category term="spring-ai" /><category term="mcp" /><category term="testing" /><summary type="html"><![CDATA[While working on my ZDF Mediathek MCP Server, I noticed a lack of good resources on how to properly integration test a Spring AI MCP Server. Since I usually follow a Test-Driven Development (TDD) approach, this was a bit of a hurdle.]]></summary></entry><entry><title type="html">Creating a new website Theme with the help of GenerativeAI</title><link href="https://nicklas.wiegandt.eu/2026/01/04/creating-a-new-website-theme-with-the-help-of-generative-ai.html" rel="alternate" type="text/html" title="Creating a new website Theme with the help of GenerativeAI" /><published>2026-01-04T05:00:00-06:00</published><updated>2026-01-04T05:00:00-06:00</updated><id>https://nicklas.wiegandt.eu/2026/01/04/creating-a-new-website-theme-with-the-help-of-generative-ai</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2026/01/04/creating-a-new-website-theme-with-the-help-of-generative-ai.html"><![CDATA[<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>I decided it was time to give my website a fresh look. But instead of starting from scratch or browsing endless theme galleries, I turned to Generative AI for help.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-idea-generation">The Idea Generation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>First, I used <strong>Perplexity Pro</strong> to generate a variety of design concepts. I asked it to create 20 distinct, responsive, and theme-aware single-page HTML design proposals for a personal portfolio and blog of a Software Architect. I specified that the designs should range from standard to minimalist styles and utilize tools like <a href="https://iconoir.com">iconoir</a> if needed.</p>
+</div>
+<div class="paragraph">
+<p>Perplexity provided me with 20 different design proposals, each as a single HTML file. This was a fantastic way to quickly visualize different directions I could take.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="refining-the-selection">Refining the Selection</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>From these 20 ideas, I selected the four that appealed to me the most. But a static HTML file is just the beginning. To take it further, I used <strong>GitHub Copilot</strong> with the <strong>Claude Sonnet 4.5</strong> and <strong>Gemini 3 Pro</strong> models. I asked Copilot to create example themes based on these four selected designs.</p>
+</div>
+<div class="paragraph">
+<p>I then iterated on these themes, refining them further to better suit my content and personal style.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-final-implementation">The Final Implementation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>After playing around with the four refined themes, I picked the winner: the "Hero Timeline Theme".</p>
+</div>
+<div class="paragraph">
+<p>To turn this design into a fully functional Jekyll theme, I once again relied on <strong>GitHub Copilot</strong>, specifically using the <strong>Gemini 3 Pro</strong> model. Copilot helped me convert the HTML and CSS into a proper Jekyll theme structure, creating layouts, includes, and assets. It also assisted in migrating my existing content and ensuring that features like the blog and tags worked seamlessly with the new design.</p>
+</div>
+<div class="paragraph">
+<p>The result is what you are seeing right now! A modern, responsive website created with the power of Generative AI.</p>
+</div>
+</div>
+</div>]]></content><author><name>Nicklas Wiegandt</name></author><category term="webdesign" /><category term="generative-ai" /><category term="general" /><summary type="html"><![CDATA[I decided it was time to give my website a fresh look. But instead of starting from scratch or browsing endless theme galleries, I turned to Generative AI for help.]]></summary></entry><entry><title type="html">Skip the first two lines of a file in Apache Camel</title><link href="https://nicklas.wiegandt.eu/2023/02/09/apache-camel-skip-lines.html" rel="alternate" type="text/html" title="Skip the first two lines of a file in Apache Camel" /><published>2023-02-09T14:00:00-06:00</published><updated>2023-02-09T14:00:00-06:00</updated><id>https://nicklas.wiegandt.eu/2023/02/09/apache-camel-skip-lines</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2023/02/09/apache-camel-skip-lines.html"><![CDATA[<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://camel.apache.org" target="_blank" rel="noopener">Apache Camel</a> is a popular open-source framework for integrating various systems and services. It provides a variety of components and tools to make it easier to integrate different systems, such as file systems, databases, and web services.</p>
+</div>
+<div class="paragraph">
+<p>However, in some cases, it might be necessary to skip some lines in a file while processing it with <a href="https://camel.apache.org" target="_blank" rel="noopener">Apache Camel</a>. For instance, you might have a file that has some metadata in the first two lines, and you only want to process the actual data from the file.</p>
+</div>
+<div class="paragraph">
+<p>In this article, I&#8217;ll show you how to skip the first two lines of a file in <a href="https://camel.apache.org" target="_blank" rel="noopener">Apache Camel</a>. The solution can be applied to any type of message that&#8217;s split by the <code>split</code> component, not just files.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-problem">The Problem</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When you&#8217;re processing a file in <a href="https://camel.apache.org" target="_blank" rel="noopener">Apache Camel</a>, it&#8217;s possible to use the <code>split</code> component to split the file into separate messages, one message per line. However, if you want to skip some lines, such as the first two lines, you need a way to filter out those messages before they&#8217;re processed.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-solution">The Solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://camel.apache.org" target="_blank" rel="noopener">Apache Camel</a> provides a <code>filter</code> component that allows you to filter out messages based on a condition. The condition can be specified using the <code>simple</code> language, which provides a simple expression language for filtering messages.</p>
+</div>
+<div class="paragraph">
+<p>To skip the first two lines of a file, we can use the <code>filter</code> component and check the value of the <code>CamelSplitIndex</code> property. This property is set by the <code>split</code> component and indicates the current index of the message in the split list.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s an example of how to skip the first two lines of a file in <a href="https://camel.apache.org" target="_blank" rel="noopener">Apache Camel</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="n">from</span><span class="o">(</span><span class="s">"file:input?noop=true"</span><span class="o">)</span>
+<span class="o">.</span><span class="na">split</span><span class="o">().</span><span class="na">tokenize</span><span class="o">(</span><span class="s">"\n"</span><span class="o">)</span>
+<span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">simple</span><span class="o">(</span><span class="s">"${exchangeProperty.CamelSplitIndex} &gt; 1"</span><span class="o">))</span>
+<span class="o">.</span><span class="na">to</span><span class="o">(</span><span class="s">"file:output"</span><span class="o">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, we start by reading a file from the <code>input</code> directory using the <code>file</code> component. The <code>noop</code> option is set to <code>true</code>, which means that <a href="https://camel.apache.org" target="_blank" rel="noopener">Apache Camel</a> will not delete the original file after processing it.</p>
+</div>
+<div class="paragraph">
+<p>Next, we use the <code>split</code> component to split the file into separate messages, one message per line. The <code>tokenize</code> option is set to <code>"\n"</code>, which means that the file will be split on newline characters.</p>
+</div>
+<div class="paragraph">
+<p>After that, we use the <code>filter</code> component to filter out messages that have an index lower than or equal to 1. This will effectively skip the first two lines of the file.</p>
+</div>
+<div class="paragraph">
+<p>Finally, we use the <code>to</code> component to write the filtered messages to the <code>output</code> directory.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="conclusion">Conclusion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this article, I showed you how to skip the first two lines of a file in <a href="https://camel.apache.org" target="_blank" rel="noopener">Apache Camel</a>. By using the <code>filter</code> component and checking the value of the <code>CamelSplitIndex</code> property, you can easily filter out the unwanted lines in a file. With <a href="https://camel.apache.org" target="_blank" rel="noopener">Apache Camel</a>, it&#8217;s possible to solve a variety of integration problems, and this is just one of the many examples.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p>This article was created with the help of ChatGPT, an AI model by OpenAI.</p>
+</div>
+</div>
+</div>]]></content><author><name>Nicklas Wiegandt</name></author><category term="apache-camel" /><summary type="html"><![CDATA[Apache Camel is a popular open-source framework for integrating various systems and services. It provides a variety of components and tools to make it easier to integrate different systems, such as file systems, databases, and web services.]]></summary></entry><entry><title type="html">Using Docker in jenkins with jenkins Docker agent</title><link href="https://nicklas.wiegandt.eu/2021/06/06/jenkins-docker-agent-with-docker.html" rel="alternate" type="text/html" title="Using Docker in jenkins with jenkins Docker agent" /><published>2021-06-06T03:00:00-05:00</published><updated>2021-06-06T03:00:00-05:00</updated><id>https://nicklas.wiegandt.eu/2021/06/06/jenkins-docker-agent-with-docker</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2021/06/06/jenkins-docker-agent-with-docker.html"><![CDATA[<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Getting <a href="https://jenkins.io" target="_blank" rel="noopener">Jenkins CI</a> to build Docker container with a jenkins Docker agent</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-problem">The problem</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Running <a href="https://jenkins.io" target="_blank" rel="noopener">Jenkins CI</a> agents as containers is a nice thing. However it can be a
 hassle if you want to build a container inside the containerized docker agent. Using the standard Jenkins agent container
-will result in an error telling you that the Docker binary is not found.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;the-solution&quot;&gt;The solution&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;The default &lt;a href=&quot;https://hub.docker.com/r/jenkins/agent&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Jenkins agent container&lt;/a&gt; doesn&amp;#8217;t contain the Docker binaries. 😔&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;But the &lt;a href=&quot;https://hub.docker.com/r/jenkins/jnlp-agent-docker&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Jenkins JNLP agent Docker container&lt;/a&gt; does! 😀&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Unfortunately the image is missing any description and finding any documentation is hard. You can neither view the Dockerfile nor is the source linked. But in the &lt;a href=&quot;https://github.com/jenkinsci/jnlp-agents&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;GitHub repository&lt;/a&gt; for the &lt;a href=&quot;https://github.com/jenkinsci/jnlp-agents&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;JNLP Agents&lt;/a&gt; is a subdirectory called &lt;code&gt;docker&lt;/code&gt; in which you can find this &lt;a href=&quot;https://github.com/jenkinsci/jnlp-agents/blob/master/docker/Dockerfile&quot;&gt;Dockerfile&lt;/a&gt;. This seems to be the source for the linked image. One can see that the Docker binary is getting installed on build time.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;In order to use the agent go to your Jenkins server settings and click on &lt;code&gt;Manage Nodes and Clouds&lt;/code&gt; &amp;#8594; &lt;code&gt;Configure Clouds&lt;/code&gt;.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;If you haven&amp;#8217;t already set your Docker settings:&lt;br&gt;
-&lt;strong&gt;Name:&lt;/strong&gt; &lt;code&gt;docker&lt;/code&gt;&lt;br&gt;
-&lt;strong&gt;Docker Host URI:&lt;/strong&gt; &lt;code&gt;unix:///var/run/docker.sock&lt;/code&gt;&lt;br&gt;&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;imageblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;img src=&quot;/assets/images/jenkins-configure-clouds.png&quot; alt=&quot;The Jenkins Docker settings&quot;&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;div class=&quot;title&quot;&gt;The Jenkins Docker setting&lt;/div&gt;
-&lt;p&gt;Then open the Docker Agent templates section.&lt;br&gt;
-Change the &lt;strong&gt;Docker Image&lt;/strong&gt; to: &lt;code&gt;jenkins/jnlp-agent-docker&lt;/code&gt;&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;imageblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;img src=&quot;/assets/images/jenkins-agent-template.png&quot; alt=&quot;The Jenkins agent template settings&quot;&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;div class=&quot;title&quot;&gt;The Jenkins agent template settings&lt;/div&gt;
-&lt;p&gt;After that open the container settings and set the following:&lt;br&gt;
-&lt;strong&gt;User:&lt;/strong&gt; &lt;code&gt;root&lt;/code&gt;&lt;br&gt;
-&lt;strong&gt;Volumes:&lt;/strong&gt; &lt;code&gt;/var/run/docker.sock:/var/run/docker.sock&lt;/code&gt;&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;imageblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;img src=&quot;/assets/images/jenkins-agent-template-container-settings.png&quot; alt=&quot;The Jenkins agent template container settings&quot;&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;div class=&quot;title&quot;&gt;The Jenkins agent template container settings&lt;/div&gt;
-&lt;p&gt;Thats it. Happy dockerizing 🙂&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;</content><author><name>Nicklas Wiegandt</name></author><category term="jenkins" /><category term="cicd" /><category term="docker" /><category term="docker-in-docker" /><category term="containerd" /><summary type="html">Getting Jenkins CI to build Docker container with a jenkins Docker agent</summary></entry><entry><title type="html">Docker Compose log aggregation using Grafana Loki and Fluent Bit</title><link href="https://nicklas.wiegandt.eu/2020/12/20/docker-compose-log-aggregation-with-grafana-loki.html" rel="alternate" type="text/html" title="Docker Compose log aggregation using Grafana Loki and Fluent Bit" /><published>2020-12-20T15:00:00-06:00</published><updated>2020-12-20T15:00:00-06:00</updated><id>https://nicklas.wiegandt.eu/2020/12/20/docker-compose-log-aggregation-with-grafana-loki</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2020/12/20/docker-compose-log-aggregation-with-grafana-loki.html">&lt;div id=&quot;preamble&quot;&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;How to use &lt;a href=&quot;https://grafana.com/oss/loki/&quot;&gt;Grafana Loki&lt;/a&gt; for &lt;a href=&quot;https://docs.docker.com/compose/&quot;&gt;docker compose&lt;/a&gt; log aggregation using &lt;a href=&quot;https://fluentbit.io/&quot;&gt;Fluent Bit&lt;/a&gt;.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Recently &lt;a href=&quot;https://elaon.de&quot;&gt;Alex&lt;/a&gt;, my co-maintainer of &lt;a href=&quot;https://mediathekview.de&quot;&gt;MediathekView&lt;/a&gt;, asked me to build a Docker Compose file to view the &lt;a href=&quot;https://github.com/mediathekview/MServer/&quot;&gt;MServer&lt;/a&gt; logs with &lt;a href=&quot;https://grafana.com/oss/loki/&quot;&gt;Grafana Loki&lt;/a&gt;. I chose &lt;a href=&quot;https://fluentbit.io/&quot;&gt;Fluent Bit&lt;/a&gt; as log proccessor and forwarder becuase Docker Compose can use the fluentd logging driver &lt;a href=&quot;https://docs.docker.com/config/containers/logging/fluentd/&quot;&gt;out of the box&lt;/a&gt;.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;This does not seem particularly complex at first. However, there are some pitfalls hidden due to missing or outdated information.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;the-solution&quot;&gt;The solution&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;sect2&quot;&gt;
-&lt;h3 id=&quot;loki-grafana-and-fluent-bit&quot;&gt;Loki, Grafana and Fluent Bit&lt;/h3&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;The Docker Compose part for Loki and Grafana is straightforward:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;title&quot;&gt;docker-compose-loki.yml&lt;/div&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;yaml&quot;&gt;  &lt;span class=&quot;na&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3.3&quot;&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;loki&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;bridge&lt;/span&gt;
+will result in an error telling you that the Docker binary is not found.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-solution">The solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The default <a href="https://hub.docker.com/r/jenkins/agent" target="_blank" rel="noopener">Jenkins agent container</a> doesn&#8217;t contain the Docker binaries. 😔</p>
+</div>
+<div class="paragraph">
+<p>But the <a href="https://hub.docker.com/r/jenkins/jnlp-agent-docker" target="_blank" rel="noopener">Jenkins JNLP agent Docker container</a> does! 😀</p>
+</div>
+<div class="paragraph">
+<p>Unfortunately the image is missing any description and finding any documentation is hard. You can neither view the Dockerfile nor is the source linked. But in the <a href="https://github.com/jenkinsci/jnlp-agents" target="_blank" rel="noopener">GitHub repository</a> for the <a href="https://github.com/jenkinsci/jnlp-agents" target="_blank" rel="noopener">JNLP Agents</a> is a subdirectory called <code>docker</code> in which you can find this <a href="https://github.com/jenkinsci/jnlp-agents/blob/master/docker/Dockerfile">Dockerfile</a>. This seems to be the source for the linked image. One can see that the Docker binary is getting installed on build time.</p>
+</div>
+<div class="paragraph">
+<p>In order to use the agent go to your Jenkins server settings and click on <code>Manage Nodes and Clouds</code> &#8594; <code>Configure Clouds</code>.</p>
+</div>
+<div class="paragraph">
+<p>If you haven&#8217;t already set your Docker settings:<br>
+<strong>Name:</strong> <code>docker</code><br>
+<strong>Docker Host URI:</strong> <code>unix:///var/run/docker.sock</code><br></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/assets/images/jenkins-configure-clouds.png" alt="The Jenkins Docker settings">
+</div>
+</div>
+<div class="paragraph">
+<div class="title">The Jenkins Docker setting</div>
+<p>Then open the Docker Agent templates section.<br>
+Change the <strong>Docker Image</strong> to: <code>jenkins/jnlp-agent-docker</code></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/assets/images/jenkins-agent-template.png" alt="The Jenkins agent template settings">
+</div>
+</div>
+<div class="paragraph">
+<div class="title">The Jenkins agent template settings</div>
+<p>After that open the container settings and set the following:<br>
+<strong>User:</strong> <code>root</code><br>
+<strong>Volumes:</strong> <code>/var/run/docker.sock:/var/run/docker.sock</code></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/assets/images/jenkins-agent-template-container-settings.png" alt="The Jenkins agent template container settings">
+</div>
+</div>
+<div class="paragraph">
+<div class="title">The Jenkins agent template container settings</div>
+<p>Thats it. Happy dockerizing 🙂</p>
+</div>
+</div>
+</div>]]></content><author><name>Nicklas Wiegandt</name></author><category term="jenkins" /><category term="cicd" /><category term="docker" /><category term="docker-in-docker" /><category term="containerd" /><summary type="html"><![CDATA[Getting Jenkins CI to build Docker container with a jenkins Docker agent]]></summary></entry><entry><title type="html">Docker Compose log aggregation using Grafana Loki and Fluent Bit</title><link href="https://nicklas.wiegandt.eu/2020/12/20/docker-compose-log-aggregation-with-grafana-loki.html" rel="alternate" type="text/html" title="Docker Compose log aggregation using Grafana Loki and Fluent Bit" /><published>2020-12-20T15:00:00-06:00</published><updated>2020-12-20T15:00:00-06:00</updated><id>https://nicklas.wiegandt.eu/2020/12/20/docker-compose-log-aggregation-with-grafana-loki</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2020/12/20/docker-compose-log-aggregation-with-grafana-loki.html"><![CDATA[<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>How to use <a href="https://grafana.com/oss/loki/">Grafana Loki</a> for <a href="https://docs.docker.com/compose/">docker compose</a> log aggregation using <a href="https://fluentbit.io/">Fluent Bit</a>.</p>
+</div>
+<div class="paragraph">
+<p>Recently <a href="https://elaon.de">Alex</a>, my co-maintainer of <a href="https://mediathekview.de">MediathekView</a>, asked me to build a Docker Compose file to view the <a href="https://github.com/mediathekview/MServer/">MServer</a> logs with <a href="https://grafana.com/oss/loki/">Grafana Loki</a>. I chose <a href="https://fluentbit.io/">Fluent Bit</a> as log proccessor and forwarder becuase Docker Compose can use the fluentd logging driver <a href="https://docs.docker.com/config/containers/logging/fluentd/">out of the box</a>.</p>
+</div>
+<div class="paragraph">
+<p>This does not seem particularly complex at first. However, there are some pitfalls hidden due to missing or outdated information.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-solution">The solution</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="loki-grafana-and-fluent-bit">Loki, Grafana and Fluent Bit</h3>
+<div class="paragraph">
+<p>The Docker Compose part for Loki and Grafana is straightforward:</p>
+</div>
+<div class="listingblock">
+<div class="title">docker-compose-loki.yml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml">  <span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.3"</span>
+  <span class="na">networks</span><span class="pi">:</span>
+    <span class="na">loki</span><span class="pi">:</span>
+      <span class="na">driver</span><span class="pi">:</span> <span class="s">bridge</span>
 
-  &lt;span class=&quot;na&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;loki&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;grafana/loki:2.0.0&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;container_name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;loki&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3100:3100&quot;&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;-config.file=/etc/loki/local-config.yaml&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;loki&lt;/span&gt;
+  <span class="na">services</span><span class="pi">:</span>
+    <span class="na">loki</span><span class="pi">:</span>
+      <span class="na">image</span><span class="pi">:</span> <span class="s">grafana/loki:2.0.0</span>
+      <span class="na">container_name</span><span class="pi">:</span> <span class="s">loki</span>
+      <span class="na">ports</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s2">"</span><span class="s">3100:3100"</span>
+      <span class="na">command</span><span class="pi">:</span> <span class="s">-config.file=/etc/loki/local-config.yaml</span>
+      <span class="na">networks</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s">loki</span>
 
-    &lt;span class=&quot;na&quot;&gt;grafana&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;grafana/grafana:latest&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;container_name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;grafana&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3000:3000&quot;&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;loki&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;The fluent bit part is also straightforward, but unlike the &lt;a href=&quot;https://docs.fluentbit.io/manual/v/master/local-testing/logging-pipeline#docker-compose&quot;&gt;sample Fluent Bit Docker Compose file&lt;/a&gt;, port 24224 is exposed. The port is required by the &lt;a href=&quot;https://docs.docker.com/config/containers/logging/fluentd/&quot;&gt;fluentd docker logging driver&lt;/a&gt;.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;title&quot;&gt;docker-compose-loki.yml&lt;/div&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;yaml&quot;&gt;  &lt;span class=&quot;na&quot;&gt;fluent-bit&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;fluent/fluent-bit&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;container_name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;fluentbit&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;24224:24224&quot;&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;24224:24224/udp&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;volumes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;.docker/logging/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;loki&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;The two compose configuration can then be combined into one single compose file:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;title&quot;&gt;docker-compose-loki.yml&lt;/div&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;yaml&quot;&gt;&lt;span class=&quot;na&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3.3&quot;&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;loki&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;bridge&lt;/span&gt;
+    <span class="na">grafana</span><span class="pi">:</span>
+      <span class="na">image</span><span class="pi">:</span> <span class="s">grafana/grafana:latest</span>
+      <span class="na">container_name</span><span class="pi">:</span> <span class="s">grafana</span>
+      <span class="na">ports</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s2">"</span><span class="s">3000:3000"</span>
+      <span class="na">networks</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s">loki</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The fluent bit part is also straightforward, but unlike the <a href="https://docs.fluentbit.io/manual/v/master/local-testing/logging-pipeline#docker-compose">sample Fluent Bit Docker Compose file</a>, port 24224 is exposed. The port is required by the <a href="https://docs.docker.com/config/containers/logging/fluentd/">fluentd docker logging driver</a>.</p>
+</div>
+<div class="listingblock">
+<div class="title">docker-compose-loki.yml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml">  <span class="na">fluent-bit</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">fluent/fluent-bit</span>
+    <span class="na">container_name</span><span class="pi">:</span> <span class="s">fluentbit</span>
+    <span class="na">ports</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s2">"</span><span class="s">24224:24224"</span>
+        <span class="pi">-</span> <span class="s2">"</span><span class="s">24224:24224/udp"</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">.docker/logging/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">loki</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The two compose configuration can then be combined into one single compose file:</p>
+</div>
+<div class="listingblock">
+<div class="title">docker-compose-loki.yml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml"><span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.3"</span>
+<span class="na">networks</span><span class="pi">:</span>
+  <span class="na">loki</span><span class="pi">:</span>
+    <span class="na">driver</span><span class="pi">:</span> <span class="s">bridge</span>
 
-&lt;span class=&quot;na&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;loki&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;grafana/loki:2.0.0&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;container_name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;loki&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3100:3100&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;-config.file=/etc/loki/local-config.yaml&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;loki&lt;/span&gt;
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">loki</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">grafana/loki:2.0.0</span>
+    <span class="na">container_name</span><span class="pi">:</span> <span class="s">loki</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">3100:3100"</span>
+    <span class="na">command</span><span class="pi">:</span> <span class="s">-config.file=/etc/loki/local-config.yaml</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">loki</span>
 
-  &lt;span class=&quot;na&quot;&gt;grafana&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;grafana/grafana:latest&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;container_name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;grafana&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3000:3000&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;loki&lt;/span&gt;
+  <span class="na">grafana</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">grafana/grafana:latest</span>
+    <span class="na">container_name</span><span class="pi">:</span> <span class="s">grafana</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">3000:3000"</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">loki</span>
 
-  &lt;span class=&quot;na&quot;&gt;fluent-bit&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;fluent/fluent-bit&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;container_name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;fluentbit&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;24224:24224&quot;&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;24224:24224/udp&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;volumes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;.docker/logging/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;loki&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect2&quot;&gt;
-&lt;h3 id=&quot;fluent-bit-configuration&quot;&gt;Fluent Bit configuration&lt;/h3&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;The configuration of Fluent Bit is almost identically to the &lt;a href=&quot;https://docs.fluentbit.io/manual/pipeline/outputs/loki&quot;&gt;example in the Fluent Bit documentation&lt;/a&gt;, but one important change must be made.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;The label &lt;code&gt;$sub[&apos;stream&apos;]&lt;/code&gt; of the example isn&amp;#8217;t applicable for Docker Compose logs.
-An example for a log line looks like this:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;json&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;container_id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;05070542e00a616589a3671404d34fe7374f3b6f08ef6f71431acc42fbfa8675&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;container_name&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/mserver_mserver_1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;source&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;stdout&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;log&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;[INFO ] [EtmMonitor] Shutting down JETM.&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Instead of &lt;code&gt;$sub[&apos;stream&apos;]&lt;/code&gt; I defined &lt;code&gt;$container_id&lt;/code&gt;, &lt;code&gt;$container_name&lt;/code&gt; and &lt;code&gt;$source&lt;/code&gt; as labels.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;title&quot;&gt;fluent-bit.conf&lt;/div&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;conf&quot;&gt;[&lt;span class=&quot;n&quot;&gt;SERVICE&lt;/span&gt;]
-    &lt;span class=&quot;n&quot;&gt;Flush&lt;/span&gt;        &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Daemon&lt;/span&gt;       &lt;span class=&quot;n&quot;&gt;Off&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Log_Level&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;info&lt;/span&gt;
+  <span class="na">fluent-bit</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">fluent/fluent-bit</span>
+    <span class="na">container_name</span><span class="pi">:</span> <span class="s">fluentbit</span>
+    <span class="na">ports</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s2">"</span><span class="s">24224:24224"</span>
+        <span class="pi">-</span> <span class="s2">"</span><span class="s">24224:24224/udp"</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">.docker/logging/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">loki</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="fluent-bit-configuration">Fluent Bit configuration</h3>
+<div class="paragraph">
+<p>The configuration of Fluent Bit is almost identically to the <a href="https://docs.fluentbit.io/manual/pipeline/outputs/loki">example in the Fluent Bit documentation</a>, but one important change must be made.</p>
+</div>
+<div class="paragraph">
+<p>The label <code>$sub['stream']</code> of the example isn&#8217;t applicable for Docker Compose logs.
+An example for a log line looks like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="nl">"container_id"</span><span class="p">:</span><span class="s2">"05070542e00a616589a3671404d34fe7374f3b6f08ef6f71431acc42fbfa8675"</span><span class="p">,</span><span class="nl">"container_name"</span><span class="p">:</span><span class="s2">"/mserver_mserver_1"</span><span class="p">,</span><span class="nl">"source"</span><span class="p">:</span><span class="s2">"stdout"</span><span class="p">,</span><span class="nl">"log"</span><span class="p">:</span><span class="s2">"[INFO ] [EtmMonitor] Shutting down JETM."</span><span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Instead of <code>$sub['stream']</code> I defined <code>$container_id</code>, <code>$container_name</code> and <code>$source</code> as labels.</p>
+</div>
+<div class="listingblock">
+<div class="title">fluent-bit.conf</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="conf">[<span class="n">SERVICE</span>]
+    <span class="n">Flush</span>        <span class="m">1</span>
+    <span class="n">Daemon</span>       <span class="n">Off</span>
+    <span class="n">Log_Level</span>    <span class="n">info</span>
 
-[&lt;span class=&quot;n&quot;&gt;INPUT&lt;/span&gt;]
-    &lt;span class=&quot;n&quot;&gt;Name&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;forward&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Listen&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;.&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;.&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;.&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Port&lt;/span&gt;   &lt;span class=&quot;m&quot;&gt;24224&lt;/span&gt;
+[<span class="n">INPUT</span>]
+    <span class="n">Name</span>   <span class="n">forward</span>
+    <span class="n">Listen</span> <span class="m">0</span>.<span class="m">0</span>.<span class="m">0</span>.<span class="m">0</span>
+    <span class="n">Port</span>   <span class="m">24224</span>
 
-[&lt;span class=&quot;n&quot;&gt;Output&lt;/span&gt;]
-    &lt;span class=&quot;n&quot;&gt;Name&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loki&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Match&lt;/span&gt; *
-    &lt;span class=&quot;n&quot;&gt;host&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loki&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;port&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3100&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;labels&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;job&lt;/span&gt;=&lt;span class=&quot;n&quot;&gt;mserver&lt;/span&gt;,$&lt;span class=&quot;n&quot;&gt;container_id&lt;/span&gt;,$&lt;span class=&quot;n&quot;&gt;container_name&lt;/span&gt;,$&lt;span class=&quot;n&quot;&gt;source&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;line_format&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect2&quot;&gt;
-&lt;h3 id=&quot;using-the-fluentd-docker-logging-driver&quot;&gt;Using the fluentd docker logging driver&lt;/h3&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;To use the fluentd docker logging driver in conjunction with other Docker Compose this snippet can be used:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;title&quot;&gt;docker-compose.yml&lt;/div&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;yaml&quot;&gt;    &lt;span class=&quot;na&quot;&gt;logging&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;fluentd&quot;&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;fluentd-address&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;localhost:24224&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;tag&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;httpd.access&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Sending the logs of nginx to Loki may look like this:
-.docker-compose.yml&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;yaml&quot;&gt;&lt;span class=&quot;na&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3.3&quot;&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;nginx&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;nginx&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;volumes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;./templates:/etc/nginx/templates&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;8080:80&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;environment&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;NGINX_HOST=foobar.com&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;NGINX_PORT=80&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;logging&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;fluentd&quot;&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;fluentd-address&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;localhost:24224&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;tag&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;httpd.access&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect2&quot;&gt;
-&lt;h3 id=&quot;grafana-loki-show-only-log-message&quot;&gt;Grafana Loki show only Log message&lt;/h3&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;When viewing the logs in the Grafana exploring view or with the Dashboard Log Panel, the individual lines are quite ugly. The entire json message is displayed, which quickly becomes very confusing. In order to get the log messages into a more readable format, one can use a &lt;a href=&quot;https://grafana.com/docs/loki/latest/logql/#Line-Format-Expression&quot;&gt;new feature of Loki version 2.0&lt;/a&gt;: &lt;code&gt;line_format&lt;/code&gt;&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;An example query for the container &lt;code&gt;mserver_mserver_1&lt;/code&gt;:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;container_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/mserver_mserver_1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; | json | line_format &lt;span class=&quot;s2&quot;&gt;&quot;{{.log}}&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;links&quot;&gt;Links&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Some useful Links:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;ulist&quot;&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&quot;https://docs.fluentbit.io/manual/pipeline/outputs/loki&quot;&gt;Documentation - Fluent Bit&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&quot;https://grafana.com/docs/loki/latest/clients/fluentbit/&quot;&gt;Documentation - Grafana Loki&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&quot;https://grafana.com/blog/2020/10/28/loki-2.0-released-transform-logs-as-youre-querying-them-and-set-up-alerts-within-loki/&quot;&gt;Blog post Grafana Loki 2.0&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-&lt;hr&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;&lt;span class=&quot;small&quot;&gt;Thanks to &lt;a href=&quot;https://www.friedmann-it.de&quot;&gt;Daniel&lt;/a&gt; for his review of this post&lt;/span&gt;&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;</content><author><name>Nicklas Wiegandt</name></author><category term="docker-compose" /><category term="docker" /><category term="grafana" /><category term="log" /><category term="loki" /><category term="fluent-bit" /><summary type="html">How to use Grafana Loki for docker compose log aggregation using Fluent Bit.</summary></entry><entry><title type="html">Use K3OS system Traefik with Let’s Encrypt</title><link href="https://nicklas.wiegandt.eu/2020/08/02/use-k3os-traefik-letsencrypt.html" rel="alternate" type="text/html" title="Use K3OS system Traefik with Let’s Encrypt" /><published>2020-08-02T07:00:00-05:00</published><updated>2020-08-02T07:00:00-05:00</updated><id>https://nicklas.wiegandt.eu/2020/08/02/use-k3os-traefik-letsencrypt</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2020/08/02/use-k3os-traefik-letsencrypt.html">&lt;div id=&quot;preamble&quot;&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;How to use &lt;a href=&quot;https://k3os.io/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;K3OS&lt;/a&gt; system &lt;a href=&quot;https://containo.us/traefik/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Traefik&lt;/a&gt; with &lt;a href=&quot;https://letsencrypt.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Let&amp;#8217;s Encrypt&lt;/a&gt;.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;the-problem&quot;&gt;The problem&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;K3OS comes with a system Traefik. Nice so we can use it to route our services and give them with Let&amp;#8217;s Encrypt HTTPS. Yes!&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;But how to configure it to do what we want? There is a configuration file: &lt;code&gt;/var/lib/rancher/k3s/server/manifests/traefik.yaml&lt;/code&gt;&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Seems to work pretty well so where is the problem? If you reboot your server or, like in my case your provider restarts your server, all Traefik configuration is lost.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;the-solution&quot;&gt;The solution&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;K3OS has some persistent directories and &lt;code&gt;/var/lib/rancher/k3s/server/manifests&lt;/code&gt; isn&amp;#8217;t one. Ok but &lt;a href=&quot;https://github.com/rancher/k3os#kubernetes&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;the documentation says&lt;/a&gt; that you can write manifests with the configuration key &lt;code&gt;write_files&lt;/code&gt;. But there&amp;#8217;s another stumbling block! Per default K3OS overwrites the Traefik configuration on each boot.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;So here is the solution, you need to add this to your K3OS configuration:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;title&quot;&gt;/var/lib/rancher/k3os/config.yaml&lt;/div&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;yaml&quot;&gt;  &lt;span class=&quot;na&quot;&gt;k3s_args&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;server&lt;/span&gt;
-  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;--no-deploy=traefik&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Now don&amp;#8217;t forget to write the Traefik configuration with &lt;code&gt;write_files&lt;/code&gt;:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;title&quot;&gt;/var/lib/rancher/k3os/config.yaml&lt;/div&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;yaml&quot;&gt;&lt;span class=&quot;na&quot;&gt;write_files&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;|-&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;apiVersion: helm.cattle.io/v1&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;kind: HelmChart&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;metadata:&lt;/span&gt;
-      &lt;span class=&quot;s&quot;&gt;name: traefik&lt;/span&gt;
-      &lt;span class=&quot;s&quot;&gt;namespace: kube-system&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;spec:&lt;/span&gt;
-      &lt;span class=&quot;s&quot;&gt;chart: https://%{KUBERNETES_API}%/static/charts/traefik-1.81.0.tgz&lt;/span&gt;
-      &lt;span class=&quot;s&quot;&gt;set:&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;rbac.enabled: &quot;true&quot;&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;ssl.enabled: &quot;true&quot;&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;ssl.enforced: &quot;true&quot;&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;acme.enabled: &quot;true&quot;&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;acme.challengeType: &quot;tls-alpn-01&quot;&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;acme.email: &quot;admin@yourdomain.com&quot;&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;acme.staging: &quot;false&quot;&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;metrics.prometheus.enabled: &quot;true&quot;&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;kubernetes.ingressEndpoint.useDefaultPublishedService: &quot;true&quot;&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;image: &quot;rancher/library-traefik&quot;&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;owner&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;root&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/var/lib/rancher/k3s/server/manifests/traefik.yaml&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;permissions&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;0755&apos;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;A complete configuration could look like this:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;title&quot;&gt;/var/lib/rancher/k3os/config.yaml&lt;/div&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;yaml&quot;&gt;&lt;table class=&quot;linenotable&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;linenos gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt; 1
+[<span class="n">Output</span>]
+    <span class="n">Name</span> <span class="n">loki</span>
+    <span class="n">Match</span> *
+    <span class="n">host</span> <span class="n">loki</span>
+    <span class="n">port</span> <span class="m">3100</span>
+    <span class="n">labels</span> <span class="n">job</span>=<span class="n">mserver</span>,$<span class="n">container_id</span>,$<span class="n">container_name</span>,$<span class="n">source</span>
+    <span class="n">line_format</span> <span class="n">json</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-the-fluentd-docker-logging-driver">Using the fluentd docker logging driver</h3>
+<div class="paragraph">
+<p>To use the fluentd docker logging driver in conjunction with other Docker Compose this snippet can be used:</p>
+</div>
+<div class="listingblock">
+<div class="title">docker-compose.yml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml">    <span class="na">logging</span><span class="pi">:</span>
+      <span class="na">driver</span><span class="pi">:</span> <span class="s2">"</span><span class="s">fluentd"</span>
+      <span class="na">options</span><span class="pi">:</span>
+        <span class="na">fluentd-address</span><span class="pi">:</span> <span class="s">localhost:24224</span>
+        <span class="na">tag</span><span class="pi">:</span> <span class="s">httpd.access</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Sending the logs of nginx to Loki may look like this:
+.docker-compose.yml</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml"><span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.3"</span>
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">nginx</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">nginx</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">./templates:/etc/nginx/templates</span>
+    <span class="na">ports</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s2">"</span><span class="s">8080:80"</span>
+    <span class="na">environment</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">NGINX_HOST=foobar.com</span>
+    <span class="pi">-</span> <span class="s">NGINX_PORT=80</span>
+    <span class="na">logging</span><span class="pi">:</span>
+      <span class="na">driver</span><span class="pi">:</span> <span class="s2">"</span><span class="s">fluentd"</span>
+      <span class="na">options</span><span class="pi">:</span>
+        <span class="na">fluentd-address</span><span class="pi">:</span> <span class="s">localhost:24224</span>
+        <span class="na">tag</span><span class="pi">:</span> <span class="s">httpd.access</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="grafana-loki-show-only-log-message">Grafana Loki show only Log message</h3>
+<div class="paragraph">
+<p>When viewing the logs in the Grafana exploring view or with the Dashboard Log Panel, the individual lines are quite ugly. The entire json message is displayed, which quickly becomes very confusing. In order to get the log messages into a more readable format, one can use a <a href="https://grafana.com/docs/loki/latest/logql/#Line-Format-Expression">new feature of Loki version 2.0</a>: <code>line_format</code></p>
+</div>
+<div class="paragraph">
+<p>An example query for the container <code>mserver_mserver_1</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="o">{</span><span class="nv">container_name</span><span class="o">=</span><span class="s2">"/mserver_mserver_1"</span><span class="o">}</span> | json | line_format <span class="s2">"{{.log}}"</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="links">Links</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Some useful Links:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.fluentbit.io/manual/pipeline/outputs/loki">Documentation - Fluent Bit</a></p>
+</li>
+<li>
+<p><a href="https://grafana.com/docs/loki/latest/clients/fluentbit/">Documentation - Grafana Loki</a></p>
+</li>
+<li>
+<p><a href="https://grafana.com/blog/2020/10/28/loki-2.0-released-transform-logs-as-youre-querying-them-and-set-up-alerts-within-loki/">Blog post Grafana Loki 2.0</a></p>
+</li>
+</ul>
+</div>
+<hr>
+<div class="paragraph">
+<p><span class="small">Thanks to <a href="https://www.friedmann-it.de">Daniel</a> for his review of this post</span></p>
+</div>
+</div>
+</div>]]></content><author><name>Nicklas Wiegandt</name></author><category term="docker-compose" /><category term="docker" /><category term="grafana" /><category term="log" /><category term="loki" /><category term="fluent-bit" /><summary type="html"><![CDATA[How to use Grafana Loki for docker compose log aggregation using Fluent Bit.]]></summary></entry><entry><title type="html">Use K3OS system Traefik with Let’s Encrypt</title><link href="https://nicklas.wiegandt.eu/2020/08/02/use-k3os-traefik-letsencrypt.html" rel="alternate" type="text/html" title="Use K3OS system Traefik with Let’s Encrypt" /><published>2020-08-02T07:00:00-05:00</published><updated>2020-08-02T07:00:00-05:00</updated><id>https://nicklas.wiegandt.eu/2020/08/02/use-k3os-traefik-letsencrypt</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2020/08/02/use-k3os-traefik-letsencrypt.html"><![CDATA[<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>How to use <a href="https://k3os.io/" target="_blank" rel="noopener">K3OS</a> system <a href="https://containo.us/traefik/" target="_blank" rel="noopener">Traefik</a> with <a href="https://letsencrypt.org" target="_blank" rel="noopener">Let&#8217;s Encrypt</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-problem">The problem</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>K3OS comes with a system Traefik. Nice so we can use it to route our services and give them with Let&#8217;s Encrypt HTTPS. Yes!</p>
+</div>
+<div class="paragraph">
+<p>But how to configure it to do what we want? There is a configuration file: <code>/var/lib/rancher/k3s/server/manifests/traefik.yaml</code></p>
+</div>
+<div class="paragraph">
+<p>Seems to work pretty well so where is the problem? If you reboot your server or, like in my case your provider restarts your server, all Traefik configuration is lost.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-solution">The solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>K3OS has some persistent directories and <code>/var/lib/rancher/k3s/server/manifests</code> isn&#8217;t one. Ok but <a href="https://github.com/rancher/k3os#kubernetes" target="_blank" rel="noopener">the documentation says</a> that you can write manifests with the configuration key <code>write_files</code>. But there&#8217;s another stumbling block! Per default K3OS overwrites the Traefik configuration on each boot.</p>
+</div>
+<div class="paragraph">
+<p>So here is the solution, you need to add this to your K3OS configuration:</p>
+</div>
+<div class="listingblock">
+<div class="title">/var/lib/rancher/k3os/config.yaml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml">  <span class="na">k3s_args</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">server</span>
+  <span class="pi">-</span> <span class="s2">"</span><span class="s">--no-deploy=traefik"</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now don&#8217;t forget to write the Traefik configuration with <code>write_files</code>:</p>
+</div>
+<div class="listingblock">
+<div class="title">/var/lib/rancher/k3os/config.yaml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml"><span class="na">write_files</span><span class="pi">:</span>
+<span class="pi">-</span> <span class="na">content</span><span class="pi">:</span> <span class="pi">|-</span>
+    <span class="s">apiVersion: helm.cattle.io/v1</span>
+    <span class="s">kind: HelmChart</span>
+    <span class="s">metadata:</span>
+      <span class="s">name: traefik</span>
+      <span class="s">namespace: kube-system</span>
+    <span class="s">spec:</span>
+      <span class="s">chart: https://%{KUBERNETES_API}%/static/charts/traefik-1.81.0.tgz</span>
+      <span class="s">set:</span>
+        <span class="s">rbac.enabled: "true"</span>
+        <span class="s">ssl.enabled: "true"</span>
+        <span class="s">ssl.enforced: "true"</span>
+        <span class="s">acme.enabled: "true"</span>
+        <span class="s">acme.challengeType: "tls-alpn-01"</span>
+        <span class="s">acme.email: "admin@yourdomain.com"</span>
+        <span class="s">acme.staging: "false"</span>
+        <span class="s">metrics.prometheus.enabled: "true"</span>
+        <span class="s">kubernetes.ingressEndpoint.useDefaultPublishedService: "true"</span>
+        <span class="s">image: "rancher/library-traefik"</span>
+  <span class="na">owner</span><span class="pi">:</span> <span class="s">root</span>
+  <span class="na">path</span><span class="pi">:</span> <span class="s">/var/lib/rancher/k3s/server/manifests/traefik.yaml</span>
+  <span class="na">permissions</span><span class="pi">:</span> <span class="s1">'</span><span class="s">0755'</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A complete configuration could look like this:</p>
+</div>
+<div class="listingblock">
+<div class="title">/var/lib/rancher/k3os/config.yaml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
  2
  3
  4
@@ -644,80 +644,80 @@ An example for a log line looks like this:&lt;/p&gt;
 27
 28
 29
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;na&quot;&gt;k3os&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;k3s_args&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;server&lt;/span&gt;
-  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;--no-deploy=traefik&quot;&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;sshAuthorizedKeys&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;github:yourGithubUserName&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;write_files&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;|-&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;apiVersion: helm.cattle.io/v1&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;kind: HelmChart&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;metadata:&lt;/span&gt;
-      &lt;span class=&quot;s&quot;&gt;name: traefik&lt;/span&gt;
-      &lt;span class=&quot;s&quot;&gt;namespace: kube-system&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;spec:&lt;/span&gt;
-      &lt;span class=&quot;s&quot;&gt;chart: https://%{KUBERNETES_API}%/static/charts/traefik-1.81.0.tgz&lt;/span&gt;
-      &lt;span class=&quot;s&quot;&gt;set:&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;rbac.enabled: &quot;true&quot;&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;ssl.enabled: &quot;true&quot;&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;ssl.enforced: &quot;true&quot;&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;acme.enabled: &quot;true&quot;&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;acme.challengeType: &quot;tls-alpn-01&quot;&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;acme.email: &quot;admin@yourdomain.com&quot;&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;acme.staging: &quot;false&quot;&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;metrics.prometheus.enabled: &quot;true&quot;&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;kubernetes.ingressEndpoint.useDefaultPublishedService: &quot;true&quot;&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;image: &quot;rancher/library-traefik&quot;&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;owner&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;root&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/var/lib/rancher/k3s/server/manifests/traefik.yaml&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;permissions&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;0755&apos;&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;how-to-use-it-for-a-container&quot;&gt;How to use it for a container&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;In case you are reading this and do not know how to use Traefik with your container now, here is how it works:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;It&amp;#8217;s super simple! :)
-Of course your domain has to be configured to point to your server for all domains you wan&amp;#8217;t to use. Your Traefik configuration has to be correct to. How to do this is documented in the &lt;a href=&quot;https://docs.traefik.io/https/acme/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Traefik documentation&lt;/a&gt; and there is a example in the solution above. If these basic conditions are fulfilled it is super easy.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;To instruct Traefik to route a subdomain with HTTPS to a service you just need to create a &lt;a href=&quot;https://kubernetes.io/docs/concepts/services-networking/ingress/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Ingress&lt;/a&gt; for your service:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;yaml&quot;&gt;&lt;span class=&quot;nn&quot;&gt;---&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Ingress&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;extensions/v1beta1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;myservice-ingress&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;namespace&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;myservice&lt;/span&gt;
+</pre></td><td class="code"><pre><span class="na">k3os</span><span class="pi">:</span>
+  <span class="na">k3s_args</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">server</span>
+  <span class="pi">-</span> <span class="s2">"</span><span class="s">--no-deploy=traefik"</span>
+<span class="na">sshAuthorizedKeys</span><span class="pi">:</span>
+<span class="pi">-</span> <span class="s">github:yourGithubUserName</span>
+<span class="na">write_files</span><span class="pi">:</span>
+<span class="pi">-</span> <span class="na">content</span><span class="pi">:</span> <span class="pi">|-</span>
+    <span class="s">apiVersion: helm.cattle.io/v1</span>
+    <span class="s">kind: HelmChart</span>
+    <span class="s">metadata:</span>
+      <span class="s">name: traefik</span>
+      <span class="s">namespace: kube-system</span>
+    <span class="s">spec:</span>
+      <span class="s">chart: https://%{KUBERNETES_API}%/static/charts/traefik-1.81.0.tgz</span>
+      <span class="s">set:</span>
+        <span class="s">rbac.enabled: "true"</span>
+        <span class="s">ssl.enabled: "true"</span>
+        <span class="s">ssl.enforced: "true"</span>
+        <span class="s">acme.enabled: "true"</span>
+        <span class="s">acme.challengeType: "tls-alpn-01"</span>
+        <span class="s">acme.email: "admin@yourdomain.com"</span>
+        <span class="s">acme.staging: "false"</span>
+        <span class="s">metrics.prometheus.enabled: "true"</span>
+        <span class="s">kubernetes.ingressEndpoint.useDefaultPublishedService: "true"</span>
+        <span class="s">image: "rancher/library-traefik"</span>
+  <span class="na">owner</span><span class="pi">:</span> <span class="s">root</span>
+  <span class="na">path</span><span class="pi">:</span> <span class="s">/var/lib/rancher/k3s/server/manifests/traefik.yaml</span>
+  <span class="na">permissions</span><span class="pi">:</span> <span class="s1">'</span><span class="s">0755'</span>
+</pre></td></tr></tbody></table></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="how-to-use-it-for-a-container">How to use it for a container</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In case you are reading this and do not know how to use Traefik with your container now, here is how it works:</p>
+</div>
+<div class="paragraph">
+<p>It&#8217;s super simple! :)
+Of course your domain has to be configured to point to your server for all domains you wan&#8217;t to use. Your Traefik configuration has to be correct to. How to do this is documented in the <a href="https://docs.traefik.io/https/acme/" target="_blank" rel="noopener">Traefik documentation</a> and there is a example in the solution above. If these basic conditions are fulfilled it is super easy.</p>
+</div>
+<div class="paragraph">
+<p>To instruct Traefik to route a subdomain with HTTPS to a service you just need to create a <a href="https://kubernetes.io/docs/concepts/services-networking/ingress/" target="_blank" rel="noopener">Ingress</a> for your service:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml"><span class="nn">---</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Ingress</span>
+<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">extensions/v1beta1</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">myservice-ingress</span>
+  <span class="na">namespace</span><span class="pi">:</span> <span class="s">myservice</span>
 
-&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;rules&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;host&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;service.mydoma.in&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;paths&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;backend&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-              &lt;span class=&quot;na&quot;&gt;serviceName&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;my-service&lt;/span&gt;
-              &lt;span class=&quot;na&quot;&gt;servicePort&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;8080&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;A complete service description inclunding Ingress could look like this:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;title&quot;&gt;README.md &lt;a href=&quot;https://github.com/mediathekview/zapp-backend/blob/29d08f164dceb9f924b7248893ce6d2b202ccd40/README.md#kubernetes&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;view&lt;/a&gt; &lt;a href=&quot;https://raw.githubusercontent.com/mediathekview/zapp-backend/29d08f164dceb9f924b7248893ce6d2b202ccd40/README.md&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;raw&lt;/a&gt;&lt;/div&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;yaml&quot;&gt;&lt;table class=&quot;linenotable&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;linenos gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt; 1
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">rules</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">host</span><span class="pi">:</span> <span class="s">service.mydoma.in</span>
+      <span class="na">http</span><span class="pi">:</span>
+        <span class="na">paths</span><span class="pi">:</span>
+          <span class="pi">-</span> <span class="na">path</span><span class="pi">:</span> <span class="s">/</span>
+            <span class="na">backend</span><span class="pi">:</span>
+              <span class="na">serviceName</span><span class="pi">:</span> <span class="s">my-service</span>
+              <span class="na">servicePort</span><span class="pi">:</span> <span class="s">8080</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A complete service description inclunding Ingress could look like this:</p>
+</div>
+<div class="listingblock">
+<div class="title">README.md <a href="https://github.com/mediathekview/zapp-backend/blob/29d08f164dceb9f924b7248893ce6d2b202ccd40/README.md#kubernetes" target="_blank" rel="noopener">view</a> <a href="https://raw.githubusercontent.com/mediathekview/zapp-backend/29d08f164dceb9f924b7248893ce6d2b202ccd40/README.md" target="_blank" rel="noopener">raw</a></div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
  2
  3
  4
@@ -776,101 +776,101 @@ Of course your domain has to be configured to point to your server for all domai
 57
 58
 59
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Namespace&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;mediathekview&lt;/span&gt;
-&lt;span class=&quot;nn&quot;&gt;---&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Service&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;zapp-backend&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;namespace&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;mediathekview&lt;/span&gt;
+</pre></td><td class="code"><pre><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Namespace</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">mediathekview</span>
+<span class="nn">---</span>
+<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Service</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">zapp-backend</span>
+  <span class="na">namespace</span><span class="pi">:</span> <span class="s">mediathekview</span>
 
-&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;protocol&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;TCP&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3000&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;selector&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;zapp-backend&lt;/span&gt;
-&lt;span class=&quot;nn&quot;&gt;---&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Deployment&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;apps/v1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;namespace&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;mediathekview&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;zapp-backend&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;zapp-backend&lt;/span&gt;
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">ports</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">http</span>
+      <span class="na">protocol</span><span class="pi">:</span> <span class="s">TCP</span>
+      <span class="na">port</span><span class="pi">:</span> <span class="m">3000</span>
+  <span class="na">selector</span><span class="pi">:</span>
+    <span class="na">app</span><span class="pi">:</span> <span class="s">zapp-backend</span>
+<span class="nn">---</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Deployment</span>
+<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">apps/v1</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">namespace</span><span class="pi">:</span> <span class="s">mediathekview</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">zapp-backend</span>
+  <span class="na">labels</span><span class="pi">:</span>
+    <span class="na">app</span><span class="pi">:</span> <span class="s">zapp-backend</span>
 
-&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;replicas&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;selector&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;matchLabels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;zapp-backend&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;template&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;zapp-backend&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;zapp-backend&lt;/span&gt;
-          &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;mediathekview/zapp-backend&lt;/span&gt;
-          &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;web&lt;/span&gt;
-              &lt;span class=&quot;na&quot;&gt;containerPort&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3000&lt;/span&gt;
-&lt;span class=&quot;nn&quot;&gt;---&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Ingress&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;extensions/v1beta1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;zapp-backend-ingress&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;namespace&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;mediathekview&lt;/span&gt;
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">replicas</span><span class="pi">:</span> <span class="m">1</span>
+  <span class="na">selector</span><span class="pi">:</span>
+    <span class="na">matchLabels</span><span class="pi">:</span>
+      <span class="na">app</span><span class="pi">:</span> <span class="s">zapp-backend</span>
+  <span class="na">template</span><span class="pi">:</span>
+    <span class="na">metadata</span><span class="pi">:</span>
+      <span class="na">labels</span><span class="pi">:</span>
+        <span class="na">app</span><span class="pi">:</span> <span class="s">zapp-backend</span>
+    <span class="na">spec</span><span class="pi">:</span>
+      <span class="na">containers</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">zapp-backend</span>
+          <span class="na">image</span><span class="pi">:</span> <span class="s">mediathekview/zapp-backend</span>
+          <span class="na">ports</span><span class="pi">:</span>
+            <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">web</span>
+              <span class="na">containerPort</span><span class="pi">:</span> <span class="m">3000</span>
+<span class="nn">---</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Ingress</span>
+<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">extensions/v1beta1</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">zapp-backend-ingress</span>
+  <span class="na">namespace</span><span class="pi">:</span> <span class="s">mediathekview</span>
 
-&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;rules&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;host&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;api.zapp.mediathekview.de&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;paths&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/&lt;/span&gt;
-            &lt;span class=&quot;na&quot;&gt;backend&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-              &lt;span class=&quot;na&quot;&gt;serviceName&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;zapp-backend&lt;/span&gt;
-              &lt;span class=&quot;na&quot;&gt;servicePort&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;3000&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;</content><author><name>Nicklas Wiegandt</name></author><category term="kubernetes" /><category term="traefik" /><category term="letsencrypt" /><category term="k3os" /><category term="rancher" /><summary type="html">How to use K3OS system Traefik with Let&amp;#8217;s Encrypt.</summary></entry><entry><title type="html">Elastic Stack with Fluent Bit Helm for Kubernetes container logs</title><link href="https://nicklas.wiegandt.eu/2020/08/01/elastic-stack-with-fluentbit-helm-for-kubernetes-container-logs.html" rel="alternate" type="text/html" title="Elastic Stack with Fluent Bit Helm for Kubernetes container logs" /><published>2020-08-01T13:15:00-05:00</published><updated>2020-08-01T13:15:00-05:00</updated><id>https://nicklas.wiegandt.eu/2020/08/01/elastic-stack-with-fluentbit-helm-for-kubernetes-container-logs</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2020/08/01/elastic-stack-with-fluentbit-helm-for-kubernetes-container-logs.html">&lt;div id=&quot;preamble&quot;&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;How to install Elastic Stack with Helm and get all Kubernetes container logs in to it with Fluent Bit.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;the-problem&quot;&gt;The problem&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;The helm chart for Elastic Stack (&lt;a href=&quot;https://hub.helm.sh/charts/stable/elastic-stack&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;stable/elastic-stack&lt;/a&gt;) seems to be pretty easy right? Yeah it is but if you install it with Fluent Bit activated it tries to find Fluentd and even if you install Fluentd too it can&amp;#8217;t find it. And to get it even worse Fluentd can&amp;#8217;t find Elasticsearch. But why?&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Fluent Bit uses the wrong hostname of Fluentd and Fluentd uses the wrong hostname of Elasticsearch.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;the-solution&quot;&gt;The solution&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Fortunally Fluent Bit don&amp;#8217;t need Fluentd to send its logs to Elasticsearch. So we just need to configure Fluent Bit to communicate with Elasticsearch and use the right hostname.
-The default helm values already include the right Elasticsearch hostname. Why it isn&amp;#8217;t already set for Fluentd and Fluent Bit? I don&amp;#8217;t know.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Here is my values file to get it working:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;title&quot;&gt;elastic-stack-fluentbit-values.yaml&lt;/div&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;yaml&quot;&gt;&lt;table class=&quot;linenotable&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;linenos gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt; 1
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">rules</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">host</span><span class="pi">:</span> <span class="s">api.zapp.mediathekview.de</span>
+      <span class="na">http</span><span class="pi">:</span>
+        <span class="na">paths</span><span class="pi">:</span>
+          <span class="pi">-</span> <span class="na">path</span><span class="pi">:</span> <span class="s">/</span>
+            <span class="na">backend</span><span class="pi">:</span>
+              <span class="na">serviceName</span><span class="pi">:</span> <span class="s">zapp-backend</span>
+              <span class="na">servicePort</span><span class="pi">:</span> <span class="s">3000</span>
+</pre></td></tr></tbody></table></code></pre>
+</div>
+</div>
+</div>
+</div>]]></content><author><name>Nicklas Wiegandt</name></author><category term="kubernetes" /><category term="traefik" /><category term="letsencrypt" /><category term="k3os" /><category term="rancher" /><summary type="html"><![CDATA[How to use K3OS system Traefik with Let&#8217;s Encrypt.]]></summary></entry><entry><title type="html">Elastic Stack with Fluent Bit Helm for Kubernetes container logs</title><link href="https://nicklas.wiegandt.eu/2020/08/01/elastic-stack-with-fluentbit-helm-for-kubernetes-container-logs.html" rel="alternate" type="text/html" title="Elastic Stack with Fluent Bit Helm for Kubernetes container logs" /><published>2020-08-01T13:15:00-05:00</published><updated>2020-08-01T13:15:00-05:00</updated><id>https://nicklas.wiegandt.eu/2020/08/01/elastic-stack-with-fluentbit-helm-for-kubernetes-container-logs</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2020/08/01/elastic-stack-with-fluentbit-helm-for-kubernetes-container-logs.html"><![CDATA[<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>How to install Elastic Stack with Helm and get all Kubernetes container logs in to it with Fluent Bit.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-problem">The problem</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The helm chart for Elastic Stack (<a href="https://hub.helm.sh/charts/stable/elastic-stack" target="_blank" rel="noopener">stable/elastic-stack</a>) seems to be pretty easy right? Yeah it is but if you install it with Fluent Bit activated it tries to find Fluentd and even if you install Fluentd too it can&#8217;t find it. And to get it even worse Fluentd can&#8217;t find Elasticsearch. But why?</p>
+</div>
+<div class="paragraph">
+<p>Fluent Bit uses the wrong hostname of Fluentd and Fluentd uses the wrong hostname of Elasticsearch.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-solution">The solution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Fortunally Fluent Bit don&#8217;t need Fluentd to send its logs to Elasticsearch. So we just need to configure Fluent Bit to communicate with Elasticsearch and use the right hostname.
+The default helm values already include the right Elasticsearch hostname. Why it isn&#8217;t already set for Fluentd and Fluent Bit? I don&#8217;t know.</p>
+</div>
+<div class="paragraph">
+<p>Here is my values file to get it working:</p>
+</div>
+<div class="listingblock">
+<div class="title">elastic-stack-fluentbit-values.yaml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
  2
  3
  4
@@ -912,68 +912,68 @@ The default helm values already include the right Elasticsearch hostname. Why it
 40
 41
 42
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;na&quot;&gt;elasticsearch&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+</pre></td><td class="code"><pre><span class="na">elasticsearch</span><span class="pi">:</span>
+  <span class="na">enabled</span><span class="pi">:</span> <span class="no">true</span>
 
-&lt;span class=&quot;na&quot;&gt;kibana&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;ELASTICSEARCH_HOSTS&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://{{ .Release.Name }}-elasticsearch-client:9200&lt;/span&gt;
+<span class="na">kibana</span><span class="pi">:</span>
+  <span class="na">enabled</span><span class="pi">:</span> <span class="no">true</span>
+  <span class="na">env</span><span class="pi">:</span>
+    <span class="na">ELASTICSEARCH_HOSTS</span><span class="pi">:</span> <span class="s">http://{{ .Release.Name }}-elasticsearch-client:9200</span>
 
-&lt;span class=&quot;na&quot;&gt;logstash&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;# elasticsearch:&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;#   host: elastic-stack-elasticsearch-client&lt;/span&gt;
+<span class="na">logstash</span><span class="pi">:</span>
+  <span class="na">enabled</span><span class="pi">:</span> <span class="no">false</span>
+  <span class="c1"># elasticsearch:</span>
+  <span class="c1">#   host: elastic-stack-elasticsearch-client</span>
 
-&lt;span class=&quot;na&quot;&gt;filebeat&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;# config:&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;#   output.file.enabled: false&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;#   output.logstash:&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;#     hosts: [&quot;{{ .Release.Name }}-logstash:5044&quot;]&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;# indexTemplateLoad:&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;#   - {{ .Release.Name }}-elasticsearch-client:9200&lt;/span&gt;
+<span class="na">filebeat</span><span class="pi">:</span>
+  <span class="na">enabled</span><span class="pi">:</span> <span class="no">false</span>
+  <span class="c1"># config:</span>
+  <span class="c1">#   output.file.enabled: false</span>
+  <span class="c1">#   output.logstash:</span>
+  <span class="c1">#     hosts: ["{{ .Release.Name }}-logstash:5044"]</span>
+  <span class="c1"># indexTemplateLoad:</span>
+  <span class="c1">#   - {{ .Release.Name }}-elasticsearch-client:9200</span>
 
-&lt;span class=&quot;na&quot;&gt;fluentd&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
+<span class="na">fluentd</span><span class="pi">:</span>
+  <span class="na">enabled</span><span class="pi">:</span> <span class="no">false</span>
 
-&lt;span class=&quot;na&quot;&gt;fluent-bit&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;backend&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;es&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;es&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;host&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{{&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;.Release.Name&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;-elasticsearch-client&lt;/span&gt;
+<span class="na">fluent-bit</span><span class="pi">:</span>
+  <span class="na">enabled</span><span class="pi">:</span> <span class="no">true</span>
+  <span class="na">backend</span><span class="pi">:</span>
+    <span class="na">type</span><span class="pi">:</span> <span class="s">es</span>
+    <span class="na">es</span><span class="pi">:</span>
+      <span class="na">host</span><span class="pi">:</span> <span class="pi">{{</span> <span class="nv">.Release.Name</span> <span class="pi">}}</span><span class="s">-elasticsearch-client</span>
 
-&lt;span class=&quot;na&quot;&gt;fluentd-elasticsearch&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
+<span class="na">fluentd-elasticsearch</span><span class="pi">:</span>
+  <span class="na">enabled</span><span class="pi">:</span> <span class="no">false</span>
 
-&lt;span class=&quot;na&quot;&gt;nginx-ldapauth-proxy&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;elasticsearch-curator&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
+<span class="na">nginx-ldapauth-proxy</span><span class="pi">:</span>
+  <span class="na">enabled</span><span class="pi">:</span> <span class="no">false</span>
+<span class="na">elasticsearch-curator</span><span class="pi">:</span>
+  <span class="na">enabled</span><span class="pi">:</span> <span class="no">false</span>
 
-&lt;span class=&quot;na&quot;&gt;elasticsearch-exporter&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;</content><author><name>Nicklas Wiegandt</name></author><category term="kubernetes" /><category term="elastic-stack" /><category term="fluentbit" /><category term="helm" /><summary type="html">How to install Elastic Stack with Helm and get all Kubernetes container logs in to it with Fluent Bit.</summary></entry><entry><title type="html">About this blog</title><link href="https://nicklas.wiegandt.eu/2020/07/31/first-post.html" rel="alternate" type="text/html" title="About this blog" /><published>2020-07-31T13:15:00-05:00</published><updated>2020-07-31T13:15:00-05:00</updated><id>https://nicklas.wiegandt.eu/2020/07/31/first-post</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2020/07/31/first-post.html">&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;My first post on my new blog. This posts is about the blog itself and how it&amp;#8217;s made.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;I created this blog to write about DevOp&amp;#8217;s things that keep me occupied. These will mainly be solutions to problems for which I had to search and try around for a long time. With this I want to achieve that others do not have to search so long for the right solution. Maybe, if I find time and motivation, I will also write articles about my work on MediathekView. And maybe I will also write articles about frameworks &amp;amp; technologies I am currently busy oneself with. And maybe I write articles about frameworks and technologies I&amp;#8217;m currently working with.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;The blog itself is made with &lt;a href=&quot;https://jekyllrb.com/&quot;&gt;Jekyll&lt;/a&gt; and &lt;a href=&quot;https://github.com/asciidoctor/jekyll-asciidoc&quot;&gt;AsciiDoc&lt;/a&gt;. It&amp;#8217;s hosted on &lt;a href=&quot;https://github.com/nicklas2751/nicklas2751.github.io&quot;&gt;GitHub&lt;/a&gt; where you can also find the &lt;a href=&quot;https://github.com/nicklas2751/nicklas2751.github.io&quot;&gt;source&lt;/a&gt;. Because this don&amp;#8217;t allow to send E-Mails on server side, I created an AWS Lambda for the contact form.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;This is the source of my contact form lambda:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;title&quot;&gt;lambda_function.py &lt;a href=&quot;https://github.com/Nicklas2751/contact-form-lambda/blob/30b833e/lambda_function.py&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;view&lt;/a&gt; &lt;a href=&quot;https://raw.githubusercontent.com/Nicklas2751/contact-form-lambda/30b833e/lambda_function.py&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;raw&lt;/a&gt;&lt;/div&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;python&quot;&gt;&lt;table class=&quot;linenotable&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;linenos gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt; 1
+<span class="na">elasticsearch-exporter</span><span class="pi">:</span>
+  <span class="na">enabled</span><span class="pi">:</span> <span class="no">false</span>
+</pre></td></tr></tbody></table></code></pre>
+</div>
+</div>
+</div>
+</div>]]></content><author><name>Nicklas Wiegandt</name></author><category term="kubernetes" /><category term="elastic-stack" /><category term="fluentbit" /><category term="helm" /><summary type="html"><![CDATA[How to install Elastic Stack with Helm and get all Kubernetes container logs in to it with Fluent Bit.]]></summary></entry><entry><title type="html">About this blog</title><link href="https://nicklas.wiegandt.eu/2020/07/31/first-post.html" rel="alternate" type="text/html" title="About this blog" /><published>2020-07-31T13:15:00-05:00</published><updated>2020-07-31T13:15:00-05:00</updated><id>https://nicklas.wiegandt.eu/2020/07/31/first-post</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2020/07/31/first-post.html"><![CDATA[<div class="paragraph">
+<p>My first post on my new blog. This posts is about the blog itself and how it&#8217;s made.</p>
+</div>
+<div class="paragraph">
+<p>I created this blog to write about DevOp&#8217;s things that keep me occupied. These will mainly be solutions to problems for which I had to search and try around for a long time. With this I want to achieve that others do not have to search so long for the right solution. Maybe, if I find time and motivation, I will also write articles about my work on MediathekView. And maybe I will also write articles about frameworks &amp; technologies I am currently busy oneself with. And maybe I write articles about frameworks and technologies I&#8217;m currently working with.</p>
+</div>
+<div class="paragraph">
+<p>The blog itself is made with <a href="https://jekyllrb.com/">Jekyll</a> and <a href="https://github.com/asciidoctor/jekyll-asciidoc">AsciiDoc</a>. It&#8217;s hosted on <a href="https://github.com/nicklas2751/nicklas2751.github.io">GitHub</a> where you can also find the <a href="https://github.com/nicklas2751/nicklas2751.github.io">source</a>. Because this don&#8217;t allow to send E-Mails on server side, I created an AWS Lambda for the contact form.</p>
+</div>
+<div class="paragraph">
+<p>This is the source of my contact form lambda:</p>
+</div>
+<div class="listingblock">
+<div class="title">lambda_function.py <a href="https://github.com/Nicklas2751/contact-form-lambda/blob/30b833e/lambda_function.py" target="_blank" rel="noopener">view</a> <a href="https://raw.githubusercontent.com/Nicklas2751/contact-form-lambda/30b833e/lambda_function.py" target="_blank" rel="noopener">raw</a></div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="python"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
  2
  3
  4
@@ -1054,97 +1054,97 @@ The default helm values already include the right Elasticsearch hostname. Why it
 79
 80
 81
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;__future__&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;print_function&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;botocore.exceptions&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ClientError&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;urllib.request&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;urlopen&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;boto3&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;json&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;requests&lt;/span&gt;
+</pre></td><td class="code"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">botocore.exceptions</span> <span class="kn">import</span> <span class="n">ClientError</span>
+<span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+<span class="kn">import</span> <span class="nn">boto3</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">requests</span>
 
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;lambda_handler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;g-recaptcha-response&quot;&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;mail&quot;&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;text&quot;&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;success&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;checkRecaptcha&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;g-recaptcha-response&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;success&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
+<span class="k">def</span> <span class="nf">lambda_handler</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s">"g-recaptcha-response"</span> <span class="ow">in</span> <span class="n">event</span> <span class="ow">and</span> <span class="s">"mail"</span> <span class="ow">in</span> <span class="n">event</span> <span class="ow">and</span> <span class="s">"text"</span> <span class="ow">in</span> <span class="n">event</span><span class="p">:</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="n">checkRecaptcha</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s">"g-recaptcha-response"</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="bp">False</span>
 
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;success&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;send_email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;mail&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;RECaptcha failed!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+        <span class="n">send_email</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s">"mail"</span><span class="p">],</span><span class="n">event</span><span class="p">[</span><span class="s">"text"</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"RECaptcha failed!"</span><span class="p">)</span>
 
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;&quot;location&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;referer&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s">"location"</span><span class="p">:</span> <span class="n">event</span><span class="p">[</span><span class="s">"referer"</span><span class="p">]</span>
+    <span class="p">}</span>
 
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;checkRecaptcha&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;captchaCode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;requestData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;secret&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;mySecret&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;response&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;captchaCode&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;requests&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;https://www.google.com/recaptcha/api/siteverify&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;requestData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;success&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+<span class="k">def</span> <span class="nf">checkRecaptcha</span><span class="p">(</span><span class="n">captchaCode</span><span class="p">):</span>
+    <span class="n">requestData</span> <span class="o">=</span> <span class="p">{</span> <span class="s">"secret"</span><span class="p">:</span> <span class="s">"mySecret"</span><span class="p">,</span> <span class="s">"response"</span><span class="p">:</span> <span class="n">captchaCode</span> <span class="p">}</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="s">"https://www.google.com/recaptcha/api/siteverify"</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">requestData</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'success'</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
 
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;send_email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;userMail&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# Replace sender@example.com with your &quot;From&quot; address.
-&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;# This address must be verified with Amazon SES.
-&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;SENDER&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;My Sender &amp;lt;cloud@my.domain&amp;gt;&quot;&lt;/span&gt;
+<span class="k">def</span> <span class="nf">send_email</span><span class="p">(</span><span class="n">userMail</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+    <span class="c1"># Replace sender@example.com with your "From" address.
+</span>    <span class="c1"># This address must be verified with Amazon SES.
+</span>    <span class="n">SENDER</span> <span class="o">=</span> <span class="s">"My Sender &lt;cloud@my.domain&gt;"</span>
 
-    &lt;span class=&quot;c1&quot;&gt;# Replace recipient@example.com with a &quot;To&quot; address. If your account
-&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;# is still in the sandbox, this address must be verified.
-&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;RECIPIENT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;recipient@my.domain&quot;&lt;/span&gt;
+    <span class="c1"># Replace recipient@example.com with a "To" address. If your account
+</span>    <span class="c1"># is still in the sandbox, this address must be verified.
+</span>    <span class="n">RECIPIENT</span> <span class="o">=</span> <span class="s">"recipient@my.domain"</span>
 
-    &lt;span class=&quot;c1&quot;&gt;# If necessary, replace us-west-2 with the AWS Region you&apos;re using for Amazon SES.
-&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;AWS_REGION&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;eu-west-1&quot;&lt;/span&gt;
+    <span class="c1"># If necessary, replace us-west-2 with the AWS Region you're using for Amazon SES.
+</span>    <span class="n">AWS_REGION</span> <span class="o">=</span> <span class="s">"eu-west-1"</span>
 
-    &lt;span class=&quot;c1&quot;&gt;# The subject line for the email.
-&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;SUBJECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;A user has sent you a message&quot;&lt;/span&gt;
+    <span class="c1"># The subject line for the email.
+</span>    <span class="n">SUBJECT</span> <span class="o">=</span> <span class="s">"A user has sent you a message"</span>
 
-    &lt;span class=&quot;c1&quot;&gt;# The character encoding for the email.
-&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;CHARSET&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;UTF-8&quot;&lt;/span&gt;
+    <span class="c1"># The character encoding for the email.
+</span>    <span class="n">CHARSET</span> <span class="o">=</span> <span class="s">"UTF-8"</span>
 
-    &lt;span class=&quot;c1&quot;&gt;# Create a new SES resource and specify a region.
-&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;client&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;boto3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;ses&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;region_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AWS_REGION&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    <span class="c1"># Create a new SES resource and specify a region.
+</span>    <span class="n">client</span> <span class="o">=</span> <span class="n">boto3</span><span class="p">.</span><span class="n">client</span><span class="p">(</span><span class="s">'ses'</span><span class="p">,</span><span class="n">region_name</span><span class="o">=</span><span class="n">AWS_REGION</span><span class="p">)</span>
 
-    &lt;span class=&quot;c1&quot;&gt;# Try to send the email.
-&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;#Provide the contents of the email.
-&lt;/span&gt;        &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;send_email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;Destination&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;s&quot;&gt;&apos;ToAddresses&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;RECIPIENT&lt;/span&gt;
-                &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;ReplyToAddresses&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;userMail&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;Message&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;s&quot;&gt;&apos;Body&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;s&quot;&gt;&apos;Text&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-                        &lt;span class=&quot;s&quot;&gt;&apos;Charset&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CHARSET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                        &lt;span class=&quot;s&quot;&gt;&apos;Data&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                    &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-                &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-                &lt;span class=&quot;s&quot;&gt;&apos;Subject&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;s&quot;&gt;&apos;Charset&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CHARSET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                    &lt;span class=&quot;s&quot;&gt;&apos;Data&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SUBJECT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;Source&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SENDER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# Display an error if something goes wrong.
-&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ClientError&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;Error&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;Message&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Email sent! Message ID:&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;MessageId&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Because the HTML form sends it&amp;#8217;s data as www-form-urlencoded the following API gateway integration request mapping template is needed:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;title&quot;&gt;api_gateway_mapping_template.vtl &lt;a href=&quot;https://github.com/Nicklas2751/contact-form-lambda/blob/30b833e/api_gateway_mapping_template.vtl&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;view&lt;/a&gt; &lt;a href=&quot;https://raw.githubusercontent.com/Nicklas2751/contact-form-lambda/30b833e/api_gateway_mapping_template.vtl&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;raw&lt;/a&gt;&lt;/div&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;vtl&quot;&gt;&lt;table class=&quot;linenotable&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;linenos gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt; 1
+    <span class="c1"># Try to send the email.
+</span>    <span class="k">try</span><span class="p">:</span>
+        <span class="c1">#Provide the contents of the email.
+</span>        <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">send_email</span><span class="p">(</span>
+            <span class="n">Destination</span><span class="o">=</span><span class="p">{</span>
+                <span class="s">'ToAddresses'</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="n">RECIPIENT</span>
+                <span class="p">]</span>
+            <span class="p">},</span>
+            <span class="n">ReplyToAddresses</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">userMail</span><span class="p">,</span>
+            <span class="p">],</span>
+            <span class="n">Message</span><span class="o">=</span><span class="p">{</span>
+                <span class="s">'Body'</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">'Text'</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s">'Charset'</span><span class="p">:</span> <span class="n">CHARSET</span><span class="p">,</span>
+                        <span class="s">'Data'</span><span class="p">:</span> <span class="n">content</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+                <span class="s">'Subject'</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">'Charset'</span><span class="p">:</span> <span class="n">CHARSET</span><span class="p">,</span>
+                    <span class="s">'Data'</span><span class="p">:</span> <span class="n">SUBJECT</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">},</span>
+            <span class="n">Source</span><span class="o">=</span><span class="n">SENDER</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="c1"># Display an error if something goes wrong.
+</span>    <span class="k">except</span> <span class="n">ClientError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">response</span><span class="p">[</span><span class="s">'Error'</span><span class="p">][</span><span class="s">'Message'</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"Email sent! Message ID:"</span><span class="p">),</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s">'MessageId'</span><span class="p">])</span>
+</pre></td></tr></tbody></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Because the HTML form sends it&#8217;s data as www-form-urlencoded the following API gateway integration request mapping template is needed:</p>
+</div>
+<div class="listingblock">
+<div class="title">api_gateway_mapping_template.vtl <a href="https://github.com/Nicklas2751/contact-form-lambda/blob/30b833e/api_gateway_mapping_template.vtl" target="_blank" rel="noopener">view</a> <a href="https://raw.githubusercontent.com/Nicklas2751/contact-form-lambda/30b833e/api_gateway_mapping_template.vtl" target="_blank" rel="noopener">raw</a></div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="vtl"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
  2
  3
  4
@@ -1196,58 +1196,58 @@ The default helm values already include the right Elasticsearch hostname. Why it
 50
 51
 52
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;## convert HTML POST data or HTTP GET query string to JSON
+</pre></td><td class="code"><pre>## convert HTML POST data or HTTP GET query string to JSON
 
 ## get the raw post data from the AWS built-in variable and give it a nicer name
-#if ($context.httpMethod == &quot;POST&quot;)
- #set($rawAPIData = $input.path(&quot;$&quot;))
-#elseif ($context.httpMethod == &quot;GET&quot;)
+#if ($context.httpMethod == "POST")
+ #set($rawAPIData = $input.path("$"))
+#elseif ($context.httpMethod == "GET")
  #set($rawAPIData = $input.params().querystring)
  #set($rawAPIData = $rawAPIData.toString())
  #set($rawAPIDataLength = $rawAPIData.length() - 1)
  #set($rawAPIData = $rawAPIData.substring(1, $rawAPIDataLength))
- #set($rawAPIData = $rawAPIData.replace(&quot;, &quot;, &quot;&amp;amp;&quot;))
+ #set($rawAPIData = $rawAPIData.replace(", ", "&amp;"))
 #else
- #set($rawAPIData = &quot;&quot;)
+ #set($rawAPIData = "")
 #end
 
-## first we get the number of &quot;&amp;amp;&quot; in the string, this tells us if there is more than one key value pair
-#set($countAmpersands = $rawAPIData.length() - $rawAPIData.replace(&quot;&amp;amp;&quot;, &quot;&quot;).length())
+## first we get the number of "&amp;" in the string, this tells us if there is more than one key value pair
+#set($countAmpersands = $rawAPIData.length() - $rawAPIData.replace("&amp;", "").length())
 
-## if there are no &quot;&amp;amp;&quot; at all then we have only one key value pair.
+## if there are no "&amp;" at all then we have only one key value pair.
 ## we append an ampersand to the string so that we can tokenise it the same way as multiple kv pairs.
-## the &quot;empty&quot; kv pair to the right of the ampersand will be ignored anyway.
+## the "empty" kv pair to the right of the ampersand will be ignored anyway.
 #if ($countAmpersands == 0)
- #set($rawPostData = $rawAPIData + &quot;&amp;amp;&quot;)
+ #set($rawPostData = $rawAPIData + "&amp;")
 #end
 
 ## now we tokenise using the ampersand(s)
-#set($tokenisedAmpersand = $rawAPIData.split(&quot;&amp;amp;&quot;))
+#set($tokenisedAmpersand = $rawAPIData.split("&amp;"))
 
 ## we set up a variable to hold the valid key value pairs
 #set($tokenisedEquals = [])
 
-## now we set up a loop to find the valid key value pairs, which must contain only one &quot;=&quot;
+## now we set up a loop to find the valid key value pairs, which must contain only one "="
 #foreach( $kvPair in $tokenisedAmpersand )
- #set($countEquals = $kvPair.length() - $kvPair.replace(&quot;=&quot;, &quot;&quot;).length())
+ #set($countEquals = $kvPair.length() - $kvPair.replace("=", "").length())
  #if ($countEquals == 1)
-  #set($kvTokenised = $kvPair.split(&quot;=&quot;))
-  #if ($kvTokenised[0].length() &amp;gt; 0)
+  #set($kvTokenised = $kvPair.split("="))
+  #if ($kvTokenised[0].length() &gt; 0)
    ## we found a valid key value pair. add it to the list.
    #set($devNull = $tokenisedEquals.add($kvPair))
   #end
  #end
 #end
 
-## next we set up our loop inside the output structure &quot;{&quot; and &quot;}&quot;
+## next we set up our loop inside the output structure "{" and "}"
 {
-  &quot;referer&quot; : &quot;$input.params(&apos;referer&apos;)&quot;,
+  "referer" : "$input.params('referer')",
 #foreach( $kvPair in $tokenisedEquals )
-  ## finally we output the JSON for this pair and append a comma if this isn&apos;t the last pair
-  #set($kvTokenised = $kvPair.split(&quot;=&quot;))
- &quot;$util.urlDecode($kvTokenised[0])&quot; : #if($kvTokenised[1].length() &amp;gt; 0)&quot;$util.urlDecode($kvTokenised[1])&quot;#{else}&quot;&quot;#end#if( $foreach.hasNext ),#end
+  ## finally we output the JSON for this pair and append a comma if this isn't the last pair
+  #set($kvTokenised = $kvPair.split("="))
+ "$util.urlDecode($kvTokenised[0])" : #if($kvTokenised[1].length() &gt; 0)"$util.urlDecode($kvTokenised[1])"#{else}""#end#if( $foreach.hasNext ),#end
 #end
 }
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;</content><author><name>Nicklas Wiegandt</name></author><category term="general" /><category term="aws" /><category term="lambda" /><summary type="html">My first post on my new blog. This posts is about the blog itself and how it&amp;#8217;s made.</summary></entry></feed>
+</pre></td></tr></tbody></table></code></pre>
+</div>
+</div>]]></content><author><name>Nicklas Wiegandt</name></author><category term="general" /><category term="aws" /><category term="lambda" /><summary type="html"><![CDATA[My first post on my new blog. This posts is about the blog itself and how it&#8217;s made.]]></summary></entry></feed>

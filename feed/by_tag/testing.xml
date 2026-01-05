@@ -1,139 +1,139 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="https://nicklas.wiegandt.eu/feed/by_tag/testing.xml" rel="self" type="application/atom+xml" /><link href="https://nicklas.wiegandt.eu/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-01-05T08:21:32-06:00</updated><id>https://nicklas.wiegandt.eu/feed/by_tag/testing.xml</id><title type="html">Nicklas Wiegandt</title><subtitle>About Nicklas Wiegandt (Nicklas2751) and his Blog.</subtitle><author><name>Nicklas Wiegandt</name></author><entry><title type="html">Integration Testing Spring AI MCP Server</title><link href="https://nicklas.wiegandt.eu/2026/01/04/integration-testing-spring-ai-mcp-server.html" rel="alternate" type="text/html" title="Integration Testing Spring AI MCP Server" /><published>2026-01-04T13:00:00-06:00</published><updated>2026-01-04T13:00:00-06:00</updated><id>https://nicklas.wiegandt.eu/2026/01/04/integration-testing-spring-ai-mcp-server</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2026/01/04/integration-testing-spring-ai-mcp-server.html">&lt;div id=&quot;preamble&quot;&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;While working on my &lt;a href=&quot;https://github.com/Nicklas2751/zdfmediathek-mcp&quot;&gt;ZDF Mediathek MCP Server&lt;/a&gt;, I noticed a lack of good resources on how to properly integration test a &lt;a href=&quot;https://docs.spring.io/spring-ai/reference/&quot;&gt;Spring AI&lt;/a&gt; MCP Server. Since I usually follow a Test-Driven Development (TDD) approach, this was a bit of a hurdle.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;I wanted to test my MCP tools integratively, meaning I wanted to ensure that the part I&amp;#8217;m testing is actually called via the Model Context Protocol.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;the-approach&quot;&gt;The Approach&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;My solution involves using the Spring AI MCP Client within the test to establish a connection to the MCP Server that is started via &lt;code&gt;@SpringBootTest&lt;/code&gt;. This allows me to simulate a real client interaction.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;To make this work, I first needed to add the MCP Client dependency to my &lt;code&gt;build.gradle.kts&lt;/code&gt;:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;kotlin&quot;&gt;&lt;span class=&quot;nf&quot;&gt;testImplementation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;org.springframework.ai:spring-ai-starter-mcp-client-webflux&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;the-integration-test&quot;&gt;The Integration Test&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;Here is an example based on my &lt;code&gt;SearchContentServiceIT&lt;/code&gt;, which tests the &lt;code&gt;search_content&lt;/code&gt; tool.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;The key part is the &lt;code&gt;setUp&lt;/code&gt; and &lt;code&gt;tearDown&lt;/code&gt; methods. In &lt;code&gt;setUp&lt;/code&gt;, I initialize the &lt;code&gt;mcpClient&lt;/code&gt; so that it connects to the server running on the random local port provided by &lt;code&gt;@SpringBootTest&lt;/code&gt;.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;kotlin&quot;&gt;&lt;span class=&quot;nd&quot;&gt;@SpringBootTest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;webEnvironment&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SpringBootTest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;WebEnvironment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;RANDOM_PORT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;properties&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;&quot;spring.ai.mcp.client.enabled=true&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;&quot;spring.ai.mcp.client.type=async&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// ... other properties&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@EnableWireMock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-    &lt;span class=&quot;nc&quot;&gt;ConfigureWireMock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;baseUrlProperties&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;zdf.url&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SearchContentServiceIT&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@LocalServerPort&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://nicklas.wiegandt.eu/feed/by_tag/testing.xml" rel="self" type="application/atom+xml" /><link href="https://nicklas.wiegandt.eu/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-01-05T12:41:19-06:00</updated><id>https://nicklas.wiegandt.eu/feed/by_tag/testing.xml</id><title type="html">Nicklas Wiegandt</title><subtitle>About Nicklas Wiegandt (Nicklas2751) and his Blog.</subtitle><author><name>Nicklas Wiegandt</name></author><entry><title type="html">Integration Testing Spring AI MCP Server</title><link href="https://nicklas.wiegandt.eu/2026/01/04/integration-testing-spring-ai-mcp-server.html" rel="alternate" type="text/html" title="Integration Testing Spring AI MCP Server" /><published>2026-01-04T13:00:00-06:00</published><updated>2026-01-04T13:00:00-06:00</updated><id>https://nicklas.wiegandt.eu/2026/01/04/integration-testing-spring-ai-mcp-server</id><content type="html" xml:base="https://nicklas.wiegandt.eu/2026/01/04/integration-testing-spring-ai-mcp-server.html"><![CDATA[<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>While working on my <a href="https://github.com/Nicklas2751/zdfmediathek-mcp">ZDF Mediathek MCP Server</a>, I noticed a lack of good resources on how to properly integration test a <a href="https://docs.spring.io/spring-ai/reference/">Spring AI</a> MCP Server. Since I usually follow a Test-Driven Development (TDD) approach, this was a bit of a hurdle.</p>
+</div>
+<div class="paragraph">
+<p>I wanted to test my MCP tools integratively, meaning I wanted to ensure that the part I&#8217;m testing is actually called via the Model Context Protocol.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-approach">The Approach</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>My solution involves using the Spring AI MCP Client within the test to establish a connection to the MCP Server that is started via <code>@SpringBootTest</code>. This allows me to simulate a real client interaction.</p>
+</div>
+<div class="paragraph">
+<p>To make this work, I first needed to add the MCP Client dependency to my <code>build.gradle.kts</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="kotlin"><span class="nf">testImplementation</span><span class="p">(</span><span class="s">"org.springframework.ai:spring-ai-starter-mcp-client-webflux"</span><span class="p">)</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="the-integration-test">The Integration Test</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Here is an example based on my <code>SearchContentServiceIT</code>, which tests the <code>search_content</code> tool.</p>
+</div>
+<div class="paragraph">
+<p>The key part is the <code>setUp</code> and <code>tearDown</code> methods. In <code>setUp</code>, I initialize the <code>mcpClient</code> so that it connects to the server running on the random local port provided by <code>@SpringBootTest</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="kotlin"><span class="nd">@SpringBootTest</span><span class="p">(</span>
+    <span class="n">webEnvironment</span> <span class="p">=</span> <span class="nc">SpringBootTest</span><span class="p">.</span><span class="nc">WebEnvironment</span><span class="p">.</span><span class="nc">RANDOM_PORT</span><span class="p">,</span>
+    <span class="n">properties</span> <span class="p">=</span> <span class="p">[</span>
+        <span class="s">"spring.ai.mcp.client.enabled=true"</span><span class="p">,</span>
+        <span class="s">"spring.ai.mcp.client.type=async"</span><span class="p">,</span>
+        <span class="c1">// ... other properties</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+<span class="nd">@EnableWireMock</span><span class="p">(</span>
+    <span class="nc">ConfigureWireMock</span><span class="p">(</span>
+        <span class="n">baseUrlProperties</span> <span class="p">=</span> <span class="p">[</span><span class="s">"zdf.url"</span><span class="p">]</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="kd">class</span> <span class="nc">SearchContentServiceIT</span> <span class="p">{</span>
+    <span class="nd">@LocalServerPort</span>
+    <span class="k">private</span> <span class="kd">var</span> <span class="py">port</span><span class="p">:</span> <span class="nc">Int</span> <span class="p">=</span> <span class="mi">0</span>
 
-    &lt;span class=&quot;nd&quot;&gt;@Autowired&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;lateinit&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;webClientBuilder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;WebClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Builder&lt;/span&gt;
+    <span class="nd">@Autowired</span>
+    <span class="k">private</span> <span class="k">lateinit</span> <span class="kd">var</span> <span class="py">webClientBuilder</span><span class="p">:</span> <span class="nc">WebClient</span><span class="p">.</span><span class="nc">Builder</span>
 
-    &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;lateinit&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;mcpClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;McpAsyncClient&lt;/span&gt;
+    <span class="k">private</span> <span class="k">lateinit</span> <span class="kd">var</span> <span class="py">mcpClient</span><span class="p">:</span> <span class="nc">McpAsyncClient</span>
 
-    &lt;span class=&quot;nd&quot;&gt;@BeforeEach&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setUp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;transport&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;WebClientStreamableHttpTransport&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;builder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;webClientBuilder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;baseUrl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://localhost:$port&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;endpoint&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    <span class="nd">@BeforeEach</span>
+    <span class="k">fun</span> <span class="nf">setUp</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">val</span> <span class="py">transport</span> <span class="p">=</span> <span class="nc">WebClientStreamableHttpTransport</span><span class="p">.</span><span class="nf">builder</span><span class="p">(</span>
+            <span class="n">webClientBuilder</span><span class="p">.</span><span class="nf">baseUrl</span><span class="p">(</span><span class="s">"http://localhost:$port"</span><span class="p">)</span>
+        <span class="p">)</span>
+            <span class="p">.</span><span class="nf">endpoint</span><span class="p">(</span><span class="s">"/"</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">build</span><span class="p">()</span>
 
-        &lt;span class=&quot;n&quot;&gt;mcpClient&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;McpClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;async&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;transport&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;mcpClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        <span class="n">mcpClient</span> <span class="p">=</span> <span class="nc">McpClient</span><span class="p">.</span><span class="nf">async</span><span class="p">(</span><span class="n">transport</span><span class="p">).</span><span class="nf">build</span><span class="p">()</span>
+        <span class="n">mcpClient</span><span class="p">.</span><span class="nf">initialize</span><span class="p">().</span><span class="nf">block</span><span class="p">()</span>
+    <span class="p">}</span>
 
-    &lt;span class=&quot;nd&quot;&gt;@AfterEach&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;tearDown&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;mcpClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;closeGracefully&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    <span class="nd">@AfterEach</span>
+    <span class="k">fun</span> <span class="nf">tearDown</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">mcpClient</span><span class="p">.</span><span class="nf">closeGracefully</span><span class="p">().</span><span class="nf">block</span><span class="p">()</span>
+    <span class="p">}</span>
 
-    &lt;span class=&quot;c1&quot;&gt;// ... tests&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;I use &lt;strong&gt;WireMock&lt;/strong&gt; to mock the actual external API (in this case, the ZDF API) that my MCP tool talks to. This keeps the test isolated from the real backend while testing the full MCP flow.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;calling-the-tool&quot;&gt;Calling the Tool&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;In the test method itself, I can now use the &lt;code&gt;mcpClient&lt;/code&gt; to call the tool and verify the result.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;kotlin&quot;&gt;    &lt;span class=&quot;nd&quot;&gt;@Test&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;`search_content&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;valid&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Query&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;returns&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expected&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;result`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// ... setup expectations and WireMock stubs ...&lt;/span&gt;
+    <span class="c1">// ... tests</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>I use <strong>WireMock</strong> to mock the actual external API (in this case, the ZDF API) that my MCP tool talks to. This keeps the test isolated from the real backend while testing the full MCP flow.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="calling-the-tool">Calling the Tool</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the test method itself, I can now use the <code>mcpClient</code> to call the tool and verify the result.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="kotlin">    <span class="nd">@Test</span>
+    <span class="k">fun</span> <span class="nf">`search_content</span> <span class="n">valid</span> <span class="nc">Query</span> <span class="n">returns</span> <span class="n">expected</span> <span class="nf">result`</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// ... setup expectations and WireMock stubs ...</span>
 
-        &lt;span class=&quot;c1&quot;&gt;// when&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;response&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;parseTextContent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;mcpClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;callTool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-                &lt;span class=&quot;nc&quot;&gt;McpSchema&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;CallToolRequest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-                    &lt;span class=&quot;s&quot;&gt;&quot;search_content&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;mapOf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;(&lt;/span&gt;
-                        &lt;span class=&quot;nc&quot;&gt;Pair&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;query&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Tagesschau&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-                        &lt;span class=&quot;nc&quot;&gt;Pair&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;limit&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-                    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-                &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        <span class="c1">// when</span>
+        <span class="kd">val</span> <span class="py">response</span> <span class="p">=</span> <span class="nf">parseTextContent</span><span class="p">(</span>
+            <span class="n">mcpClient</span><span class="p">.</span><span class="nf">callTool</span><span class="p">(</span>
+                <span class="nc">McpSchema</span><span class="p">.</span><span class="nc">CallToolRequest</span><span class="p">(</span>
+                    <span class="s">"search_content"</span><span class="p">,</span>
+                    <span class="n">mapOf</span><span class="p">&lt;</span><span class="nc">String</span><span class="p">,</span> <span class="nc">String</span><span class="p">&gt;(</span>
+                        <span class="nc">Pair</span><span class="p">(</span><span class="s">"query"</span><span class="p">,</span> <span class="s">"Tagesschau"</span><span class="p">),</span>
+                        <span class="nc">Pair</span><span class="p">(</span><span class="s">"limit"</span><span class="p">,</span> <span class="s">"2"</span><span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
 
-        &lt;span class=&quot;c1&quot;&gt;// then&lt;/span&gt;
-        &lt;span class=&quot;nf&quot;&gt;assertThat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;usingRecursiveComparison&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;isEqualTo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expectedResponse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;sect1&quot;&gt;
-&lt;h2 id=&quot;parsing-the-response&quot;&gt;Parsing the Response&lt;/h2&gt;
-&lt;div class=&quot;sectionbody&quot;&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;One interesting helper method I created is &lt;code&gt;parseTextContent&lt;/code&gt;. It helps to convert the text content from the MCP Client&amp;#8217;s response back into a typed object using the Jackson &lt;code&gt;ObjectMapper&lt;/code&gt;. This makes assertions much easier.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;listingblock&quot;&gt;
-&lt;div class=&quot;content&quot;&gt;
-&lt;pre class=&quot;rouge highlight&quot;&gt;&lt;code data-lang=&quot;kotlin&quot;&gt;    &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;parseTextContent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Mono&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;McpSchema&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;CallToolResult&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;):&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ZdfSearchResponse&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;objectMapper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;readValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;ZdfSearchResponse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;(&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!!&lt;/span&gt;
-                &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-                &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;first&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;McpSchema&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;TextContent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;paragraph&quot;&gt;
-&lt;p&gt;This approach allows me to test my MCP tools end-to-end within the Spring context, ensuring that the MCP layer, the tool implementation, and the integration with external services (mocked) work together as expected.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;</content><author><name>Nicklas Wiegandt</name></author><category term="spring-ai" /><category term="mcp" /><category term="testing" /><summary type="html">While working on my ZDF Mediathek MCP Server, I noticed a lack of good resources on how to properly integration test a Spring AI MCP Server. Since I usually follow a Test-Driven Development (TDD) approach, this was a bit of a hurdle.</summary></entry></feed>
+        <span class="c1">// then</span>
+        <span class="nf">assertThat</span><span class="p">(</span><span class="n">response</span><span class="p">).</span><span class="nf">usingRecursiveComparison</span><span class="p">().</span><span class="nf">isEqualTo</span><span class="p">(</span><span class="n">expectedResponse</span><span class="p">)</span>
+    <span class="p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="parsing-the-response">Parsing the Response</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>One interesting helper method I created is <code>parseTextContent</code>. It helps to convert the text content from the MCP Client&#8217;s response back into a typed object using the Jackson <code>ObjectMapper</code>. This makes assertions much easier.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="kotlin">    <span class="k">private</span> <span class="k">fun</span> <span class="nf">parseTextContent</span><span class="p">(</span><span class="n">result</span><span class="p">:</span> <span class="nc">Mono</span><span class="p">&lt;</span><span class="nc">McpSchema</span><span class="p">.</span><span class="nc">CallToolResult</span><span class="p">&gt;):</span> <span class="nc">ZdfSearchResponse</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">objectMapper</span><span class="p">.</span><span class="n">readValue</span><span class="p">&lt;</span><span class="nc">ZdfSearchResponse</span><span class="p">&gt;(</span>
+            <span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="nf">block</span><span class="p">()</span><span class="o">!!</span>
+                <span class="p">.</span><span class="nf">content</span><span class="p">()</span>
+                <span class="p">.</span><span class="nf">first</span><span class="p">()</span> <span class="k">as</span> <span class="nc">McpSchema</span><span class="p">.</span><span class="nc">TextContent</span><span class="p">).</span><span class="nf">text</span><span class="p">()</span>
+        <span class="p">)</span>
+    <span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This approach allows me to test my MCP tools end-to-end within the Spring context, ensuring that the MCP layer, the tool implementation, and the integration with external services (mocked) work together as expected.</p>
+</div>
+</div>
+</div>]]></content><author><name>Nicklas Wiegandt</name></author><category term="spring-ai" /><category term="mcp" /><category term="testing" /><summary type="html"><![CDATA[While working on my ZDF Mediathek MCP Server, I noticed a lack of good resources on how to properly integration test a Spring AI MCP Server. Since I usually follow a Test-Driven Development (TDD) approach, this was a bit of a hurdle.]]></summary></entry></feed>
