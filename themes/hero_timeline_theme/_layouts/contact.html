@@ -1,6 +1,60 @@
 ---
 layout: page
 ---
-{{ content }}
 
+
+<div class="article-container">
+  <div class="article-content">
+    {{ content }}
+  </div>
+
+  <div class="contact-form-container">
+    <script async defer src="https://cdn.jsdelivr.net/gh/altcha-org/altcha@main/dist/altcha.min.js" type="module"></script>
+
+    <form id="contact" class="form-vertical" method="post" action="{{ site.contact_form.action }}">
+
+      <div class="form-group">
+        <label for="mail" class="form-label">E-Mail</label>
+        <input
+          type="email"
+          name="mail"
+          id="mail"
+          placeholder="your@email.com"
+          required
+          class="form-input"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="subject" class="form-label">Subject</label>
+        <input
+          type="text"
+          id="subject"
+          name="subject"
+          required
+          placeholder="What is this about?"
+          class="form-input"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="text" class="form-label">Message</label>
+        <textarea
+          id="text"
+          name="text"
+          rows="5"
+          required
+          class="form-input"
+          placeholder="Your message..."
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <altcha-widget challengeurl="{{ site.contact_form.altcha_challenge_url }}"></altcha-widget>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 1rem; padding: 0.8rem;">Send Message</button>
+    </form>
+  </div>
+</div>
 
