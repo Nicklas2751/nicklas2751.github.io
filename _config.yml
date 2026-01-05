@@ -47,6 +47,10 @@ asciidoctor:
     - rouge-css=class
     - imagesdir=/
 
+contact_form:
+  action: "https://gy9kx6l66c.execute-api.eu-west-1.amazonaws.com/default/website-contact-form"
+  altcha_challenge_url: "https://gy9kx6l66c.execute-api.eu-west-1.amazonaws.com/default/website-contact-form"
+
 # Build settings
 plugins:
   - jekyll-feed
