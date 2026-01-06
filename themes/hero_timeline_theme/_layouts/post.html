@@ -3,13 +3,13 @@ layout: default
 ---
 <main class="article-container">
   <div class="eyebrow">{% if page.tags %}{{ page.tags | first | upcase }}{% else %}BLOG{% endif %}</div>
-  <h1 style="margin-bottom:0.5rem">{{ page.title }}</h1>
-  <div style="color:var(--muted); margin-bottom:2rem; font-size:0.9rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+  <h1 class="post-title">{{ page.title }}</h1>
+  <div class="post-meta">
     {{ page.date | date: "%d. %b %Y" }}
     {% if page.tags %}
       ·
       {% for tag in page.tags %}
-        <a href="{{ '/tag/' | append: tag | relative_url }}" class="badge" style="font-size: 0.75rem; padding: 0.2rem 0.5rem;">{{ tag }}</a>
+        <a href="{{ '/tag/' | append: tag | relative_url }}" class="badge post-tag-badge">{{ tag }}</a>
       {% endfor %}
     {% endif %}
   </div>
@@ -18,8 +18,7 @@ layout: default
     {{ content }}
   </div>
 
-  <div style="margin-top:3rem">
+  <div class="post-footer">
     <a href="{{ '/blog/' | relative_url }}" class="btn">Back to Overview</a>
   </div>
 </main>
-

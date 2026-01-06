@@ -1,0 +1,13 @@
+{% assign skill_item = include.skill %}
+{% assign text = skill_item %}
+{% assign is_important = false %}
+
+{% if skill_item.name %}
+  {% assign text = skill_item.name %}
+  {% if skill_item.important %}
+    {% assign is_important = true %}
+  {% endif %}
+{% endif %}
+
+<span class="badge {% if is_important %}badge-important{% endif %}">{{ text }}</span>
+

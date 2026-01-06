@@ -12,7 +12,7 @@
 <body>
   <div class="page">
     <header class="header">
-      <div class="brand"><a href="{{ '/' | relative_url }}" style="color: var(--accent);">{{ site.title }}</a></div>
+      <div class="brand"><a href="{{ '/' | relative_url }}">{{ site.title }}</a></div>
       <nav class="nav">
         {% for item in site.data.navigation %}
           <a href="{{ item.link | relative_url }}" {% if page.url == item.link %}class="active"{% endif %}>{{ item.name }}</a>
@@ -25,7 +25,7 @@
 
     <footer class="footer">
       &copy; {{ site.time | date: '%Y' }} {{ site.author }} <a href="{{ '/contact/' | relative_url }}">Contact</a> · <a href="{{ '/datenschutz/' | relative_url }}">Datenschutz</a> · <a href="{{ '/feed.xml' | relative_url }}">RSS</a>
-      <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 1rem; font-size: 1.2rem;">
+      <div class="footer-social">
         {% if site.email %}
         <a href="mailto:{{ site.email }}" aria-label="Email"><i class="iconoir-mail"></i></a>
         {% endif %}
