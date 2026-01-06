@@ -13,7 +13,13 @@ layout: default
       {% for skill_group in site.data.skills %}
         {% if skill_group.skills %}
           {% for skill in skill_group.skills %}
-            <span class="badge">{{ skill }}</span>
+            {% assign text = skill %}
+            {% assign is_important = false %}
+            {% if skill.name %}
+              {% assign text = skill.name %}
+              {% if skill.important %}{% assign is_important = true %}{% endif %}
+            {% endif %}
+            <span class="badge {% if is_important %}badge-important{% endif %}">{{ text }}</span>
           {% endfor %}
         {% endif %}
       {% endfor %}
