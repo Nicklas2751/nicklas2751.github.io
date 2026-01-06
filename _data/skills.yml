@@ -1,5 +1,6 @@
 - skills:
-    - software architecture
+    - name: software architecture
+      important: true
     - software development
     - project management
     - software architecture documentation
@@ -10,18 +11,21 @@
     - name: English
       level: fluent
 - technicalLanguages:
-    - Java SE
+    - name: Java SE
+      important: true
     - Java EE
     - HTML
     - CSS
     - PHP
     - SQL
     - JavaScript
-    - TypeScript
+    - name: TypeScript
+      important: true
     - Python
     - Kotlin
 - frameworks:
-    - Spring Boot
+    - name: Spring Boot
+      important: true
     - Spring AI
     - JUnit
     - AssertJ
@@ -33,11 +37,13 @@
     - Angular TypeScript
     - Vue
     - Apache Camel
-    - Svelte
+    - name: Svelte
+      important: true
     - Arc42
 - tools:
     - Apache Maven
-    - Git
+    - name: Git
+      important: true
     - Gradle
     - Oracle DB
     - MySQL
@@ -47,13 +53,18 @@
     - LibreOffice
     - Microsoft Outlook
     - Microsoft Teams
-    - Docker
-    - Kubernetes
+    - name: Docker
+      important: true
+    - name: Kubernetes
+      important: true
     - Rancher 2
     - K3OS
-    - Amazon Web Services
-    - Google Cloud
-    - Azure
+    - name: Amazon Web Services
+      important: true
+    - name: Google Cloud
+      important: true
+    - name: Azure
+      important: true
     - Ansible
     - WordPress
     - Jenkins
@@ -68,11 +79,13 @@
     - Google Kubernetes Engine
     - Azure Kubernetes Services 
     - Alexa Skills Kit
-    - Terraform
+    - name: Terraform
+      important: true
     - Caffeine Cache
     - Redis
     - OpenAPI Generator
-    - Model Context Protocol (MCP)
+    - name: Model Context Protocol (MCP)
+      important: true
     - GitHub Copilot
     - DocAsCode Toolchain
 - operatingSystems:
