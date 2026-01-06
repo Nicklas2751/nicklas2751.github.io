@@ -2,7 +2,7 @@
 layout: default
 ---
 <main class="article-container">
-<h1 style="margin-bottom: 2rem;">Topics</h1>
+<h1 style="margin-bottom: 2rem;">Tags</h1>
 <div class="badges" style="gap: 1rem;">
   {% for tag in site.tags %}
     <a href="{{ '/tag/' | append: tag[0] | relative_url }}" class="badge" style="font-size: 1rem; padding: 0.5rem 1rem;">{{ tag[0] }} ({{ tag[1].size }})</a>
