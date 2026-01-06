@@ -7,9 +7,9 @@ layout: default
     <h1>{{ page.hero_title }}</h1>
 
     <!-- Quickfacts -->
-    <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap;">
-        <img src="https://www.gravatar.com/avatar/8665d18ab7949fcc3a0a4e06b6391b1e.jpg?s=200&amp;r=X" alt="Nicklas Wiegandt" style="border-radius: 50%; width: 100px; height: 100px; border: 2px solid var(--accent);">
-        <div style="font-size: 0.95rem; color: var(--muted); line-height: 1.6;">
+    <div class="profile-header">
+        <img src="{{ site.author_avatar }}" alt="{{ site.author_avatar_alt }}" class="profile-avatar">
+        <div class="profile-info">
             <div><i class="iconoir-user"></i> {{ site.author }}</div>
             <div><i class="iconoir-code"></i> {{ site.author_role }}</div>
             <div><i class="iconoir-birthday-cake"></i> {{ site.author_birthdate }}</div>
@@ -23,8 +23,8 @@ layout: default
     </p>
 
     <!-- Certificates -->
-    <h2 style="font-size:1.4rem; margin-top:2rem; margin-bottom:1rem;">Certificates</h2>
-    <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;">
+    <h2 class="section-title">Certificates</h2>
+    <div class="certificates-grid">
         {% for cert in site.data.certificates %}
         <a href="{{ cert.url }}" target="_blank">
             <img src="{{ cert.image | relative_url }}" alt="{{ cert.title }}" width="100" height="100">
@@ -35,21 +35,15 @@ layout: default
     <!-- Skills from Data -->
     {% for group in site.data.skills %}
         {% if group.skills %}
-            <h2 style="font-size:1.4rem; margin-top:2rem; margin-bottom:1rem;">Skills</h2>
+            <h2 class="section-title">Skills</h2>
             <div class="badges">
             {% for skill in group.skills %}
-                {% assign text = skill %}
-                {% assign is_important = false %}
-                {% if skill.name %}
-                    {% assign text = skill.name %}
-                    {% if skill.important %}{% assign is_important = true %}{% endif %}
-                {% endif %}
-                <span class="badge {% if is_important %}badge-important{% endif %}">{{ text }}</span>
+                {% include skill-badge.html skill=skill %}
             {% endfor %}
             </div>
         {% endif %}
         {% if group.languages %}
-            <h2 style="font-size:1.4rem; margin-top:2rem; margin-bottom:1rem;">Languages</h2>
+            <h2 class="section-title">Languages</h2>
             <div class="badges">
             {% for lang in group.languages %}
                 <span class="badge">{{ lang.name }} ({{ lang.level }})</span>
@@ -57,7 +51,7 @@ layout: default
             </div>
         {% endif %}
         {% if group.iSAQBAdvancedModules %}
-            <h2 style="font-size:1.4rem; margin-top:2rem; margin-bottom:1rem;">iSAQB Advanced Modules</h2>
+            <h2 class="section-title">iSAQB Advanced Modules</h2>
             <div class="badges">
             {% for module in group.iSAQBAdvancedModules %}
                 <span class="badge">{{ module }}</span>
@@ -65,49 +59,31 @@ layout: default
             </div>
         {% endif %}
         {% if group.technicalLanguages %}
-            <h2 style="font-size:1.4rem; margin-top:2rem; margin-bottom:1rem;">Technical Languages</h2>
+            <h2 class="section-title">Technical Languages</h2>
             <div class="badges">
             {% for tech in group.technicalLanguages %}
-                {% assign text = tech %}
-                {% assign is_important = false %}
-                {% if tech.name %}
-                    {% assign text = tech.name %}
-                    {% if tech.important %}{% assign is_important = true %}{% endif %}
-                {% endif %}
-                <span class="badge {% if is_important %}badge-important{% endif %}">{{ text }}</span>
+                {% include skill-badge.html skill=tech %}
             {% endfor %}
             </div>
         {% endif %}
         {% if group.frameworks %}
-            <h2 style="font-size:1.4rem; margin-top:2rem; margin-bottom:1rem;">Frameworks</h2>
+            <h2 class="section-title">Frameworks</h2>
             <div class="badges">
             {% for framework in group.frameworks %}
-                {% assign text = framework %}
-                {% assign is_important = false %}
-                {% if framework.name %}
-                    {% assign text = framework.name %}
-                    {% if framework.important %}{% assign is_important = true %}{% endif %}
-                {% endif %}
-                <span class="badge {% if is_important %}badge-important{% endif %}">{{ text }}</span>
+                {% include skill-badge.html skill=framework %}
             {% endfor %}
             </div>
         {% endif %}
         {% if group.tools %}
-            <h2 style="font-size:1.4rem; margin-top:2rem; margin-bottom:1rem;">Tools</h2>
+            <h2 class="section-title">Tools</h2>
             <div class="badges">
             {% for tool in group.tools %}
-                {% assign text = tool %}
-                {% assign is_important = false %}
-                {% if tool.name %}
-                    {% assign text = tool.name %}
-                    {% if tool.important %}{% assign is_important = true %}{% endif %}
-                {% endif %}
-                <span class="badge {% if is_important %}badge-important{% endif %}">{{ text }}</span>
+                {% include skill-badge.html skill=tool %}
             {% endfor %}
             </div>
         {% endif %}
         {% if group.operatingSystems %}
-            <h2 style="font-size:1.4rem; margin-top:2rem; margin-bottom:1rem;">Operating Systems</h2>
+            <h2 class="section-title">Operating Systems</h2>
             <div class="badges">
             {% for os in group.operatingSystems %}
                 <span class="badge">{{ os }}</span>
@@ -116,7 +92,7 @@ layout: default
         {% endif %}
     {% endfor %}
 
-    <div class="article-content" style="margin-top: 2rem;">
+    <div class="article-content article-content-wrapper">
       {{ content }}
     </div>
   </div>

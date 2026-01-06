@@ -2,12 +2,10 @@
 layout: default
 ---
 <main class="article-container">
-<h1 style="margin-bottom: 2rem;">Tags</h1>
-<div class="badges" style="gap: 1rem;">
+<h1 class="page-title">Tags</h1>
+<div class="badges tags-cloud">
   {% for tag in site.tags %}
-    <a href="{{ '/tag/' | append: tag[0] | relative_url }}" class="badge" style="font-size: 1rem; padding: 0.5rem 1rem;">{{ tag[0] }} ({{ tag[1].size }})</a>
+    <a href="{{ '/tag/' | append: tag[0] | relative_url }}" class="badge tags-cloud-badge">{{ tag[0] }} ({{ tag[1].size }})</a>
   {% endfor %}
 </div>
 </main>
-
-

@@ -3,7 +3,7 @@ layout: default
 ---
 <section class="layout-grid">
   <div>
-    <img src="{{ site.author_avatar }}" alt="{{ site.author_avatar_alt }}" style="border-radius: 50%; width: 80px; height: 80px; border: 2px solid var(--accent); margin-bottom: 1.5rem;">
+    <img src="{{ site.author_avatar }}" alt="{{ site.author_avatar_alt }}" class="home-avatar">
     <div class="eyebrow">{{ page.hero_eyebrow }}</div>
     <h1>{{ page.hero_title }}</h1>
     <p class="lead">
@@ -13,18 +13,12 @@ layout: default
       {% for skill_group in site.data.skills %}
         {% if skill_group.skills %}
           {% for skill in skill_group.skills %}
-            {% assign text = skill %}
-            {% assign is_important = false %}
-            {% if skill.name %}
-              {% assign text = skill.name %}
-              {% if skill.important %}{% assign is_important = true %}{% endif %}
-            {% endif %}
-            <span class="badge {% if is_important %}badge-important{% endif %}">{{ text }}</span>
+            {% include skill-badge.html skill=skill %}
           {% endfor %}
         {% endif %}
       {% endfor %}
     </div>
-    <div style="display:flex; gap:1rem;">
+    <div class="cta-container">
       <a href="{{ '/about/' | relative_url }}" class="btn btn-primary">View Career</a>
       <a href="{{ '/blog/' | relative_url }}" class="btn">Blog</a>
     </div>
@@ -36,7 +30,7 @@ layout: default
     <div class="timeline-item">
       <div class="dot"></div>
       <div class="timeline-meta">{{ post.date | date: "%b %Y" }}</div>
-      <div class="timeline-title"><a href="{{ post.url | relative_url }}" style="color:inherit;">{{ post.title }}</a></div>
+      <div class="timeline-title"><a href="{{ post.url | relative_url }}" class="timeline-link">{{ post.title }}</a></div>
       <div class="timeline-body">
         {{ post.excerpt | strip_html | truncatewords: 15 }}
       </div>
@@ -44,6 +38,6 @@ layout: default
     {% endfor %}
   </aside>
   <div class="latest-posts-link">
-    <a href="{{ '/blog/' | relative_url }}" style="color:var(--accent); font-weight:600;">{{ page.latest_posts_text | default: "Read latest posts →" }}</a>
+    <a href="{{ '/blog/' | relative_url }}" class="latest-link">{{ page.latest_posts_text | default: "Read latest posts →" }}</a>
   </div>
 </section>
