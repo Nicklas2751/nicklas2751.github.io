@@ -38,7 +38,13 @@ layout: default
             <h2 style="font-size:1.4rem; margin-top:2rem; margin-bottom:1rem;">Skills</h2>
             <div class="badges">
             {% for skill in group.skills %}
-                <span class="badge">{{ skill }}</span>
+                {% assign text = skill %}
+                {% assign is_important = false %}
+                {% if skill.name %}
+                    {% assign text = skill.name %}
+                    {% if skill.important %}{% assign is_important = true %}{% endif %}
+                {% endif %}
+                <span class="badge {% if is_important %}badge-important{% endif %}">{{ text }}</span>
             {% endfor %}
             </div>
         {% endif %}
@@ -62,7 +68,13 @@ layout: default
             <h2 style="font-size:1.4rem; margin-top:2rem; margin-bottom:1rem;">Technical Languages</h2>
             <div class="badges">
             {% for tech in group.technicalLanguages %}
-                <span class="badge">{{ tech }}</span>
+                {% assign text = tech %}
+                {% assign is_important = false %}
+                {% if tech.name %}
+                    {% assign text = tech.name %}
+                    {% if tech.important %}{% assign is_important = true %}{% endif %}
+                {% endif %}
+                <span class="badge {% if is_important %}badge-important{% endif %}">{{ text }}</span>
             {% endfor %}
             </div>
         {% endif %}
@@ -70,7 +82,13 @@ layout: default
             <h2 style="font-size:1.4rem; margin-top:2rem; margin-bottom:1rem;">Frameworks</h2>
             <div class="badges">
             {% for framework in group.frameworks %}
-                <span class="badge">{{ framework }}</span>
+                {% assign text = framework %}
+                {% assign is_important = false %}
+                {% if framework.name %}
+                    {% assign text = framework.name %}
+                    {% if framework.important %}{% assign is_important = true %}{% endif %}
+                {% endif %}
+                <span class="badge {% if is_important %}badge-important{% endif %}">{{ text }}</span>
             {% endfor %}
             </div>
         {% endif %}
@@ -78,7 +96,13 @@ layout: default
             <h2 style="font-size:1.4rem; margin-top:2rem; margin-bottom:1rem;">Tools</h2>
             <div class="badges">
             {% for tool in group.tools %}
-                <span class="badge">{{ tool }}</span>
+                {% assign text = tool %}
+                {% assign is_important = false %}
+                {% if tool.name %}
+                    {% assign text = tool.name %}
+                    {% if tool.important %}{% assign is_important = true %}{% endif %}
+                {% endif %}
+                <span class="badge {% if is_important %}badge-important{% endif %}">{{ text }}</span>
             {% endfor %}
             </div>
         {% endif %}
